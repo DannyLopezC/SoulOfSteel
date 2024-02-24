@@ -5,24 +5,24 @@ using Photon.Realtime;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviourPunCallbacks {
-    
+
     private List<int> roomIds;
 
     void Start() {
         roomIds = new List<int>();
-        
-        JoinRoom();
     }
 
     // joining
     
-    private void JoinRoom() {
+    public void JoinRoom() {
         PhotonNetwork.JoinRandomRoom();
         Debug.Log($"Joining to a random room");
     }
 
     public override void OnJoinedRoom() {
         Debug.Log($"Joined to the room");
+        
+        PhotonNetwork.LoadLevel("Game");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message) {

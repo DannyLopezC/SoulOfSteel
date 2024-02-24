@@ -12,14 +12,9 @@ public class MainMenuManager : MonoBehaviour {
         GameManager.Instance.OnMasterServerConnected += OnMasterServerConnected;
     }
 
-    public void LoadScene(string sceneName) {
-        SceneManager.LoadScene(sceneName);
-    }
+    public void LoadScene(string sceneName) => SceneManager.LoadScene(sceneName);
 
-    public void OnExitButton() {
-        Debug.Log($"Closing the game");        
-        Application.Quit();
-    }
+    public void OnExitButton() => Application.Quit();
 
     private void OnMasterServerConnected() {
         playButton.interactable = true;

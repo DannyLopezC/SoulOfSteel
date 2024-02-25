@@ -19,12 +19,6 @@ public class RoomManager : MonoBehaviourPunCallbacks {
         Debug.Log($"Joining to a random room");
     }
 
-    public override void OnJoinedRoom() {
-        Debug.Log($"Joined to the room");
-        
-        PhotonNetwork.LoadLevel("Game");
-    }
-
     public override void OnJoinRandomFailed(short returnCode, string message) {
         Debug.Log($"Failed joining to a random room, creating a new one");
         
@@ -39,10 +33,7 @@ public class RoomManager : MonoBehaviourPunCallbacks {
 
         Debug.Log($"Creating a new room");
         PhotonNetwork.JoinOrCreateRoom($"Room #{roomId}", new RoomOptions() { MaxPlayers = 2 }, TypedLobby.Default);
-    }
-
-    public override void OnCreatedRoom() {
-        Debug.Log($"Room created");
+        PhotonNetwork.LoadLevel("Game");
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message) {

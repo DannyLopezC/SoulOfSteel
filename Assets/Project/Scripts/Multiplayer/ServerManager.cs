@@ -13,9 +13,9 @@ public class ServerManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnConnectedToMaster() {
-        Debug.Log($"It has been connected to the master server");
         PhotonNetwork.AutomaticallySyncScene = true;
         
+        Debug.Log($"It has been connected to the master server");
         GameManager.Instance.OnMasterServerConnected.Invoke();
     }
 

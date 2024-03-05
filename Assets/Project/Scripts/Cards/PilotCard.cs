@@ -30,7 +30,6 @@ public class PilotCard : Card, IPointerClickHandler {
 
     public void InitializePilotCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, Board defaultMovement, int defaultDamage = 0) {
-        
         _health = health;
         _defaultMovement = defaultMovement;
         _defaultDamage = defaultDamage;

@@ -6,7 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 
 public class ServerManager : MonoBehaviourPunCallbacks {
-    void Start() {
+    private void Start() {
         PhotonNetwork.GameVersion = "0.1";
         PhotonNetwork.ConnectUsingSettings();
         Debug.Log($"It is going to connect to the master server");

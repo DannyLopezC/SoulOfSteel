@@ -1,19 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 [Serializable]
 public abstract class Card : MonoBehaviour {
-    [Header("Card UI Components")]
+    [BoxGroup("Card UI Components")]
     [SerializeField] private TMP_Text nameTMP;
     [SerializeField] private TMP_Text descriptionTMP;
     [SerializeField] private TMP_Text scrapCostTMP;
     [SerializeField] private Image imageSourceIMG;
     
-    [Header("Card Properties")]
+    [BoxGroup("Card Properties")]
     [SerializeField] private string cardName;
     [SerializeField] private string cardDescription;
     [SerializeField] private int scrapCost;

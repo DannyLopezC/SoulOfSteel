@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [Serializable]
-public abstract class Card : MonoBehaviour {
+public abstract class Card : MonoBehaviour, IPointerClickHandler {
     [BoxGroup("Card UI Components")]
     [SerializeField] private TMP_Text nameTMP;
     [SerializeField] private TMP_Text descriptionTMP;
@@ -40,7 +41,13 @@ public abstract class Card : MonoBehaviour {
         imageSourceIMG.sprite = imageSource;
     }
 
-    protected virtual void ShowCard() {
-        Debug.Log($"opening the card");
+    /*protected virtual void ShowCard(string name, string description, int scrapCost, Sprite imageSource) {
+        ShowCard(true, name, description, scrapCost, imageSource );
+    }*/
+    
+    public void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Right) {
+            UIManager.Instance.ShowCard(true, cardName, cardDescription, scrapCost, imageSource);
+        }
     }
 }

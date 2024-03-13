@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [Serializable]
-public class PilotCard : Card, IPointerClickHandler {
+public class PilotCard : Card {
     [Header("Pilot Card UI Components")]
     [SerializeField] private TMP_Text healthTMP;
 
@@ -43,11 +43,5 @@ public class PilotCard : Card, IPointerClickHandler {
         base.SetCardUI();
 
         if(healthTMP != null) healthTMP.text = $"Vida: {_health}";
-    }
-
-    public void OnPointerClick(PointerEventData eventData) {
-        if (eventData.button == PointerEventData.InputButton.Right) {
-            ShowCard();
-        }
     }
 }

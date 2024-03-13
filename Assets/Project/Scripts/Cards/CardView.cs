@@ -18,8 +18,6 @@ public class CardView : MonoBehaviour, ICardView {
     [SerializeField] private TMP_Text scrapCostTMP;
     [SerializeField] private Image imageSourceIMG;
     
-    [BoxGroup("Card Properties")]
-    
     private ICardController _cardController;
 
     public ICardController CardController {
@@ -33,7 +31,6 @@ public class CardView : MonoBehaviour, ICardView {
         imageSourceIMG.sprite = imageSource;
     }
 }
-
 
 public class Test {
     public void TestMethod() {

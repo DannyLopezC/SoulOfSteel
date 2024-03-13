@@ -33,6 +33,16 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
     }
 
     public override void OnJoinedRoom() {
+        SpawnPlayer();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer) {
+        Debug.Log($"A player left de room");
+        PhotonNetwork.LoadLevel(MAIN_MENU_SCENE);
+        PhotonNetwork.LeaveRoom();
+    }
+
+    private void SpawnPlayer() {
         _players = PhotonNetwork.PlayerList;
         _playerNumber = _players.Length;
 
@@ -41,11 +51,5 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         PhotonNetwork.NickName = _playerNumber.ToString();
 
         _playerGameObject = PhotonNetwork.Instantiate(PLAYER_PREFAB_PATH, transform.position, Quaternion.identity, 0);
-    }
-
-    public override void OnPlayerLeftRoom(Player otherPlayer) {
-        Debug.Log($"A player left de room");
-        PhotonNetwork.LoadLevel(MAIN_MENU_SCENE);
-        PhotonNetwork.LeaveRoom();
     }
 }

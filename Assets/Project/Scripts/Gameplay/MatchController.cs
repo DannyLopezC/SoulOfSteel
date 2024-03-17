@@ -59,7 +59,6 @@ public class MatchController : IMatchController {
         yield return new WaitForSeconds(3);
         GameManager.Instance.playerList.ForEach(player => player.PlayerController.ShuffleDeck());
         _view.SetCurrentPhaseText("shuffling decks");
-        yield return new WaitForSeconds(3);
         GameManager.Instance.ExecutePhases.Invoke();
     }
 

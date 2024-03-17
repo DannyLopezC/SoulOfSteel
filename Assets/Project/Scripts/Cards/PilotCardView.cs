@@ -2,6 +2,7 @@
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public interface IPilotCardView : ICardView{
     void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int health);
@@ -21,17 +22,22 @@ public class PilotCardView: CardView, IPilotCardView {
     private void Start() {
         PilotCardController.InitializePilotCard("Charizard",
             "esta carta está rotisima no hay nada que hacer contra ella",
-            6,
-            9,
+            Random.Range(3, 7),
+            Random.Range(3, 7),
             false,
             null,
-            100,
-            null);
+            Random.Range(1, 100),
+            null,
+            CardType.Pilot);
     }
     
     public void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int _health) {
         base.SetCardUI(cardName, cardDescription, scrapCost, imageSource);
 
         if(healthTMP != null) healthTMP.text = $"Vida: {_health}";
+    }
+
+    public override void ManageRightClick() {
+        PilotCardController.ManageRightClick();
     }
 }

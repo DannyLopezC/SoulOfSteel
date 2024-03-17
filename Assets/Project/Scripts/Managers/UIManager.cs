@@ -31,14 +31,14 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     public void ShowCardPanel(string cardName, string cardDescription,
         int scrapCost, Sprite imageSource, bool activate = true) {
         FindOrInstantiatePanel(ref _currentCardPanel, cardPanel);
-        
+
         _currentCardPanel.Init(cardName, cardDescription, scrapCost, imageSource);
         _currentCardPanel.gameObject.SetActive(activate);
     }
 
     private static void FindOrInstantiatePanel<T>(ref T panel, GameObject prefab) where T : Component {
         if (panel == null) {
-            panel = Instantiate(prefab).GetComponent<T>();
+            Instantiate(prefab).TryGetComponent<T>(out panel);
         }
     }
 }

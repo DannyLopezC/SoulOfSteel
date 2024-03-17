@@ -9,7 +9,7 @@ public class BoardController : IBoardController {
 
     private List<List<int>> _boardStatus;
     private int _boardSize = 10;
-    private List<QuadrantView> quadrants;
+    private List<QuadrantView> _quadrants;
 
     public BoardController(IBoardView view) {
         _view = view;

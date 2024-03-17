@@ -1,39 +1,42 @@
 ﻿using UnityEngine;
 
-// public enum CardType {
-//     Pilot,
-//     Weapon,
-//     CampEffect
-// }
-
-public interface ICardController {
-    // CardType GetCardType();
-    void ManageRightClick();
+public enum CardType {
+    Pilot,
+    Weapon,
+    CampEffect
 }
 
-public class CardController : ICardController {
+public interface ICardController {
+    CardType GetCardType();
+    public void ManageRightClick();
+    void PrintInfo();
+}
+
+public abstract class CardController : ICardController {
     private readonly ICardView _view;
 
     private int _scrapRecovery;
     private bool _isCampEffect;
-    
-    protected string CardName { get; set; }
-    protected string CardDescription { get; set; }
-    protected int ScrapCost { get; set; }
-    protected Sprite ImageSource { get; set; }
 
-    public CardController(ICardView view) {
+    protected CardType Type;
+    protected string CardName { get; private set; }
+    protected string CardDescription { get; private set; }
+    protected int ScrapCost { get; private set; }
+    protected Sprite ImageSource { get; private set; }
+
+    protected CardController(ICardView view) {
         _view = view;
     }
 
-    public void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery, bool isCampEffect,
-        Sprite imageSource) {
+    protected void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, CardType type) {
         CardName = cardName;
         CardDescription = cardDescription;
         ScrapCost = scrapCost;
         _scrapRecovery = scrapRecovery;
         _isCampEffect = isCampEffect;
         ImageSource = imageSource;
+        Type = type;
 
         SetCardUI();
     }
@@ -42,13 +45,20 @@ public class CardController : ICardController {
         _view.SetCardUI(CardName, CardDescription, ScrapCost, ImageSource);
     }
 
-    private void ShowCard() {
+    protected virtual void ShowCard() {
         UIManager.Instance.ShowCardPanel(CardName, CardDescription, ScrapCost, ImageSource);
     }
 
-    public void ManageRightClick() {
+    public virtual void ManageRightClick() {
         ShowCard();
     }
 
-    // public abstract CardType GetCardType();
+    public void PrintInfo() {
+        string s = CardName + "\n";
+        s += CardDescription + "\n";
+        s += $"{ScrapCost}\n";
+        Debug.Log(s);
+    }
+
+    public abstract CardType GetCardType();
 }

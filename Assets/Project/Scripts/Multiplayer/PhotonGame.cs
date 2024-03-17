@@ -43,12 +43,12 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         _players = PhotonNetwork.PlayerList;
         _playerNumber = _players.Length;
 
-        Debug.Log($"Player number {_playerNumber} joined");
-
         PhotonNetwork.NickName = _playerNumber.ToString();
 
         _playerGameObject = PhotonNetwork.Instantiate(PLAYER_PREFAB_PATH, transform.position, Quaternion.identity, 0);
-        GameManager.Instance.playerList.Add(_playerGameObject.GetComponent<PlayerView>());
+
+        _playerGameObject.TryGetComponent(out PlayerView currentPlayer);
+        GameManager.Instance.playerList.Add(currentPlayer);
 
         if (PhotonNetwork.PlayerList.Length == 2) {
             UIManager.Instance.ShowGamePanel();

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public interface IPlayerController {
-    void DrawCards();
+    void DrawCards(int amount);
     void EquipCard(int indexHandList);
     void DismissCard(int indexHandList);
     void ShuffleDeck();
@@ -31,8 +31,8 @@ public class PlayerController : IPlayerController {
     public PlayerController(IPlayerView view) {
         _view = view;
     }
-    
-    public void DrawCards() {
+
+    public void DrawCards(int amount) {
         
     }
 

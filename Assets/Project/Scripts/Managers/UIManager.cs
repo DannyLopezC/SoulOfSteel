@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     
     public void ShowCard(bool activate, string cardName, string cardDescription,
         int scrapCost, Sprite imageSource) {
+        
+        
         if (_currentCardPanel == null) {
             _currentCardPanel = Instantiate(cardPanel).GetComponent<CardPanel>();
         }

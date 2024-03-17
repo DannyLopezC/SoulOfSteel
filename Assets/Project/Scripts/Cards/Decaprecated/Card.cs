@@ -47,7 +47,6 @@ public abstract class Card : MonoBehaviour, IPointerClickHandler {
     
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Right) {
-            UIManager.Instance.ShowCard(true, cardName, cardDescription, scrapCost, imageSource);
         }
     }
 }

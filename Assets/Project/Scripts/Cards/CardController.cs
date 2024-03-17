@@ -7,22 +7,20 @@
 // }
 
 public interface ICardController {
-    void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery, bool isCampEffect,
-        Sprite imageSource);
-
-    void ShowCard();
     // CardType GetCardType();
+    void ManageRightClick();
 }
 
 public class CardController : ICardController {
     private readonly ICardView _view;
 
-    private string _cardName;
-    private string _cardDescription;
-    private int _scrapCost;
     private int _scrapRecovery;
     private bool _isCampEffect;
-    private Sprite _imageSource;
+    
+    protected string CardName { get; set; }
+    protected string CardDescription { get; set; }
+    protected int ScrapCost { get; set; }
+    protected Sprite ImageSource { get; set; }
 
     public CardController(ICardView view) {
         _view = view;
@@ -30,22 +28,26 @@ public class CardController : ICardController {
 
     public void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery, bool isCampEffect,
         Sprite imageSource) {
-        _cardName = cardName;
-        _cardDescription = cardDescription;
-        _scrapCost = scrapCost;
+        CardName = cardName;
+        CardDescription = cardDescription;
+        ScrapCost = scrapCost;
         _scrapRecovery = scrapRecovery;
         _isCampEffect = isCampEffect;
-        _imageSource = imageSource;
+        ImageSource = imageSource;
 
         SetCardUI();
     }
 
     protected virtual void SetCardUI() {
-        _view.SetCardUI(_cardName, _cardDescription, _scrapCost, _imageSource);
+        _view.SetCardUI(CardName, CardDescription, ScrapCost, ImageSource);
     }
 
-    public virtual void ShowCard() {
-        Debug.Log($"opening the card");
+    private void ShowCard() {
+        UIManager.Instance.ShowCard(true, CardName, CardDescription, ScrapCost, ImageSource);
+    }
+
+    public void ManageRightClick() {
+        ShowCard();
     }
 
     // public abstract CardType GetCardType();

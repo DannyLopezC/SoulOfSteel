@@ -31,10 +31,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
     public Action ExecutePhases;
 
     private void Start() {
-        playerList = new List<PlayerView> {
-            Instantiate(Resources.Load("Player").GetComponent<PlayerView>()),
-            Instantiate(Resources.Load("Player").GetComponent<PlayerView>())
-        };
+        
     }
 
     public void ApplyDamage(int playerId) {

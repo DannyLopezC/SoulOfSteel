@@ -43,7 +43,7 @@ public class CardController : ICardController {
     }
 
     private void ShowCard() {
-        UIManager.Instance.ShowCard(true, CardName, CardDescription, ScrapCost, ImageSource);
+        UIManager.Instance.ShowCardPanel(CardName, CardDescription, ScrapCost, ImageSource);
     }
 
     public void ManageRightClick() {

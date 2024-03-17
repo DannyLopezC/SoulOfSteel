@@ -19,25 +19,22 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
 
     private void Start() {
         pv = GetComponent<PhotonView>();
-    }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
-        /*_players = PhotonNetwork.PlayerList;
-        _playerNumber = _players.Length;
-
-        Debug.Log($"Player number {_playerNumber} joined, enteredroom");
-
-        PhotonNetwork.NickName = _playerNumber.ToString();
-
-        _playerGameObject = PhotonNetwork.Instantiate("Player", transform.position, Quaternion.identity, 0);*/
+        UIManager.Instance.ShowWaitingForOpponentPanel();
     }
 
     public override void OnJoinedRoom() {
         SpawnPlayer();
     }
 
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
+        if (PhotonNetwork.PlayerList.Length == 2) {
+            UIManager.Instance.ShowGamePanel();
+        }
+    }
+
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) {
-        Debug.Log($"A player left de room");
+        Debug.Log($"A player left the room");
         PhotonNetwork.LoadLevel(MAIN_MENU_SCENE);
         PhotonNetwork.LeaveRoom();
     }
@@ -51,5 +48,10 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         PhotonNetwork.NickName = _playerNumber.ToString();
 
         _playerGameObject = PhotonNetwork.Instantiate(PLAYER_PREFAB_PATH, transform.position, Quaternion.identity, 0);
+        GameManager.Instance.playerList.Add(_playerGameObject.GetComponent<PlayerView>());
+
+        if (PhotonNetwork.PlayerList.Length == 2) {
+            UIManager.Instance.ShowGamePanel();
+        }
     }
 }

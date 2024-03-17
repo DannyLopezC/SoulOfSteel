@@ -14,7 +14,7 @@ public class PilotCard : Card {
     [Header("Pilot Properties")]
     private int _health;
     private int _defaultDamage;
-    private Board _defaultMovement;
+    private BoardView _defaultMovement;
     [Space(20)]public Vector2 position;
 
     private void Start() {
@@ -29,7 +29,7 @@ public class PilotCard : Card {
     }
 
     public void InitializePilotCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, Board defaultMovement, int defaultDamage = 0) {
+        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, int defaultDamage = 0) {
         _health = health;
         _defaultMovement = defaultMovement;
         _defaultDamage = defaultDamage;

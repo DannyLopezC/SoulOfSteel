@@ -8,7 +8,7 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class PhotonGame : MonoBehaviourPunCallbacks {
-    private Player[] _players;
+    private Photon.Realtime.Player[] _players;
     private int _playerNumber;
     private GameObject _playerGameObject;
 
@@ -21,7 +21,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         pv = GetComponent<PhotonView>();
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer) {
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
         /*_players = PhotonNetwork.PlayerList;
         _playerNumber = _players.Length;
 
@@ -36,7 +36,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         SpawnPlayer();
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer) {
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) {
         Debug.Log($"A player left de room");
         PhotonNetwork.LoadLevel(MAIN_MENU_SCENE);
         PhotonNetwork.LeaveRoom();

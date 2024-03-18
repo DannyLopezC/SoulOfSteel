@@ -42,10 +42,7 @@ public class MatchController : IMatchController {
         int totalPhases = Enum.GetNames(typeof(Phases)).Length;
 
         int nextPhaseIndex = (currentPhaseIndex + 1) % totalPhases;
-
-        GameManager.Instance.currentPhase = (Phases)nextPhaseIndex;
-
-        GameManager.Instance.ExecutePhases.Invoke();
+        GameManager.Instance.ChangePhase((Phases)nextPhaseIndex);
     }
 
     public void SelectQuadrant() {
@@ -54,12 +51,11 @@ public class MatchController : IMatchController {
 
     public IEnumerator PrepareMatch() {
         ThrowPriorityDice();
-        yield return new WaitForSeconds(3);
+        yield return 3f;
         SelectQuadrant();
-        yield return new WaitForSeconds(3);
-        GameManager.Instance.playerList.ForEach(player => player.PlayerController.ShuffleDeck());
+        yield return 3f;
+        GameManager.Instance.PrepareForMatch();
         _view.SetCurrentPhaseText("shuffling decks");
-        GameManager.Instance.ExecutePhases.Invoke();
     }
 
     public IEnumerator ExecutePhases() {

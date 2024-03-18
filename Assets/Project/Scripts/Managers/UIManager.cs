@@ -37,8 +37,10 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     }
 
     private static void FindOrInstantiatePanel<T>(ref T panel, GameObject prefab) where T : Component {
-        if (panel == null) {
-            Instantiate(prefab).TryGetComponent<T>(out panel);
-        }
+        if (panel != null) return;
+        panel = FindObjectOfType<T>();
+
+        if (panel != null) return;
+        Instantiate(prefab).TryGetComponent(out panel);
     }
 }

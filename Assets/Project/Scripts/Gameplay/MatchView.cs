@@ -32,4 +32,8 @@ public class MatchView : MonoBehaviour, IMatchView {
     private void ExecutePhases() {
         StartCoroutine(MatchController.ExecutePhases());
     }
+    
+    private void OnDestroy() {
+        GameManager.Instance.ExecutePhases -= ExecutePhases;
+    }
 }

@@ -27,11 +27,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
     public BoardView boardView;
     public List<PlayerView> playerList;
 
-    public Action OnMasterServerConnected;
-    public Action ExecutePhases;
+    public event Action OnMasterServerConnected;
+    public event Action ExecutePhases;
 
-    private void Start() {
-        
+    public void OnConnectedToServer() {
+        OnMasterServerConnected?.Invoke();
     }
 
     public void ApplyDamage(int playerId) {
@@ -44,5 +44,15 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
 
     public void ExecuteEffect() {
         
+    }
+
+    public void PrepareForMatch() {
+        playerList.ForEach(player => player.PlayerController.ShuffleDeck());
+        ExecutePhases?.Invoke();
+    }
+
+    public void ChangePhase(Phases phase) {
+        currentPhase = phase;
+        ExecutePhases?.Invoke();
     }
 }

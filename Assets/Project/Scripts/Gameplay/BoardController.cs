@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 public interface IBoardController {
-    void GenerateBoardCells(float cellXSize, float cellYSize, GameObject cellPrefab);
+    void GenerateBoardCells(float cellXSize, float cellYSize, float offset, GameObject cellPrefab);
     int GetBoardCount();
 }
 
@@ -21,15 +21,15 @@ public class BoardController : IBoardController {
         _boardStatus = new List<List<CellView>>();
     }
 
-    public void GenerateBoardCells(float cellXSize, float cellYSize, GameObject cellPrefab) {
+    public void GenerateBoardCells(float cellXSize, float cellYSize, float offset, GameObject cellPrefab) {
         int xSize = BoardCount;
         int ySize = BoardCount;
 
         for (int i = 0; i < xSize; i++) {
             _boardStatus.Add(new List<CellView>());
             for (int j = 0; j < ySize; j++) {
-                float xCenter = (cellXSize / 2) + (cellXSize * j);
-                float yCenter = (cellYSize / 2) + (cellYSize * i);
+                float xCenter = (cellXSize / 2) + (cellXSize * j) + (offset * j);
+                float yCenter = (cellYSize / 2) + (cellYSize * i) + (offset * i);
                 Transform cellT = _view.InstantiateCellView().transform;
                 cellT.SetParent(_view.GetTransform());
                 cellT.localPosition = new Vector2(xCenter, yCenter);

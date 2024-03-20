@@ -14,6 +14,7 @@ public interface IBoardView {
 public class BoardView : MonoBehaviour, IBoardView {
     [OnValueChanged("GenerateBoard")] public float xBoardSize;
     [OnValueChanged("GenerateBoard")] public float yBoardSize;
+    [OnValueChanged("GenerateBoard")] public float offset;
     public GameObject cellPrefab;
     
     private IBoardController _boardController;
@@ -39,7 +40,7 @@ public class BoardView : MonoBehaviour, IBoardView {
         DestroyTransformChildren();
 
         BoardController.GenerateBoardCells(xBoardSize / BoardController.GetBoardCount(),
-            yBoardSize / BoardController.GetBoardCount(), cellPrefab);
+            yBoardSize / BoardController.GetBoardCount(), offset, cellPrefab);
     }
 
     private void DestroyTransformChildren() {

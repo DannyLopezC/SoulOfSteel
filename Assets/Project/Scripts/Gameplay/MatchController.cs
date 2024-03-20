@@ -86,6 +86,8 @@ public class MatchController : IMatchController {
     }
 
     private void SetNextPriority() {
+        if (GameManager.Instance.playerList.Count == 0) return;
+        
         GameManager.Instance.currentPriority =
             (GameManager.Instance.currentPriority + 1) % GameManager.Instance.playerList.Count;
     }

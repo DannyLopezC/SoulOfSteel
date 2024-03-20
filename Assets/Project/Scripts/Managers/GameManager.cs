@@ -55,4 +55,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
         currentPhase = phase;
         ExecutePhases?.Invoke();
     }
+
+    protected override void OnDestroy() {
+        Instance = null;
+    }
 }

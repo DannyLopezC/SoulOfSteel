@@ -6,18 +6,8 @@ using System.Linq;
 using Random = UnityEngine.Random;
 
 public interface IMatchController {
-    void ThrowPriorityDice();
-    void SetNextPriority();
-    void ChangePhase();
-    void SelectQuadrant();
     IEnumerator PrepareMatch();
     IEnumerator ExecutePhases();
-    void RechargePhase();
-    void PrincipalPhase();
-    void MovementPhase();
-    void BattlePhase();
-    void FinalPhase();
-    void DrawPhase();
 }
 
 public class MatchController : IMatchController {
@@ -30,12 +20,12 @@ public class MatchController : IMatchController {
         _view = view;
     }
 
-    public void ThrowPriorityDice() {
+    private void ThrowPriorityDice() {
         GameManager.Instance.currentPriority = Random.Range(0, 1);
         _view.SetCurrentPhaseText($"Throwing priority dice, result={GameManager.Instance.currentPriority}");
     }
 
-    public void ChangePhase() {
+    private void ChangePhase() {
         _view.SetCurrentPhaseText("Changing Phase");
 
         int currentPhaseIndex = (int)GameManager.Instance.currentPhase;
@@ -45,7 +35,7 @@ public class MatchController : IMatchController {
         GameManager.Instance.ChangePhase((Phases)nextPhaseIndex);
     }
 
-    public void SelectQuadrant() {
+    private void SelectQuadrant() {
         _view.SetCurrentPhaseText("Selecting quadrant");
     }
 
@@ -90,33 +80,33 @@ public class MatchController : IMatchController {
         ChangePhase();
     }
 
-    public void DrawPhase() {
+    private void DrawPhase() {
         GameManager.Instance.playerList.ForEach(player => player.PlayerController.DrawCards(5));
         _view.SetCurrentPhaseText("drawing cards");
     }
 
-    public void SetNextPriority() {
+    private void SetNextPriority() {
         GameManager.Instance.currentPriority =
             (GameManager.Instance.currentPriority + 1) % GameManager.Instance.playerList.Count;
     }
-    
-    public void RechargePhase() {
+
+    private void RechargePhase() {
         _view.SetCurrentPhaseText("recharge phase");
     }
 
-    public void PrincipalPhase() {
+    private void PrincipalPhase() {
         _view.SetCurrentPhaseText("principal phase");
     }
 
-    public void MovementPhase() {
+    private void MovementPhase() {
         _view.SetCurrentPhaseText("movement phase");
     }
 
-    public void BattlePhase() {
+    private void BattlePhase() {
         _view.SetCurrentPhaseText("battle phase");
     }
 
-    public void FinalPhase() {
+    private void FinalPhase() {
         _view.SetCurrentPhaseText("final phase");
     }
 }

@@ -7,7 +7,7 @@ public class QuadrantController : IQuadrantController {
     private readonly IQuadrantView _view;
 
     public int quadrantId;
-    // public EffectCard quadrantCardEffect; 
+    public EffectCardView quadrantCardEffect; 
 
     public QuadrantController(IQuadrantView view) {
         _view = view;

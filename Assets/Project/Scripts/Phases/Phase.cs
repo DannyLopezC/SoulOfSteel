@@ -6,13 +6,13 @@ public interface IPhase {
     void End();
 }
 
-public class Phase : IPhase {
+public abstract class Phase : IPhase {
+
     public Phase() {
+        
     }
 
-    public virtual void Start() {
-    }
+    public abstract void Start();
 
-    public virtual void End() {
-    }
+    public abstract void End();
 }

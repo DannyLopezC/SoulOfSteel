@@ -8,6 +8,7 @@ public class DrawPhase : Phase, IDrawPhase {
     }
 
     public override void Start() {
+        
     }
 
     public override void End() {

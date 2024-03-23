@@ -29,8 +29,8 @@ public class MatchView : MonoBehaviour, IMatchView {
         currentPhaseText.text = text;
     }
 
-    private void ExecutePhases() {
-        StartCoroutine(MatchController.ExecutePhases());
+    private void ExecutePhases(Phase phase) {
+        StartCoroutine(phase.Start());
     }
     
     private void OnDestroy() {

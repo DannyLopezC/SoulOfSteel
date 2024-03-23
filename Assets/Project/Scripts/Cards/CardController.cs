@@ -3,6 +3,7 @@
 public enum CardType {
     Pilot,
     Weapon,
+    Armor,
     CampEffect
 }
 

@@ -11,6 +11,7 @@ public interface IMatchController {
 }
 
 public class MatchController : IMatchController {
+    
     private int _matchId;
     private List<string> _matchLog;
     
@@ -28,11 +29,11 @@ public class MatchController : IMatchController {
     private void ChangePhase() {
         _view.SetCurrentPhaseText("Changing Phase");
 
-        int currentPhaseIndex = (int)GameManager.Instance.currentPhase;
-        int totalPhases = Enum.GetNames(typeof(Phases)).Length;
-
-        int nextPhaseIndex = (currentPhaseIndex + 1) % totalPhases;
-        GameManager.Instance.ChangePhase((Phases)nextPhaseIndex);
+        // int currentPhaseIndex = (int)GameManager.Instance.currentPhase;
+        // int totalPhases = Enum.GetNames(typeof(Phases)).Length;
+        //
+        // int nextPhaseIndex = (currentPhaseIndex + 1) % totalPhases;
+        // GameManager.Instance.ChangePhase((Phases)nextPhaseIndex);
     }
 
     private void SelectQuadrant() {
@@ -44,52 +45,46 @@ public class MatchController : IMatchController {
         yield return 3f;
         SelectQuadrant();
         yield return 3f;
-        GameManager.Instance.PrepareForMatch();
+        GameManager.Instance.PrepareForMatch(_view);
         _view.SetCurrentPhaseText("shuffling decks");
     }
 
     public IEnumerator ExecutePhases() {
-        yield return new WaitForSeconds(3);
-        switch (GameManager.Instance.currentPhase) {
-            case Phases.Draw:
-                DrawPhase();
-                break;
-            case Phases.PriorityChange:
-                SetNextPriority();
-                break;
-            case Phases.Recharge:
-                RechargePhase();
-                break;
-            case Phases.Principal:
-                PrincipalPhase();
-                break;
-            case Phases.Movement:
-                MovementPhase();
-                break;
-            case Phases.Battle:
-                BattlePhase();
-                break;
-            case Phases.Final:
-                FinalPhase();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        yield return new WaitForSeconds(3);
-        ChangePhase();
+        // yield return new WaitForSeconds(3);
+        // switch (GameManager.Instance.currentPhase) {
+        //     case Phases.Draw:
+        //         DrawPhase();
+        //         break;
+        //     case Phases.PriorityChange:
+        //         SetNextPriority();
+        //         break;
+        //     case Phases.Recharge:
+        //         RechargePhase();
+        //         break;
+        //     case Phases.Principal:
+        //         PrincipalPhase();
+        //         break;
+        //     case Phases.Movement:
+        //         MovementPhase();
+        //         break;
+        //     case Phases.Battle:
+        //         BattlePhase();
+        //         break;
+        //     case Phases.Final:
+        //         FinalPhase();
+        //         break;
+        //     default:
+        //         throw new ArgumentOutOfRangeException();
+        // }
+        //
+        // yield return new WaitForSeconds(3);
+        // ChangePhase();
+        yield break;
     }
 
-    private void DrawPhase() {
-        GameManager.Instance.playerList.ForEach(player => player.PlayerController.DrawCards(5));
-        _view.SetCurrentPhaseText("drawing cards");
-    }
 
     private void SetNextPriority() {
-        if (GameManager.Instance.playerList.Count == 0) return;
         
-        GameManager.Instance.currentPriority =
-            (GameManager.Instance.currentPriority + 1) % GameManager.Instance.playerList.Count;
     }
 
     private void RechargePhase() {

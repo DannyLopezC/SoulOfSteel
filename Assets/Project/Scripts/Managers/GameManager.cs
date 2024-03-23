@@ -5,16 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public enum Phases {
-    Draw = 0,
-    PriorityChange = 1,
-    Recharge = 2,
-    Principal = 3,
-    Movement = 4,
-    Battle = 5,
-    Final = 6
-}
-
 public interface IGameManager {
     void ApplyDamage(int playerId);
     void ValidateHealthStatus();
@@ -22,13 +12,13 @@ public interface IGameManager {
 } 
 
 public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
-    public Phases currentPhase;
+    public Phase CurrentPhase { get; private set; }
     public int currentPriority; // player Id
     public BoardView boardView;
     public List<PlayerView> playerList;
 
     public event Action OnMasterServerConnected;
-    public event Action ExecutePhases;
+    public event Action<Phase> ExecutePhases;
 
     public void OnConnectedToServer() {
         OnMasterServerConnected?.Invoke();
@@ -46,14 +36,14 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
         
     }
 
-    public void PrepareForMatch() {
+    public void PrepareForMatch(IMatchView matchView) {
         playerList.ForEach(player => player.PlayerController.ShuffleDeck());
-        ExecutePhases?.Invoke();
+        ChangePhase(new DrawPhase(matchView));
     }
 
-    public void ChangePhase(Phases phase) {
-        currentPhase = phase;
-        ExecutePhases?.Invoke();
+    public void ChangePhase(Phase phase) {
+        CurrentPhase = phase;
+        ExecutePhases?.Invoke(CurrentPhase);
     }
 
     protected override void OnDestroy() {

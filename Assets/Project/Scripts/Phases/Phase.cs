@@ -1,18 +1,24 @@
 ﻿using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public interface IPhase {
-    void Start();
-    void End();
+    IEnumerator Start();
+    IEnumerator End();
 }
 
 public abstract class Phase : IPhase {
+    protected readonly IMatchView matchView;
 
-    public Phase() {
-        
+    protected Phase(IMatchView matchView) {
+        this.matchView = matchView;
     }
 
-    public abstract void Start();
+    public virtual IEnumerator Start() {
+        yield break;
+    }
 
-    public abstract void End();
+    public virtual IEnumerator End() {
+        yield break;
+    }
 }

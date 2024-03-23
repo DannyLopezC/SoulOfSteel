@@ -1,16 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
-public interface IDrawPhase {
-}
-
-public class DrawPhase : Phase, IDrawPhase {
-    public DrawPhase() {
+public class DrawPhase : Phase {
+    public DrawPhase(IMatchView matchView) : base(matchView) {
     }
 
-    public override void Start() {
-        
+    public override IEnumerator Start() {
+        GameManager.Instance.playerList.ForEach(player => player.PlayerController.DrawCards(5));
+
+        matchView.SetCurrentPhaseText("drawing cards");
+
+        GameManager.Instance.ChangePhase(new ChangePriorityPhase(matchView));
+        yield break;
     }
 
-    public override void End() {
+    public override IEnumerator End() {
+        yield break;
     }
 }

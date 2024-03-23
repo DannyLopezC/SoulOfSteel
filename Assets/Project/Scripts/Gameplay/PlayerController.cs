@@ -14,19 +14,20 @@ public interface IPlayerController {
 
 public class PlayerController : IPlayerController {
     private readonly IPlayerView _view;
-    
-    public int playerId;
+
+    public int PlayerId;
     private int _health;
     private int _scrapPoints;
     private List<CardView> _deck;
+    private List<CardView> _shuffledDeck;
     private List<CardView> _hand;
     private List<CardView> _scrapPile;
     private List<CardView> _factory;
     private PilotCardView _pilot;
-    // private EquipmentCardView legs;
-    // private EquipmentCardView leftArm;
-    // private EquipmentCardView rightArm;
-    // private EquipmentCardView bodyArmor;
+    private EquipmentCardView _legs;
+    private EquipmentCardView _leftArm;
+    private EquipmentCardView _rightArm;
+    private EquipmentCardView _bodyArmor;
 
     public PlayerController(IPlayerView view) {
         _view = view;
@@ -45,6 +46,7 @@ public class PlayerController : IPlayerController {
     }
 
     public void ShuffleDeck() {
+        List<CardView> temporalDeck = _deck;
         
     }
 

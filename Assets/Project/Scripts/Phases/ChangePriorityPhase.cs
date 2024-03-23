@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine;
 
 public class ChangePriorityPhase : Phase {
     public ChangePriorityPhase(IMatchView matchView) : base(matchView) {
@@ -10,8 +11,10 @@ public class ChangePriorityPhase : Phase {
         GameManager.Instance.currentPriority =
             (GameManager.Instance.currentPriority + 1) % GameManager.Instance.playerList.Count;
 
-        GameManager.Instance.ChangePhase(new RechargePhase(matchView));
-
         matchView.SetCurrentPhaseText("Changing priority phase");
+
+        yield return new WaitForSeconds(3);
+
+        GameManager.Instance.ChangePhase(new RechargePhase(matchView));
     }
 }

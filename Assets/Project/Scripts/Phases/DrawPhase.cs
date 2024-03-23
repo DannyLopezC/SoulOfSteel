@@ -9,6 +9,7 @@ public class DrawPhase : Phase {
         GameManager.Instance.playerList.ForEach(player => player.PlayerController.DrawCards(5));
 
         matchView.SetCurrentPhaseText("drawing cards");
+        yield return new WaitForSeconds(3);
 
         GameManager.Instance.ChangePhase(new ChangePriorityPhase(matchView));
         yield break;

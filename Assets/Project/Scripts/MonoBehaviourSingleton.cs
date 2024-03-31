@@ -31,6 +31,10 @@ public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviourSi
         DontDestroyOnLoad(gameObject);
     }
 
+    public static bool HasInstance() {
+        return _instance != null;
+    }
+
     protected virtual void OnDestroy() {
         if (_instance == this) {
             _instance = null;

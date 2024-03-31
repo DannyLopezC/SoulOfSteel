@@ -40,4 +40,8 @@ public class PilotCardView: CardView, IPilotCardView {
     public override void ManageRightClick() {
         PilotCardController.ManageRightClick();
     }
+
+    public override CardType GetCardType() {
+        return PilotCardController.GetCardType();
+    }
 }

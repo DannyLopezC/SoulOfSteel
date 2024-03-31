@@ -34,4 +34,6 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     }
 
     public abstract void ManageRightClick();
+
+    public abstract CardType GetCardType();
 }

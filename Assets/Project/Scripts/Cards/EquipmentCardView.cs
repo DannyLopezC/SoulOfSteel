@@ -25,4 +25,8 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
     public override void ManageRightClick() {
         EquipmentCardController.ManageRightClick();
     }
+
+    public override CardType GetCardType() {
+        return EquipmentCardController.GetCardType();
+    }
 }

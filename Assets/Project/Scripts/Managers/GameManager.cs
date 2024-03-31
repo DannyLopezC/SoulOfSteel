@@ -19,6 +19,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
 
     public event Action OnMasterServerConnected;
     public event Action<Phase> ExecutePhases;
+    public event Action OnDrawFinishedEvent;
+
+    public void OnDrawFinished() {
+        OnDrawFinishedEvent?.Invoke();
+    }
 
     public void OnConnectedToServer() {
         OnMasterServerConnected?.Invoke();

@@ -19,6 +19,6 @@ public class MainMenuManager : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        GameManager.Instance.OnMasterServerConnected -= OnMasterServerConnected;
+        if (GameManager.HasInstance()) GameManager.Instance.OnMasterServerConnected -= OnMasterServerConnected;
     }
 }

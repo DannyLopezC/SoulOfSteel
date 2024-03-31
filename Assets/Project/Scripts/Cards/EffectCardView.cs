@@ -13,4 +13,8 @@ public class EffectCardView : CardView, IEffectCardView {
     public override void ManageRightClick() {
         EffectCardController.ManageRightClick();
     }
+
+    public override CardType GetCardType() {
+        return EffectCardController.GetCardType();
+    }
 }

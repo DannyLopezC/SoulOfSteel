@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private GameObject waitingForOpponentPanel;
     private Canvas _currentWaitingForOpponentPanel;
 
+    [SerializeField] private MatchView matchView;
+
     public void ShowWaitingForOpponentPanel(bool activate = true) {
         FindOrInstantiatePanel(ref _currentWaitingForOpponentPanel, waitingForOpponentPanel);
 
@@ -42,5 +44,9 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
 
         if (panel != null) return;
         Instantiate(prefab).TryGetComponent(out panel);
+    }
+
+    public void SetText(string text) {
+        matchView.SetCurrentPhaseText(text);
     }
 }

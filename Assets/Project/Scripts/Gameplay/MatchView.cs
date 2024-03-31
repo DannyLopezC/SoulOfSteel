@@ -34,6 +34,6 @@ public class MatchView : MonoBehaviour, IMatchView {
     }
     
     private void OnDestroy() {
-        GameManager.Instance.ExecutePhases -= ExecutePhases;
+        if (GameManager.HasInstance()) GameManager.Instance.ExecutePhases -= ExecutePhases;
     }
 }

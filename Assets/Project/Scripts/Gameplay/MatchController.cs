@@ -31,9 +31,9 @@ public class MatchController : IMatchController {
 
     public IEnumerator PrepareMatch() {
         ThrowPriorityDice();
-        yield return 3f;
+        yield return new WaitForSeconds(2);
         SelectQuadrant();
-        yield return 3f;
+        yield return new WaitForSeconds(2);
         GameManager.Instance.PrepareForMatch(_view);
         _view.SetCurrentPhaseText("shuffling decks");
     }

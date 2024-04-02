@@ -9,32 +9,24 @@ public class Movement : MonoBehaviour {
 
     public PhotonView pv;
 
+    private BoardView board;
+
     private void Start() {
         pv = GetComponent<PhotonView>();
+        GameManager.Instance.OnCellClickedEvent += OnMovement;
     }
 
     private void Update() {
-        OnMovement();
     }
 
-    private void OnMovement() {
-        if (pv.IsMine) {
-            if (Input.GetKey(KeyCode.W)) {
-                transform.position = new Vector3(transform.position.x, transform.position.y + velocity);
-            }
-            
-            if (Input.GetKey(KeyCode.S)) {
-                transform.position = new Vector3(transform.position.x, transform.position.y - velocity);
-            }
-            
-            if (Input.GetKey(KeyCode.A)) {
-                transform.position = new Vector3(transform.position.x - velocity, transform.position.y);
-            }
-            
-            if (Input.GetKey(KeyCode.D)) {
-                transform.position = new Vector3(transform.position.x + velocity, transform.position.y);
-            }
-        }
-        
+    private void OnMovement(Vector2 index) {
+        // if (pv.IsMine) {
+        Debug.Log($"{index}");
+        transform.position = GameManager.Instance.boardView.GetCellPos(index);
+        // }
+    }
+
+    private void OnDestroy() {
+        if (GameManager.HasInstance()) GameManager.Instance.OnCellClickedEvent -= OnMovement;
     }
 }

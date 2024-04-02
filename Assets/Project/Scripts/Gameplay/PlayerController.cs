@@ -55,12 +55,12 @@ public class PlayerController : IPlayerController {
 
     public IEnumerator AddCards(int amount) {
         while (amount > 0) {
+            yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
             int random = Random.Range(0, _shuffledDeck.Count - 1);
             CardView cardToAdd = _shuffledDeck[random];
             _hand.Add(cardToAdd);
             _view.AddCardToPanel(cardToAdd);
-            yield return new WaitForSeconds(0.5f);
             _shuffledDeck.RemoveAt(random);
             if (_shuffledDeck.Count == 0) ShuffleDeck();
             amount--;

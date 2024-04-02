@@ -11,6 +11,7 @@ public interface IPlayerView {
 
 }
 
+[Serializable]
 public class PlayerView : MonoBehaviour, IPlayerView {
     [SerializeField] private List<CardView> deck;
 

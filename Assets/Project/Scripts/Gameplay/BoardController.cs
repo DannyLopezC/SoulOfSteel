@@ -10,9 +10,10 @@ public interface IBoardController {
 public class BoardController : IBoardController {
     private readonly IBoardView _view;
 
-    private List<List<CellView>> _boardStatus;
     private const int BoardCount = 10;
     private List<QuadrantView> _quadrants;
+
+    public List<List<CellView>> _boardStatus;
 
     public BoardController(IBoardView view) {
         _view = view;
@@ -29,7 +30,7 @@ public class BoardController : IBoardController {
             _boardStatus.Add(new List<CellView>());
             for (int j = 0; j < ySize; j++) {
                 float xCenter = (cellXSize / 2) + (cellXSize * j) + (offset * j);
-                float yCenter = (cellYSize / 2) + (cellYSize * i) + (offset * i);
+                float yCenter = (cellYSize / 2) - (cellYSize * i) - (offset * i + 1);
                 Transform cellT = _view.InstantiateCellView().transform;
                 cellT.SetParent(_view.GetTransform());
                 cellT.localPosition = new Vector2(xCenter, yCenter);
@@ -37,11 +38,14 @@ public class BoardController : IBoardController {
                 cellT.TryGetComponent(out CellView boardCell);
                 boardCell.cellXSize = cellXSize;
                 boardCell.cellYSize = cellYSize;
+                boardCell.index = new Vector2(j, i);
                 boardCell.SetSize();
                 _boardStatus[i].Add(boardCell);
                 cellT.gameObject.name = $"cell_{i}{j}";
             }
         }
+
+        _view.SetBoardStatus(_boardStatus);
     }
 
     public int GetBoardCount() {

@@ -18,7 +18,9 @@ public class Movement : MonoBehaviour {
     }
 
     private void OnMovement(Vector2 index) {
-        transform.position = GameManager.Instance.boardView.GetCellPos(index);
+        if (pv.IsMine) {
+            transform.position = GameManager.Instance.boardView.GetCellPos(index);
+        }
     }
 
     private void OnDestroy() {

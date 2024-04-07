@@ -24,11 +24,11 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
     }
 
     public override void OnJoinedRoom() {
+        Debug.Log($"OnJoinedRoom() called by PUN: {PhotonNetwork.CurrentRoom.Name}");
+        
         SpawnPlayer();
-    }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
-        if (PhotonNetwork.PlayerList.Length == 2 || GameManager.Instance.testing) {
+        if (PhotonNetwork.PlayerList.Length == 2) {
             foreach (PlayerView t in GameManager.Instance.playerList) {
                 t.TurnOnSprite();
             }
@@ -36,6 +36,17 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
             UIManager.Instance.ShowWaitingForOpponentPanel(false);
             UIManager.Instance.ShowGamePanel();
         }
+    }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
+        // if (PhotonNetwork.PlayerList.Length == 2) {
+        //     foreach (PlayerView t in GameManager.Instance.playerList) {
+        //         t.TurnOnSprite();
+        //     }
+        //
+        //     UIManager.Instance.ShowWaitingForOpponentPanel(false);
+        //     UIManager.Instance.ShowGamePanel();
+        // }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) {
@@ -58,14 +69,5 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         GameManager.Instance.playerList.Add(currentPlayer);
         currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.PlayerList.Length);
         currentPlayer.SetCardsInfo();
-
-        // if (PhotonNetwork.PlayerList.Length == 2 || GameManager.Instance.testing) {
-        //     foreach (PlayerView t in GameManager.Instance.playerList) {
-        //         t.TurnOnSprite();
-        //     }
-        //
-        //     UIManager.Instance.ShowWaitingForOpponentPanel(false);
-        //     UIManager.Instance.ShowGamePanel();
-        // }
     }
 }

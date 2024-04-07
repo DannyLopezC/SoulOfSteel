@@ -5,11 +5,9 @@ using Photon.Pun;
 using UnityEngine;
 
 public class Movement : MonoBehaviour {
-    [SerializeField] private float velocity = 0.1f;
-
     public PhotonView pv;
 
-    private BoardView board;
+    private BoardView _board;
 
     private void Start() {
         pv = GetComponent<PhotonView>();
@@ -20,10 +18,7 @@ public class Movement : MonoBehaviour {
     }
 
     private void OnMovement(Vector2 index) {
-        // if (pv.IsMine) {
-        Debug.Log($"{index}");
         transform.position = GameManager.Instance.boardView.GetCellPos(index);
-        // }
     }
 
     private void OnDestroy() {

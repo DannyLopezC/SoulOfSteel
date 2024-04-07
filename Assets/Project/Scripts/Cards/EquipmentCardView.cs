@@ -18,6 +18,12 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
             CardType.Armor);
     }
 
+    public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement) {
+        EquipmentCardController.InitEquipmentCard(cardName, cardDescription, scrapCost, scrapRecovery,
+            isCampEffect, imageSource, CardType.Pilot);
+    }
+
     public IEquipmentCardController EquipmentCardController {
         get { return _equipmentCardController ??= new EquipmentCardController(this); }
     }

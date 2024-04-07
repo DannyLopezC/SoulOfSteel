@@ -30,11 +30,10 @@ public class BoardView : MonoBehaviour, IBoardView {
     }
 
     private void Awake() {
-        // GameManager.Instance.boardView = this;
+        GameManager.Instance.boardView = this;
     }
 
     private void Start() {
-        Debug.Log($"{_boardStatus}");
         GenerateBoard();
     }
 
@@ -57,12 +56,6 @@ public class BoardView : MonoBehaviour, IBoardView {
 
         BoardController.GenerateBoardCells(xBoardSize / BoardController.GetBoardCount(),
             yBoardSize / BoardController.GetBoardCount(), offset, cellPrefab);
-
-        for (int i = 0; i < _boardStatus.Count; i++) {
-            for (int j = 0; j < _boardStatus[i].Count; j++) {
-                Debug.Log($"{_boardStatus[j][i].index}");
-            }
-        }
     }
 
     private void DestroyTransformChildren() {
@@ -81,7 +74,6 @@ public class BoardView : MonoBehaviour, IBoardView {
     }
 
     public Vector3 GetCellPos(Vector2 index) {
-        Debug.Log($"{index}");
         return _boardStatus[(int)index.y][(int)index.x].transform.position;
     }
 

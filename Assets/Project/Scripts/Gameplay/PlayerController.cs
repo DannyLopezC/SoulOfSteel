@@ -6,6 +6,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public interface IPlayerController {
+    void SetPlayerId(int id);
     void DrawCards(int amount, bool fullDraw);
     void EquipCard(int indexHandList);
     void DismissCard(int indexHandList);
@@ -15,16 +16,17 @@ public interface IPlayerController {
     void SelectDefense();
     void DoDamage(int damage);
     IEnumerator AddCards(int amount);
+    int GetPlayerId();
 }
 
 public class PlayerController : IPlayerController {
     private readonly IPlayerView _view;
 
-    public int PlayerId;
+    private int _playerId;
     private int _health;
     private int _scrapPoints;
-    private readonly List<CardView> _deck;
-    private List<CardView> _shuffledDeck;
+    private readonly CardsInfo _deckInfo;
+    private List<CardsInfo.CardInfoStruct> _shuffledDeck;
     private List<CardView> _hand;
     private List<CardView> _scrapPile;
     private List<CardView> _factory;
@@ -34,12 +36,9 @@ public class PlayerController : IPlayerController {
     private EquipmentCardView _rightArm;
     private EquipmentCardView _bodyArmor;
 
-    public PlayerController(IPlayerView view, List<CardView> deck) {
+    public PlayerController(IPlayerView view, CardsInfo deck) {
         _view = view;
-        _deck = new List<CardView>();
-        foreach (CardView cv in deck) {
-            _deck.Add(cv);
-        }
+        _deckInfo = deck;
 
         _hand = new List<CardView>();
     }
@@ -58,15 +57,21 @@ public class PlayerController : IPlayerController {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
             int random = Random.Range(0, _shuffledDeck.Count - 1);
-            CardView cardToAdd = _shuffledDeck[random];
-            _hand.Add(cardToAdd);
-            _view.AddCardToPanel(cardToAdd);
+            CardView card = _view.AddCardToPanel(_shuffledDeck[random].type);
+            card.InitCard(_shuffledDeck[random].cardName, _shuffledDeck[random].cardDescription,
+                _shuffledDeck[random].cost, _shuffledDeck[random].recovery, _shuffledDeck[random].isCampEffect,
+                _shuffledDeck[random].imageSource, _shuffledDeck[random].health, _shuffledDeck[random].defaultMovement);
+            _hand.Add(card);
             _shuffledDeck.RemoveAt(random);
             if (_shuffledDeck.Count == 0) ShuffleDeck();
             amount--;
         }
 
         GameManager.Instance.OnDrawFinished();
+    }
+
+    public int GetPlayerId() {
+        return _playerId;
     }
 
     public void EquipCard(int indexHandList) {
@@ -78,7 +83,7 @@ public class PlayerController : IPlayerController {
     }
 
     public void ShuffleDeck() {
-        List<CardView> temporalDeck = _deck.ToList();
+        List<CardsInfo.CardInfoStruct> temporalDeck = _deckInfo.playerCards.ToList();
 
         int n = temporalDeck.Count;
         while (n > 1) {
@@ -104,5 +109,9 @@ public class PlayerController : IPlayerController {
 
     public void DoDamage(int damage) {
         
+    }
+
+    public void SetPlayerId(int id) {
+        _playerId = id;
     }
 }

@@ -36,4 +36,8 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public abstract void ManageRightClick();
 
     public abstract CardType GetCardType();
+
+    public abstract void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement);
+    
 }

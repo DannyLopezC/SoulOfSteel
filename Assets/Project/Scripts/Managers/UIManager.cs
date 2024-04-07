@@ -7,15 +7,15 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private GameObject gamePanel;
-    private MatchView _currentGamePanel;
+    [SerializeField] private MatchView _currentGamePanel;
     
     [SerializeField] private GameObject cardPanel;
-    private CardPanel _currentCardPanel;
+    [SerializeField] private CardPanel _currentCardPanel;
 
     [SerializeField] private GameObject waitingForOpponentPanel;
-    private Canvas _currentWaitingForOpponentPanel;
+    [SerializeField] private Canvas _currentWaitingForOpponentPanel;
 
-    [SerializeField] private MatchView matchView;
+    public MatchView matchView;
 
     public void ShowWaitingForOpponentPanel(bool activate = true) {
         FindOrInstantiatePanel(ref _currentWaitingForOpponentPanel, waitingForOpponentPanel);
@@ -27,7 +27,6 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
         FindOrInstantiatePanel(ref _currentGamePanel, gamePanel);
 
         _currentGamePanel.gameObject.SetActive(activate);
-        ShowWaitingForOpponentPanel(false);
     }
 
     public void ShowCardPanel(string cardName, string cardDescription,
@@ -40,9 +39,21 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
 
     private static void FindOrInstantiatePanel<T>(ref T panel, GameObject prefab) where T : Component {
         if (panel != null) return;
+
         panel = FindObjectOfType<T>();
 
         if (panel != null) return;
+
+        // Search for inactive objects
+        T[] objectsOfType = Resources.FindObjectsOfTypeAll<T>();
+
+        foreach (T obj in objectsOfType) {
+            if (!obj.gameObject.activeInHierarchy) {
+                panel = obj;
+                return;
+            }
+        }
+        
         Instantiate(prefab).TryGetComponent(out panel);
     }
 

@@ -20,15 +20,21 @@ public class PilotCardView: CardView, IPilotCardView {
     }
     
     private void Start() {
-        PilotCardController.InitializePilotCard("Charizard",
-            "esta carta está rotisima no hay nada que hacer contra ella",
-            Random.Range(3, 7),
-            Random.Range(3, 7),
-            false,
-            null,
-            Random.Range(1, 100),
-            null,
-            CardType.Pilot);
+        // PilotCardController.InitializePilotCard("Charizard",
+        //     "esta carta está rotisima no hay nada que hacer contra ella",
+        //     Random.Range(3, 7),
+        //     Random.Range(3, 7),
+        //     false,
+        //     null,
+        //     Random.Range(1, 100),
+        //     null,
+        //     CardType.Pilot);
+    }
+
+    public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement) {
+        PilotCardController.InitializePilotCard(cardName, cardDescription, scrapCost, scrapRecovery,
+            isCampEffect, imageSource, health, defaultMovement, CardType.Pilot);
     }
     
     public void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int _health) {

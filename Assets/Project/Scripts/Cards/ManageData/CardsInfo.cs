@@ -21,6 +21,7 @@ public class CardsInfo : ScriptableObject {
 
     [Serializable]
     public struct CardInfoStruct {
+        public int id;
         public string cardName;
         public CardType type;
         public string cardDescription;
@@ -28,6 +29,11 @@ public class CardsInfo : ScriptableObject {
         public int energy;
         public int damage;
         public int shield;
+        public int recovery;
+        public bool isCampEffect;
+        public Sprite imageSource;
+        public int health;
+        public BoardView defaultMovement;
     }
 
     [Button]

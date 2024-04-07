@@ -18,6 +18,7 @@ public class MatchView : MonoBehaviour, IMatchView {
     }
 
     private void Awake() {
+        UIManager.Instance.matchView = this;
         GameManager.Instance.ExecutePhases += ExecutePhases;
     }
 

@@ -14,7 +14,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
 
     public PhotonView pv;
 
-    private const string PLAYER_PREFAB_PATH = "Player";
+    private const string PLAYER_PREFAB_PATH = "PlayerCanvas";
     private const string MAIN_MENU_SCENE = "MainMenu";
 
     private void Start() {
@@ -28,7 +28,12 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
-        if (PhotonNetwork.PlayerList.Length == 2) {
+        if (PhotonNetwork.PlayerList.Length == 2 || GameManager.Instance.testing) {
+            foreach (PlayerView t in GameManager.Instance.playerList) {
+                t.TurnOnSprite();
+            }
+
+            UIManager.Instance.ShowWaitingForOpponentPanel(false);
             UIManager.Instance.ShowGamePanel();
         }
     }
@@ -45,13 +50,22 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
 
         PhotonNetwork.NickName = _playerNumber.ToString();
 
-        _playerGameObject = PhotonNetwork.Instantiate(PLAYER_PREFAB_PATH, transform.position, Quaternion.identity, 0);
 
-        _playerGameObject.TryGetComponent(out PlayerView currentPlayer);
+        PhotonNetwork.Instantiate(PLAYER_PREFAB_PATH, transform.position, Quaternion.identity, 0).transform
+            .GetChild(0)
+            .TryGetComponent(out PlayerView currentPlayer);
+
         GameManager.Instance.playerList.Add(currentPlayer);
+        currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.PlayerList.Length);
+        currentPlayer.SetCardsInfo();
 
-        if (PhotonNetwork.PlayerList.Length == 2) {
-            UIManager.Instance.ShowGamePanel();
-        }
+        // if (PhotonNetwork.PlayerList.Length == 2 || GameManager.Instance.testing) {
+        //     foreach (PlayerView t in GameManager.Instance.playerList) {
+        //         t.TurnOnSprite();
+        //     }
+        //
+        //     UIManager.Instance.ShowWaitingForOpponentPanel(false);
+        //     UIManager.Instance.ShowGamePanel();
+        // }
     }
 }

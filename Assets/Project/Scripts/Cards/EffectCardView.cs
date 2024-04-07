@@ -17,4 +17,8 @@ public class EffectCardView : CardView, IEffectCardView {
     public override CardType GetCardType() {
         return EffectCardController.GetCardType();
     }
+
+    public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement) {
+    }
 }

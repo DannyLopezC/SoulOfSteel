@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PhotonGame : MonoBehaviourPunCallbacks {
     private Photon.Realtime.Player[] _players;
@@ -27,7 +28,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         Debug.Log($"OnJoinedRoom() called by PUN: {PhotonNetwork.CurrentRoom.Name}");
         
         SpawnPlayer();
+    }
 
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
         if (PhotonNetwork.PlayerList.Length == 2) {
             foreach (PlayerView t in GameManager.Instance.playerList) {
                 t.TurnOnSprite();
@@ -38,21 +41,14 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         }
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
-        // if (PhotonNetwork.PlayerList.Length == 2) {
-        //     foreach (PlayerView t in GameManager.Instance.playerList) {
-        //         t.TurnOnSprite();
-        //     }
-        //
-        //     UIManager.Instance.ShowWaitingForOpponentPanel(false);
-        //     UIManager.Instance.ShowGamePanel();
-        // }
-    }
-
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) {
         Debug.Log($"A player left the room");
         PhotonNetwork.LoadLevel(MAIN_MENU_SCENE);
         PhotonNetwork.LeaveRoom();
+    }
+
+    public override void OnLeftRoom() {
+        // SceneManager.LoadScene(0);
     }
 
     private void SpawnPlayer() {
@@ -69,5 +65,14 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         GameManager.Instance.playerList.Add(currentPlayer);
         currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.PlayerList.Length);
         currentPlayer.SetCardsInfo();
+
+        if (PhotonNetwork.PlayerList.Length == 2) {
+            foreach (PlayerView t in GameManager.Instance.playerList) {
+                t.TurnOnSprite();
+            }
+
+            UIManager.Instance.ShowWaitingForOpponentPanel(false);
+            UIManager.Instance.ShowGamePanel();
+        }
     }
 }

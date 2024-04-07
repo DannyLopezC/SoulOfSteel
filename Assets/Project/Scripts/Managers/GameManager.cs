@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public GameObject handPanel;
     
     public Phase CurrentPhase { get; private set; }
+    public GameObject LocalPlayerInstance { get; set; }
+
     public int currentPriority; // player Id
     public BoardView boardView;
     public List<PlayerView> playerList;

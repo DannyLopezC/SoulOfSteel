@@ -43,17 +43,6 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
         panel = FindObjectOfType<T>();
 
         if (panel != null) return;
-
-        // Search for inactive objects
-        T[] objectsOfType = Resources.FindObjectsOfTypeAll<T>();
-
-        foreach (T obj in objectsOfType) {
-            if (!obj.gameObject.activeInHierarchy) {
-                panel = obj;
-                return;
-            }
-        }
-        
         Instantiate(prefab).TryGetComponent(out panel);
     }
 

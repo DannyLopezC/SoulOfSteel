@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Photon.Pun;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -16,6 +17,7 @@ public interface IPlayerView {
 
 [Serializable]
 public class PlayerView : MonoBehaviour, IPlayerView {
+    [SerializeField] private PhotonView pv;
     [SerializeField] private CardsInfo _deckInfo;
 
     private GameObject _handCardsPanel;
@@ -41,6 +43,11 @@ public class PlayerView : MonoBehaviour, IPlayerView {
         // TryGetComponent(out Image image);
         // image.enabled = false;
         // playerNumber.gameObject.SetActive(false);
+        pv = GetComponent<PhotonView>();
+
+        if (pv.IsMine) {
+            GameManager.Instance.LocalPlayerInstance = gameObject;
+        }
     }
 
     public void TurnOnSprite() {

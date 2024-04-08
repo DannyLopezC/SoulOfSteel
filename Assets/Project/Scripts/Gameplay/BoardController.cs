@@ -30,18 +30,26 @@ public class BoardController : IBoardController {
             _boardStatus.Add(new List<CellView>());
             for (int j = 0; j < ySize; j++) {
                 float xCenter = (cellXSize / 2) + (cellXSize * j) + (offset * j);
-                float yCenter = (cellYSize / 2) - (cellYSize * i) - (offset * i + 1);
+                float yCenter = (cellYSize / 2) - (cellYSize * i) - (offset * i);
                 Transform cellT = _view.InstantiateCellView().transform;
                 cellT.SetParent(_view.GetTransform());
-                cellT.localPosition = new Vector2(xCenter, yCenter);
+                RectTransform rt = (RectTransform)cellT;
+                rt.anchorMin = new Vector2(j / 10f, (ySize - (i + 1)) / 10f);
+                rt.anchorMax = new Vector2((j + 1) * 0.1f, (ySize - i) / 10f);
 
                 cellT.TryGetComponent(out CellView boardCell);
                 boardCell.cellXSize = cellXSize;
                 boardCell.cellYSize = cellYSize;
                 boardCell.index = new Vector2(j, i);
                 boardCell.SetSize();
+
+
+                cellT.localPosition = new Vector2(xCenter, yCenter);
+                
                 _boardStatus[i].Add(boardCell);
                 cellT.gameObject.name = $"cell_{i}{j}";
+
+                cellT.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             }
         }
 

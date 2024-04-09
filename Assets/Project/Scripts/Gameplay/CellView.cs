@@ -1,4 +1,5 @@
 ﻿using System;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +10,8 @@ public interface ICellView {
 }
 
 [Serializable]
-public class CellView : MonoBehaviour, ICellView, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
+public class CellView : MonoBehaviour, ICellView, IPointerEnterHandler, IPointerExitHandler,
+    IPointerClickHandler {
     [SerializeField] private Outline outline;
     
     public float cellXSize;

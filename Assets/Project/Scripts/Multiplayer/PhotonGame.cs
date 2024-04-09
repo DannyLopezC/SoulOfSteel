@@ -31,7 +31,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
-        if (PhotonNetwork.PlayerList.Length == 2) {
+        if (PhotonNetwork.PlayerList.Length == 2 || GameManager.Instance.testing) {
             foreach (PlayerView t in GameManager.Instance.playerList) {
                 t.TurnOnSprite();
             }
@@ -66,7 +66,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
         currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.PlayerList.Length);
         currentPlayer.SetCardsInfo();
 
-        if (PhotonNetwork.PlayerList.Length == 2) {
+        if (PhotonNetwork.PlayerList.Length == 2 || GameManager.Instance.testing) {
             foreach (PlayerView t in GameManager.Instance.playerList) {
                 t.TurnOnSprite();
             }

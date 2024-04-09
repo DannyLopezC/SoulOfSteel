@@ -19,10 +19,14 @@ public class MatchView : MonoBehaviour, IMatchView {
 
     private void Awake() {
         UIManager.Instance.matchView = this;
+        UIManager.Instance._currentGamePanel = this;
         GameManager.Instance.ExecutePhases += ExecutePhases;
     }
 
     private void Start() {
+    }
+
+    public void PrepareMatch() {
         StartCoroutine(MatchController.PrepareMatch());
     }
 

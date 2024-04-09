@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private GameObject gamePanel;
-    [SerializeField] private MatchView _currentGamePanel;
+    [SerializeField] public MatchView _currentGamePanel;
     
     [SerializeField] private GameObject cardPanel;
     [SerializeField] private CardPanel _currentCardPanel;
@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private Canvas _currentWaitingForOpponentPanel;
 
     public MatchView matchView;
-
+    
     public void ShowWaitingForOpponentPanel(bool activate = true) {
         FindOrInstantiatePanel(ref _currentWaitingForOpponentPanel, waitingForOpponentPanel);
 
@@ -26,7 +26,8 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     public void ShowGamePanel(bool activate = true) {
         FindOrInstantiatePanel(ref _currentGamePanel, gamePanel);
 
-        _currentGamePanel.gameObject.SetActive(activate);
+        _currentGamePanel.transform.GetChild(0).gameObject.SetActive(activate);
+        if (activate) _currentGamePanel.PrepareMatch();
     }
 
     public void ShowCardPanel(string cardName, string cardDescription,

@@ -12,7 +12,6 @@ public interface IPlayerView {
     void CleanHandsPanel();
     CardView AddCardToPanel(CardType cardType);
     void InitAddCards(int amount);
-
 }
 
 [Serializable]
@@ -30,8 +29,8 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     [SerializeField] private GameObject pilotCardPrefab;
     [SerializeField] private GameObject effectCardPrefab;
 
-    [SerializeField] private TMP_Text playerNumber;
-    
+    [SerializeField] private TMP_Text playerName;
+
     private IPlayerController _playerController;
     private IPlayerView _playerViewImplementation;
 
@@ -39,11 +38,16 @@ public class PlayerView : MonoBehaviour, IPlayerView {
         get { return _playerController ??= new PlayerController(this, _deckInfo); }
     }
 
+    private void Awake() {
+        GameManager.Instance.OnGameStartedEvent += TurnOnSprite;
+    }
+
     private void Start() {
         // TryGetComponent(out Image image);
         // image.enabled = false;
         // playerNumber.gameObject.SetActive(false);
         pv = GetComponent<PhotonView>();
+        GameManager.Instance.playerList.Add(this);
 
         if (pv.IsMine) {
             GameManager.Instance.LocalPlayerInstance = gameObject;
@@ -53,10 +57,10 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     public void TurnOnSprite() {
         TryGetComponent(out Image image);
         image.enabled = true;
-        playerNumber.gameObject.SetActive(true);
-        playerNumber.text = $"{PlayerController.GetPlayerId()}";
+        playerName.gameObject.SetActive(true);
+        playerName.text = pv.Owner.NickName;
     }
-    
+
     public GameObject GetHandCardsPanel() {
         return HandCardsPanel;
     }
@@ -101,5 +105,13 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     public void SetCardsInfo() {
         // Debug.Log($"eo");
         // _deckInfo = Resources.Load<CardsInfo>($"PlayerCards{PlayerController.GetPlayerId()}");
+    }
+
+    // public void OnGameStarted() {
+    //     pv.RPC("TurnOnSprite", RpcTarget.AllBuffered);
+    // }
+
+    private void OnDestroy() {
+        if (GameManager.HasInstance()) GameManager.Instance.OnGameStartedEvent -= TurnOnSprite;
     }
 }

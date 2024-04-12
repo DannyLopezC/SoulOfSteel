@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,9 +10,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public bool testing;
 
     public GameObject handPanel;
-    
+
     public Phase CurrentPhase { get; private set; }
     public GameObject LocalPlayerInstance { get; set; }
+    public string LocalPlayerName;
 
     public int currentPriority; // player Id
     public BoardView boardView;
@@ -22,9 +24,22 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action OnDrawFinishedEvent;
     public event Action<string> OnDataDownloadedEvent;
     public event Action<Vector2> OnCellClickedEvent;
+    public event Action OnGameStartedEvent;
 
     public void OnCellClicked(Vector2 index) {
         OnCellClickedEvent?.Invoke(index);
+    }
+
+    public void OnGameStarted() {
+        StartCoroutine(OnGameStartedCoroutine());
+    }
+
+    public IEnumerator OnGameStartedCoroutine() {
+        while (playerList.Count < 2 && !testing) {
+            yield return null;
+        }
+
+        OnGameStartedEvent?.Invoke();
     }
 
     public void OnDataDownloaded(string data) {
@@ -40,15 +55,12 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     }
 
     public void ApplyDamage(int playerId) {
-        
     }
 
     public void ValidateHealthStatus() {
-        
     }
 
     public void ExecuteEffect() {
-        
     }
 
     public void PrepareForMatch(IMatchView matchView) {

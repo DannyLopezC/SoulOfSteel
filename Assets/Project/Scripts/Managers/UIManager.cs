@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviourSingleton<UIManager> {
+    public TMP_InputField nickname;
+
     [SerializeField] private GameObject gamePanel;
     [SerializeField] public MatchView _currentGamePanel;
-    
+
     [SerializeField] private GameObject cardPanel;
     [SerializeField] private CardPanel _currentCardPanel;
 
@@ -16,7 +20,15 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private Canvas _currentWaitingForOpponentPanel;
 
     public MatchView matchView;
-    
+
+    private void Start() {
+        nickname.onValueChanged.AddListener(SetNickname);
+    }
+
+    private void SetNickname(string nickname) {
+        GameManager.Instance.LocalPlayerName = nickname;
+    }
+
     public void ShowWaitingForOpponentPanel(bool activate = true) {
         FindOrInstantiatePanel(ref _currentWaitingForOpponentPanel, waitingForOpponentPanel);
 
@@ -49,5 +61,9 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
 
     public void SetText(string text) {
         matchView.SetCurrentPhaseText(text);
+    }
+
+    protected override void OnDestroy() {
+        nickname.onValueChanged.RemoveAllListeners();
     }
 }

@@ -25,7 +25,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
     }
 
     public override void OnJoinedRoom() {
-        Debug.Log($"OnJoinedRoom() called by PUN: {PhotonNetwork.CurrentRoom.Name}");
+        // Debug.Log($"OnJoinedRoom() called by PUN: {PhotonNetwork.CurrentRoom.Name}");
 
         SpawnPlayer();
         StartGame();

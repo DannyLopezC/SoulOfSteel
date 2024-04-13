@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviourSingleton<GameManager> {
+    public CardsDataBase cardDataBase;
+
     public bool testing;
 
     public GameObject handPanel;

@@ -51,6 +51,7 @@ public class Downloader : MonoBehaviourSingleton<Downloader> {
         yield return playerCardsInfo.cardDataBase = JsonUtility.FromJson<CardInfoSerialized>(data);
 
         foreach (CardInfoSerialized.CardInfoStruct card in playerCardsInfo.cardDataBase.Sheet1) {
+            card.SetType();
         }
     }
 }

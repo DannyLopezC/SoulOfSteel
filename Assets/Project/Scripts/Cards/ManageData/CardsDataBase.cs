@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class CardInfoSerialized {
@@ -9,34 +11,24 @@ public class CardInfoSerialized {
     private List<CardInfoStruct> Sheet2;
 
     [Serializable]
-    public struct CardInfoStruct {
+    public class CardInfoStruct {
+        Dictionary<string, CardType> typeMapping = new() {
+            { "Campo", CardType.CampEffect },
+            { "hackeo", CardType.Hacking },
+            { "Generador", CardType.Generator },
+            { "Arma", CardType.Weapon },
+            { "Brazo", CardType.Arm },
+            { "Pecho", CardType.Chest },
+            { "Piernas", CardType.Legs },
+        };
+
         [FoldoutGroup("Card")] public int Id;
         [FoldoutGroup("Card")] public string CardName;
 
-        private CardType _type;
+        [OnValueChanged("SetType"), HideInInspector]
+        public string Type;
 
-        [FoldoutGroup("Card")]
-        public CardType Type {
-            set {
-                Dictionary<string, CardType> typeMapping = new() {
-                    { "Campo", CardType.CampEffect },
-                    { "hackeo", CardType.Hacking },
-                    { "Generador", CardType.Generator },
-                    { "Arma", CardType.Weapon },
-                    { "Brazo", CardType.Arm },
-                    { "Pecho", CardType.Chest },
-                    { "Piernas", CardType.Legs },
-                };
-
-                if (typeMapping.TryGetValue(value.ToString(), out CardType enumValue)) {
-                    _type = enumValue;
-                }
-                else {
-                    throw new ArgumentException($"Invalid CardType value: {value}");
-                }
-            }
-            get => _type;
-        }
+        [FoldoutGroup("Card")] public CardType TypeEnum;
 
         [TextArea(1, 10), FoldoutGroup("Card/Description")] [FoldoutGroup("Card")]
         public string Description;
@@ -50,6 +42,18 @@ public class CardInfoSerialized {
         [FoldoutGroup("Card")] public Sprite ImageSource;
         [FoldoutGroup("Card")] public int Health;
         [FoldoutGroup("Card")] public BoardView DefaultMovement;
+
+        public void SetType() {
+            Type = Type.Replace(" ", "");
+            if (Type == "Brazo/Arma") Type = "Arma";
+            Debug.Log($"{Type}");
+            if (typeMapping.TryGetValue(Type, out CardType enumValue)) {
+                TypeEnum = enumValue;
+            }
+            else {
+                throw new ArgumentException($"Invalid CardType Type: {Type}");
+            }
+        }
     }
 }
 

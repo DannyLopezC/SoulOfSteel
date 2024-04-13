@@ -41,6 +41,7 @@ public class PlayerController : IPlayerController {
         _deckInfo = deck;
 
         _hand = new List<CardView>();
+        _shuffledDeck = ScriptableObject.CreateInstance<PlayerCardsInfo>();
     }
 
     public void DrawCards(int amount, bool fullDraw) {
@@ -57,7 +58,7 @@ public class PlayerController : IPlayerController {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
             int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
-            CardView card = _view.AddCardToPanel(_shuffledDeck.playerCards[random].Type);
+            CardView card = _view.AddCardToPanel(_shuffledDeck.playerCards[random].TypeEnum);
             card.InitCard(_shuffledDeck.playerCards[random].CardName, _shuffledDeck.playerCards[random].Description,
                 _shuffledDeck.playerCards[random].Cost, _shuffledDeck.playerCards[random].Recovery,
                 _shuffledDeck.playerCards[random].IsCampEffect,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using TMPro;
 using UnityEditor;
@@ -102,8 +103,21 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     }
 
     public void SetCardsInfo() {
-        Debug.Log($"actor number: {pv.Owner.ActorNumber}");
-        _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{pv.Owner.ActorNumber}");
+        if (pv.IsMine) {
+            Debug.Log($"actor number: {pv.Owner.ActorNumber}");
+
+            int actorNumber = pv.Owner.ActorNumber;
+            int count = GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Count;
+            int halfCount = count / 2;
+
+            int startIndex = actorNumber == 1 ? 0 : halfCount;
+
+            _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
+
+            _deckInfo.SetPlayerCards(Enumerable
+                .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
+                .ToList());
+        }
     }
 
     private void OnDestroy() {

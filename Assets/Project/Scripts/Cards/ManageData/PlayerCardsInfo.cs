@@ -6,8 +6,21 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 
-[Serializable, CreateAssetMenu(fileName = "Card_", menuName = "Card")]
+[Serializable, CreateAssetMenu(fileName = "PlayerCards_", menuName = "PlayerCards")]
 public class PlayerCardsInfo : ScriptableObject {
-    public int playerId;
     public List<CardInfoSerialized.CardInfoStruct> playerCards;
+
+    [Button]
+    public void SetPlayerCards(List<int> cardIds) {
+        playerCards ??= new List<CardInfoSerialized.CardInfoStruct>();
+
+        playerCards.Clear();
+
+        foreach (int cardId in cardIds) {
+            CardInfoSerialized.CardInfoStruct card =
+                GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.Id == cardId);
+
+            playerCards.Add(card);
+        }
+    }
 }

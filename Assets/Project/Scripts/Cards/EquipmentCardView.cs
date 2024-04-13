@@ -18,18 +18,30 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
             CardType.Armor);
     }
 
+    public override bool GetSelected() {
+        return EquipmentCardController.GetSelected();
+    }
+
     public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement) {
+        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
         EquipmentCardController.InitEquipmentCard(cardName, cardDescription, scrapCost, scrapRecovery,
-            isCampEffect, imageSource, CardType.Pilot);
+            isCampEffect, imageSource, type);
     }
 
     public IEquipmentCardController EquipmentCardController {
         get { return _equipmentCardController ??= new EquipmentCardController(this); }
     }
 
+    public override void ManageLeftClick() {
+        EquipmentCardController.Select();
+    }
+
     public override void ManageRightClick() {
         EquipmentCardController.ManageRightClick();
+    }
+
+    public override void SetIsSelecting(bool isSelecting) {
+        EquipmentCardController.IsSelecting(isSelecting);
     }
 
     public override CardType GetCardType() {

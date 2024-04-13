@@ -50,13 +50,15 @@ public class PlayerView : MonoBehaviour, IPlayerView {
         if (pv.IsMine) {
             GameManager.Instance.LocalPlayerInstance = gameObject;
         }
+
+        if (GameManager.Instance.testing) TurnOnSprite();
     }
 
     public void TurnOnSprite() {
         TryGetComponent(out Image image);
         image.enabled = true;
         playerName.gameObject.SetActive(true);
-        playerName.text = pv.Owner.NickName;
+        if (!GameManager.Instance.testing) playerName.text = pv.Owner.NickName;
 
         SetCardsInfo();
     }
@@ -85,7 +87,9 @@ public class PlayerView : MonoBehaviour, IPlayerView {
                 prefab = effectCardPrefab;
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                prefab = pilotCardPrefab;
+                Debug.Log($"Prefab not found, using pilot prefab");
+                break;
         }
 
         GameObject GO = Instantiate(prefab, HandCardsPanel.transform);
@@ -104,9 +108,9 @@ public class PlayerView : MonoBehaviour, IPlayerView {
 
     public void SetCardsInfo() {
         if (pv.IsMine) {
-            Debug.Log($"actor number: {pv.Owner.ActorNumber}");
+            // Debug.Log($"actor number: {pv.Owner.ActorNumber}");
 
-            int actorNumber = pv.Owner.ActorNumber;
+            int actorNumber = GameManager.Instance.testing ? 1 : pv.Owner.ActorNumber;
             int count = GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Count;
             int halfCount = count / 2;
 
@@ -127,6 +131,12 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     public void DrawCards(int amount, bool fullDraw) {
         if (pv.IsMine) {
             PlayerController.DrawCards(amount, fullDraw);
+        }
+    }
+
+    public void SelectCards(CardType type, int amount) {
+        if (pv.IsMine) {
+            StartCoroutine(PlayerController.SelectCards(type, amount));
         }
     }
 }

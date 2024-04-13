@@ -18,11 +18,16 @@ public interface ICardController {
     CardType GetCardType();
     public void ManageRightClick();
     void PrintInfo();
+    void Select(bool deselect = false);
+    void IsSelecting(bool isSelecting);
+    bool GetSelected();
 }
 
 public abstract class CardController : ICardController {
     private readonly ICardView _view;
 
+    private bool _isSelecting;
+    private bool _selected;
     private int _scrapRecovery;
     private bool _isCampEffect;
 
@@ -69,4 +74,19 @@ public abstract class CardController : ICardController {
     }
 
     public abstract CardType GetCardType();
+
+    public void Select(bool deselect = false) {
+        if (!_isSelecting) return;
+
+        _selected = !deselect && !_selected;
+        _view.GetGameObject().transform.localScale = _selected ? Vector3.one : new Vector3(0.7f, 0.7f, 0.7f);
+    }
+
+    public void IsSelecting(bool isSelecting) {
+        _isSelecting = isSelecting;
+    }
+
+    public bool GetSelected() {
+        return _selected;
+    }
 }

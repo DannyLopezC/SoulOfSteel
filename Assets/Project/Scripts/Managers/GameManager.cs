@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action<string> OnDataDownloadedEvent;
     public event Action<Vector2> OnCellClickedEvent;
     public event Action OnGameStartedEvent;
+    public event Action<List<CardView>> OnSelectingFinishedEvent;
+
+    public void OnSelectingFinished(List<CardView> selectedCards) {
+        OnSelectingFinishedEvent?.Invoke(selectedCards);
+    }
 
     public void OnCellClicked(Vector2 index) {
         OnCellClickedEvent?.Invoke(index);

@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     public MatchView matchView;
 
     private void Start() {
-        nickname.onValueChanged.AddListener(SetNickname);
+        if (!GameManager.Instance.testing) nickname.onValueChanged.AddListener(SetNickname);
     }
 
     private void SetNickname(string nickname) {
@@ -64,6 +64,6 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     }
 
     protected override void OnDestroy() {
-        nickname.onValueChanged.RemoveAllListeners();
+        if (GameManager.HasInstance() && !GameManager.Instance.testing) nickname.onValueChanged.RemoveAllListeners();
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
@@ -26,6 +27,7 @@ public class MatchView : MonoBehaviour, IMatchView {
     private void Start() {
     }
 
+    [Button]
     public void PrepareMatch() {
         StartCoroutine(MatchController.PrepareMatch());
     }
@@ -37,7 +39,7 @@ public class MatchView : MonoBehaviour, IMatchView {
     private void ExecutePhases(Phase phase) {
         StartCoroutine(phase.Start());
     }
-    
+
     private void OnDestroy() {
         if (GameManager.HasInstance()) GameManager.Instance.ExecutePhases -= ExecutePhases;
     }

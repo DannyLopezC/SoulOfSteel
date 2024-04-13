@@ -345,6 +345,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
     - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: effectCardPrefab
+      value: 
+      objectReference: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
+    - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: equipmentCardPrefab
       value: 
       objectReference: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}

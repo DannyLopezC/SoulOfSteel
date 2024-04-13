@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,6 +15,7 @@ public interface IPlayerController {
     void SelectAttack();
     void SelectMovement();
     void SelectDefense();
+    IEnumerator SelectCards(CardType type, int amount);
     void DoDamage(int damage);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
@@ -23,7 +25,7 @@ public class PlayerController : IPlayerController {
     private readonly IPlayerView _view;
 
     private int _playerId;
-    private int _health;
+    [ShowInInspector] private int _health;
     private int _scrapPoints;
     private readonly PlayerCardsInfo _deckInfo;
     private PlayerCardsInfo _shuffledDeck;
@@ -58,12 +60,11 @@ public class PlayerController : IPlayerController {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
             int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
-            CardView card = _view.AddCardToPanel(_shuffledDeck.playerCards[random].TypeEnum);
-            card.InitCard(_shuffledDeck.playerCards[random].CardName, _shuffledDeck.playerCards[random].Description,
-                _shuffledDeck.playerCards[random].Cost, _shuffledDeck.playerCards[random].Recovery,
-                _shuffledDeck.playerCards[random].IsCampEffect,
-                _shuffledDeck.playerCards[random].ImageSource, _shuffledDeck.playerCards[random].Health,
-                _shuffledDeck.playerCards[random].DefaultMovement);
+            CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[random];
+            CardView card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
+            card.InitCard(cardInfoStruct.CardName, cardInfoStruct.Description, cardInfoStruct.Cost,
+                cardInfoStruct.Recovery, cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource,
+                cardInfoStruct.Health, cardInfoStruct.DefaultMovement, cardInfoStruct.TypeEnum);
             _hand.Add(card);
             _shuffledDeck.playerCards.RemoveAt(random);
             if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck();
@@ -110,5 +111,44 @@ public class PlayerController : IPlayerController {
 
     public void SetPlayerId(int id) {
         _playerId = id;
+    }
+
+    public IEnumerator SelectCards(CardType type, int amount) {
+        List<CardView> selectedCards = new List<CardView>();
+        int currentAmount = amount;
+
+        if (_hand.Find(card => card.GetCardType() == CardType.CampEffect) == null) {
+            GameManager.Instance.OnSelectingFinished(selectedCards);
+            yield break;
+        }
+
+        foreach (CardView card in _hand) {
+            if (card.GetCardType() == type) {
+                card.SetIsSelecting(true);
+            }
+        }
+
+        while (currentAmount > 0) {
+            foreach (CardView card in _hand) {
+                if (card.GetSelected()) {
+                    if (!selectedCards.Contains(card)) {
+                        selectedCards.Add(card);
+                    }
+                }
+                else {
+                    selectedCards.Remove(card);
+                }
+            }
+
+            currentAmount = amount - selectedCards.Count;
+            if (currentAmount <= 0) {
+                break; // Exit the loop if the required amount is reached
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(2);
+        GameManager.Instance.OnSelectingFinished(selectedCards);
     }
 }

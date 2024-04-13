@@ -17,7 +17,7 @@ public interface IPlayerView {
 [Serializable]
 public class PlayerView : MonoBehaviour, IPlayerView {
     [SerializeField] private PhotonView pv;
-    [SerializeField] private CardsInfo _deckInfo;
+    [SerializeField] private PlayerCardsInfo _deckInfo;
 
     private GameObject _handCardsPanel;
 
@@ -43,9 +43,6 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     }
 
     private void Start() {
-        // TryGetComponent(out Image image);
-        // image.enabled = false;
-        // playerNumber.gameObject.SetActive(false);
         pv = GetComponent<PhotonView>();
         GameManager.Instance.playerList.Add(this);
 
@@ -59,6 +56,8 @@ public class PlayerView : MonoBehaviour, IPlayerView {
         image.enabled = true;
         playerName.gameObject.SetActive(true);
         playerName.text = pv.Owner.NickName;
+
+        SetCardsInfo();
     }
 
     public GameObject GetHandCardsPanel() {
@@ -103,15 +102,17 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     }
 
     public void SetCardsInfo() {
-        // Debug.Log($"eo");
-        // _deckInfo = Resources.Load<CardsInfo>($"PlayerCards{PlayerController.GetPlayerId()}");
+        Debug.Log($"actor number: {pv.Owner.ActorNumber}");
+        _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{pv.Owner.ActorNumber}");
     }
-
-    // public void OnGameStarted() {
-    //     pv.RPC("TurnOnSprite", RpcTarget.AllBuffered);
-    // }
 
     private void OnDestroy() {
         if (GameManager.HasInstance()) GameManager.Instance.OnGameStartedEvent -= TurnOnSprite;
+    }
+
+    public void DrawCards(int amount, bool fullDraw) {
+        if (pv.IsMine) {
+            PlayerController.DrawCards(amount, fullDraw);
+        }
     }
 }

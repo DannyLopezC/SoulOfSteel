@@ -1,10 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Flags]
 public enum CardType {
     Pilot,
     Weapon,
     Armor,
-    CampEffect
+    CampEffect,
+    Hacking,
+    Generator,
+    Arm,
+    Legs,
+    Chest
 }
 
 public interface ICardController {

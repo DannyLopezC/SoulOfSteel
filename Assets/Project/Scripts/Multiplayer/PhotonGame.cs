@@ -57,7 +57,6 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
             .TryGetComponent(out PlayerView currentPlayer);
 
         currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.PlayerList.Length);
-        currentPlayer.SetCardsInfo();
     }
 
     public void StartGame() {

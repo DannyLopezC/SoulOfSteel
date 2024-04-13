@@ -15,52 +15,94 @@ MonoBehaviour:
   textAssetData: {fileID: 0}
   playerId: 0
   playerCards:
-  - cardName: hello
+  - id: 0
+    cardName: 'Franja Minada de Tulik '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
-  - cardName: nombe
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Campos Gravitacionales Racksianos '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
-  - cardName: popo
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Worm port  '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
-  - cardName: joder ostia
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Tuneles de Topos '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
-  - cardName: yo k se
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Lagunas Acidas  '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
-  - cardName: tu papa
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Plataformas aereas '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
-  - cardName: lina te amo
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Circuito De Carreras de Formula R '
     type: 0
     cardDescription: 
     cost: 0
     energy: 0
     damage: 0
     shield: 0
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}

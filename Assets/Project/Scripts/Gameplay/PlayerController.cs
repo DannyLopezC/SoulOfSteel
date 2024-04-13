@@ -25,8 +25,8 @@ public class PlayerController : IPlayerController {
     private int _playerId;
     private int _health;
     private int _scrapPoints;
-    private readonly CardsInfo _deckInfo;
-    private List<CardsInfo.CardInfoStruct> _shuffledDeck;
+    private readonly PlayerCardsInfo _deckInfo;
+    private PlayerCardsInfo _shuffledDeck;
     private List<CardView> _hand;
     private List<CardView> _scrapPile;
     private List<CardView> _factory;
@@ -36,7 +36,7 @@ public class PlayerController : IPlayerController {
     private EquipmentCardView _rightArm;
     private EquipmentCardView _bodyArmor;
 
-    public PlayerController(IPlayerView view, CardsInfo deck) {
+    public PlayerController(IPlayerView view, PlayerCardsInfo deck) {
         _view = view;
         _deckInfo = deck;
 
@@ -56,14 +56,16 @@ public class PlayerController : IPlayerController {
         while (amount > 0) {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
-            int random = Random.Range(0, _shuffledDeck.Count - 1);
-            CardView card = _view.AddCardToPanel(_shuffledDeck[random].type);
-            card.InitCard(_shuffledDeck[random].cardName, _shuffledDeck[random].cardDescription,
-                _shuffledDeck[random].cost, _shuffledDeck[random].recovery, _shuffledDeck[random].isCampEffect,
-                _shuffledDeck[random].imageSource, _shuffledDeck[random].health, _shuffledDeck[random].defaultMovement);
+            int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
+            CardView card = _view.AddCardToPanel(_shuffledDeck.playerCards[random].Type);
+            card.InitCard(_shuffledDeck.playerCards[random].CardName, _shuffledDeck.playerCards[random].Description,
+                _shuffledDeck.playerCards[random].Cost, _shuffledDeck.playerCards[random].Recovery,
+                _shuffledDeck.playerCards[random].IsCampEffect,
+                _shuffledDeck.playerCards[random].ImageSource, _shuffledDeck.playerCards[random].Health,
+                _shuffledDeck.playerCards[random].DefaultMovement);
             _hand.Add(card);
-            _shuffledDeck.RemoveAt(random);
-            if (_shuffledDeck.Count == 0) ShuffleDeck();
+            _shuffledDeck.playerCards.RemoveAt(random);
+            if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck();
             amount--;
         }
 
@@ -75,15 +77,13 @@ public class PlayerController : IPlayerController {
     }
 
     public void EquipCard(int indexHandList) {
-        
     }
 
     public void DismissCard(int indexHandList) {
-        
     }
 
     public void ShuffleDeck() {
-        List<CardsInfo.CardInfoStruct> temporalDeck = _deckInfo.playerCards.ToList();
+        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _deckInfo.playerCards.ToList();
 
         int n = temporalDeck.Count;
         while (n > 1) {
@@ -92,23 +92,19 @@ public class PlayerController : IPlayerController {
             (temporalDeck[k], temporalDeck[n]) = (temporalDeck[n], temporalDeck[k]);
         }
 
-        _shuffledDeck = temporalDeck;
+        _shuffledDeck.playerCards = temporalDeck;
     }
 
     public void SelectAttack() {
-        
     }
 
     public void SelectMovement() {
-        
     }
 
     public void SelectDefense() {
-        
     }
 
     public void DoDamage(int damage) {
-        
     }
 
     public void SetPlayerId(int id) {

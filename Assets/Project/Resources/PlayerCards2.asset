@@ -16,7 +16,7 @@ MonoBehaviour:
   playerId: 0
   playerCards:
   - id: 0
-    cardName: 
+    cardName: 'Ciber Camuflaje '
     type: 0
     cardDescription: 
     cost: 0
@@ -29,7 +29,72 @@ MonoBehaviour:
     health: 0
     defaultMovement: {fileID: 0}
   - id: 0
-    cardName: 
+    cardName: 'Balisa Cuantica '
+    type: 0
+    cardDescription: 
+    cost: 0
+    energy: 0
+    damage: 0
+    shield: 0
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Maniobras Evasivas '
+    type: 0
+    cardDescription: 
+    cost: 0
+    energy: 0
+    damage: 0
+    shield: 0
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Rematerializacion Atomica '
+    type: 0
+    cardDescription: 
+    cost: 0
+    energy: 0
+    damage: 0
+    shield: 0
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Piezas Defectuosas '
+    type: 0
+    cardDescription: 
+    cost: 0
+    energy: 0
+    damage: 0
+    shield: 0
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Ingenieria Inversa '
+    type: 0
+    cardDescription: 
+    cost: 0
+    energy: 0
+    damage: 0
+    shield: 0
+    recovery: 0
+    isCampEffect: 0
+    imageSource: {fileID: 0}
+    health: 0
+    defaultMovement: {fileID: 0}
+  - id: 0
+    cardName: 'Propulsores de emergencia '
     type: 0
     cardDescription: 
     cost: 0

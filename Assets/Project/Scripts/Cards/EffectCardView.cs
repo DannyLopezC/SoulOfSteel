@@ -35,6 +35,14 @@ public class EffectCardView : CardView, IEffectCardView {
         return EffectCardController.GetSelected();
     }
 
+    public override void Select(bool deselect = false) {
+        EffectCardController.Select(deselect);
+    }
+
+    public override void DoEffect() {
+        EffectCardController.DoEffect();
+    }
+
     public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
     }

@@ -9,6 +9,7 @@ public interface ICardView {
     void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource);
 
     GameObject GetGameObject();
+    // void SelectAnimation();
 }
 
 [Serializable]
@@ -51,6 +52,10 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public abstract void SetIsSelecting(bool isSelecting);
     public abstract CardType GetCardType();
     public abstract bool GetSelected();
+    public abstract void Select(bool deselect = false);
+
+    public abstract void DoEffect();
+    // public abstract void SelectAnimation();
 
     public abstract void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type);

@@ -21,6 +21,7 @@ public interface ICardController {
     void Select(bool deselect = false);
     void IsSelecting(bool isSelecting);
     bool GetSelected();
+    void DoEffect();
 }
 
 public abstract class CardController : ICardController {
@@ -76,10 +77,19 @@ public abstract class CardController : ICardController {
     public abstract CardType GetCardType();
 
     public void Select(bool deselect = false) {
-        if (!_isSelecting) return;
+        if (_isSelecting) {
+            _selected = !deselect && !_selected;
+            _view.GetGameObject().transform.localScale = _selected ? Vector3.one : new Vector3(0.7f, 0.7f, 0.7f);
+            GameManager.Instance.OnCardSelected(_view.GetGameObject().GetComponent<CardView>(), _selected);
+        }
+        else {
+            _selected = !deselect;
+            _view.GetGameObject().transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        }
+    }
 
-        _selected = !deselect && !_selected;
-        _view.GetGameObject().transform.localScale = _selected ? Vector3.one : new Vector3(0.7f, 0.7f, 0.7f);
+    public void SelectAnimation(bool select) {
+        _view.GetGameObject().transform.position.
     }
 
     public void IsSelecting(bool isSelecting) {
@@ -88,5 +98,9 @@ public abstract class CardController : ICardController {
 
     public bool GetSelected() {
         return _selected;
+    }
+
+    public virtual void DoEffect() {
+        Debug.Log($"doing effect from {CardName}");
     }
 }

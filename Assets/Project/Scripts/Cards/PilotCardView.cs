@@ -35,6 +35,14 @@ public class PilotCardView : CardView, IPilotCardView {
         return PilotCardController.GetSelected();
     }
 
+    public override void Select(bool deselect = false) {
+        PilotCardController.Select(deselect);
+    }
+
+    public override void DoEffect() {
+        PilotCardController.DoEffect();
+    }
+
     public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
         PilotCardController.InitializePilotCard(cardName, cardDescription, scrapCost, scrapRecovery,

@@ -88,7 +88,7 @@ public class PlayerView : MonoBehaviour, IPlayerView {
                 break;
             default:
                 prefab = pilotCardPrefab;
-                Debug.Log($"Prefab not found, using pilot prefab");
+                // Debug.Log($"Prefab not found, using pilot prefab");
                 break;
         }
 
@@ -136,7 +136,7 @@ public class PlayerView : MonoBehaviour, IPlayerView {
 
     public void SelectCards(CardType type, int amount) {
         if (pv.IsMine) {
-            StartCoroutine(PlayerController.SelectCards(type, amount));
+            PlayerController.SelectCards(type, amount);
         }
     }
 }

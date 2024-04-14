@@ -22,6 +22,14 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
         return EquipmentCardController.GetSelected();
     }
 
+    public override void Select(bool deselect = false) {
+        EquipmentCardController.Select(deselect);
+    }
+
+    public override void DoEffect() {
+        EquipmentCardController.DoEffect();
+    }
+
     public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
         EquipmentCardController.InitEquipmentCard(cardName, cardDescription, scrapCost, scrapRecovery,

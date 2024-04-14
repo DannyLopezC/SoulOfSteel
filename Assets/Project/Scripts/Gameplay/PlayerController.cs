@@ -15,7 +15,7 @@ public interface IPlayerController {
     void SelectAttack();
     void SelectMovement();
     void SelectDefense();
-    IEnumerator SelectCards(CardType type, int amount);
+    void SelectCards(CardType type, int amount);
     void DoDamage(int damage);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
@@ -113,42 +113,11 @@ public class PlayerController : IPlayerController {
         _playerId = id;
     }
 
-    public IEnumerator SelectCards(CardType type, int amount) {
-        List<CardView> selectedCards = new List<CardView>();
-        int currentAmount = amount;
-
-        if (_hand.Find(card => card.GetCardType() == CardType.CampEffect) == null) {
-            GameManager.Instance.OnSelectingFinished(selectedCards);
-            yield break;
-        }
-
+    public void SelectCards(CardType type, int amount) {
         foreach (CardView card in _hand) {
             if (card.GetCardType() == type) {
                 card.SetIsSelecting(true);
             }
         }
-
-        while (currentAmount > 0) {
-            foreach (CardView card in _hand) {
-                if (card.GetSelected()) {
-                    if (!selectedCards.Contains(card)) {
-                        selectedCards.Add(card);
-                    }
-                }
-                else {
-                    selectedCards.Remove(card);
-                }
-            }
-
-            currentAmount = amount - selectedCards.Count;
-            if (currentAmount <= 0) {
-                break; // Exit the loop if the required amount is reached
-            }
-
-            yield return null;
-        }
-
-        yield return new WaitForSeconds(2);
-        GameManager.Instance.OnSelectingFinished(selectedCards);
     }
 }

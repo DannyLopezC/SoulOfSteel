@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 public interface IEffectCardController : ICardController {
-    void DoEffect();
 }
 
 public class EffectCardController : CardController, IEffectCardController {
@@ -13,9 +12,5 @@ public class EffectCardController : CardController, IEffectCardController {
 
     public override CardType GetCardType() {
         return Type;
-    }
-
-    public void DoEffect() {
-        Debug.Log($"Doing effect");
     }
 }

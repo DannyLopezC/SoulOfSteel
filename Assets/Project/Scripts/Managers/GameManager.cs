@@ -27,10 +27,15 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action<string> OnDataDownloadedEvent;
     public event Action<Vector2> OnCellClickedEvent;
     public event Action OnGameStartedEvent;
-    public event Action<List<CardView>> OnSelectingFinishedEvent;
+    public event Action OnSelectingFinishedEvent;
+    public event Action<CardView, bool> OnCardSelectedEvent;
 
-    public void OnSelectingFinished(List<CardView> selectedCards) {
-        OnSelectingFinishedEvent?.Invoke(selectedCards);
+    public void OnCardSelected(CardView card, bool selected) {
+        OnCardSelectedEvent?.Invoke(card, selected);
+    }
+
+    public void OnSelectingFinished() {
+        OnSelectingFinishedEvent?.Invoke();
     }
 
     public void OnCellClicked(Vector2 index) {

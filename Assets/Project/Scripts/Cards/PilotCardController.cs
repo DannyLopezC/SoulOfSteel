@@ -4,8 +4,6 @@ public interface IPilotCardController : ICardController {
     void InitializePilotCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type,
         int defaultDamage = 0);
-
-    void DoEffect();
 }
 
 public class PilotCardController : CardController, IPilotCardController {
@@ -30,10 +28,6 @@ public class PilotCardController : CardController, IPilotCardController {
         /* Init card method called at the end because I am calling SetCardUI from it,
            and in this class I am modifying the SetCardUI*/
         InitCard(cardName, cardDescription, scrapCost, scrapRecovery, isCampEffect, imageSource, type);
-    }
-
-    public void DoEffect() {
-        Debug.Log($"doing effect");
     }
 
     protected override void SetCardUI() {

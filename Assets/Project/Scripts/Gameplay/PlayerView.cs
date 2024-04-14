@@ -23,7 +23,7 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     private GameObject _handCardsPanel;
 
     public GameObject HandCardsPanel {
-        get { return _handCardsPanel ??= GameManager.Instance.handPanel; }
+        get { return _handCardsPanel ??= GameManager.Instance.handPanel.gameObject; }
     }
 
     [SerializeField] private GameObject equipmentCardPrefab;

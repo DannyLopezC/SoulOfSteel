@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     public bool testing;
 
-    public GameObject handPanel;
+    public HandPanel handPanel;
+    public HandPanel middlePanel;
 
     public Phase CurrentPhase { get; private set; }
     public GameObject LocalPlayerInstance { get; set; }

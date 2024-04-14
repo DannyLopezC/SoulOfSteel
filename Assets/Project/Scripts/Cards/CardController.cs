@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 [Flags]
@@ -27,6 +28,7 @@ public interface ICardController {
 public abstract class CardController : ICardController {
     private readonly ICardView _view;
 
+    private Vector3 startingPos;
     private bool _isSelecting;
     private bool _selected;
     private int _scrapRecovery;
@@ -53,6 +55,7 @@ public abstract class CardController : ICardController {
         Type = type;
 
         SetCardUI();
+        startingPos = _view.GetGameObject().transform.position;
     }
 
     protected virtual void SetCardUI() {
@@ -79,17 +82,31 @@ public abstract class CardController : ICardController {
     public void Select(bool deselect = false) {
         if (_isSelecting) {
             _selected = !deselect && !_selected;
-            _view.GetGameObject().transform.localScale = _selected ? Vector3.one : new Vector3(0.7f, 0.7f, 0.7f);
+            SelectAnimation(_selected);
             GameManager.Instance.OnCardSelected(_view.GetGameObject().GetComponent<CardView>(), _selected);
         }
         else {
             _selected = !deselect;
-            _view.GetGameObject().transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
         }
     }
 
     public void SelectAnimation(bool select) {
-        // _view.GetGameObject().transform.position.
+        Transform animationReference = GameManager.Instance.handPanel.animationReference;
+        var parent = GameManager.Instance.handPanel.transform.parent;
+        animationReference.SetParent(parent);
+        Transform t = _view.GetGameObject().transform;
+        t.SetParent(parent);
+        Vector3 endPos = select
+            ? GameManager.Instance.middlePanel.transform.position
+            : animationReference.position;
+        if (select) animationReference.SetParent(GameManager.Instance.handPanel.transform);
+        t.DOMove(endPos, 0.5f).OnComplete(() => {
+            t.SetParent(select
+                ? GameManager.Instance.middlePanel.transform
+                : GameManager.Instance.handPanel.transform);
+
+            if (!select) animationReference.SetParent(GameManager.Instance.handPanel.transform);
+        });
     }
 
     public void IsSelecting(bool isSelecting) {

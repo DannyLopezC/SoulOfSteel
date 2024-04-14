@@ -26,7 +26,7 @@ public class RechargePhase : Phase {
         if (selected) _effectCards.Add(card);
         else _effectCards.Remove(card);
 
-        if (_effectCards.Count >= 1) GameManager.Instance.OnSelectingFinished();
+        // if (_effectCards.Count >= 2) GameManager.Instance.OnSelectingFinished();
     }
 
     private void AllCardsSelected() {

@@ -89,7 +89,7 @@ public abstract class CardController : ICardController {
     }
 
     public void SelectAnimation(bool select) {
-        _view.GetGameObject().transform.position.
+        // _view.GetGameObject().transform.position.
     }
 
     public void IsSelecting(bool isSelecting) {

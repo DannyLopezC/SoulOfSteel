@@ -19,6 +19,8 @@ public interface IPlayerController {
     void DoDamage(int damage);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
+    bool GetCardsSelected();
+    void SetCardsSelected(bool cardsSelected);
 }
 
 public class PlayerController : IPlayerController {
@@ -38,6 +40,8 @@ public class PlayerController : IPlayerController {
     private EquipmentCardView _rightArm;
     private EquipmentCardView _bodyArmor;
 
+    private bool _cardsSelected;
+
     public PlayerController(IPlayerView view, PlayerCardsInfo deck) {
         _view = view;
         _deckInfo = deck;
@@ -48,6 +52,9 @@ public class PlayerController : IPlayerController {
 
     public void DrawCards(int amount, bool fullDraw) {
         if (fullDraw) {
+            // not destroying the select animatino reference
+            GameManager.Instance.handPanel.animationReference.SetParent(
+                GameManager.Instance.handPanel.transform.parent);
             _view.CleanHandsPanel();
             _hand.Clear();
         }
@@ -76,6 +83,14 @@ public class PlayerController : IPlayerController {
 
     public int GetPlayerId() {
         return _playerId;
+    }
+
+    public bool GetCardsSelected() {
+        return _cardsSelected;
+    }
+
+    public void SetCardsSelected(bool cardsSelected) {
+        _cardsSelected = cardsSelected;
     }
 
     public void EquipCard(int indexHandList) {

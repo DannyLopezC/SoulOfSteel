@@ -41,7 +41,7 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
     }
 
     public override void ManageLeftClick() {
-        EquipmentCardController.Select();
+        EquipmentCardController.Select(false);
     }
 
     public override void ManageRightClick() {

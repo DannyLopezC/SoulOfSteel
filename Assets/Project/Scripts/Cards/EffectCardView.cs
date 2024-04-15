@@ -16,7 +16,7 @@ public class EffectCardView : CardView, IEffectCardView {
     }
 
     public override void ManageLeftClick() {
-        EffectCardController.Select();
+        EffectCardController.Select(false);
     }
 
     public override void ManageRightClick() {

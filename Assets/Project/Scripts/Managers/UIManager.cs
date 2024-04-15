@@ -64,6 +64,8 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     }
 
     protected override void OnDestroy() {
-        if (GameManager.HasInstance() && !GameManager.Instance.testing) nickname.onValueChanged.RemoveAllListeners();
+        if (GameManager.HasInstance())
+            if (!GameManager.Instance.testing)
+                nickname.onValueChanged.RemoveAllListeners();
     }
 }

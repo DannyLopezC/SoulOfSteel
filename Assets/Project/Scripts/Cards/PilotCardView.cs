@@ -56,7 +56,7 @@ public class PilotCardView : CardView, IPilotCardView {
     }
 
     public override void ManageLeftClick() {
-        PilotCardController.Select();
+        PilotCardController.Select(false);
     }
 
     public override void ManageRightClick() {

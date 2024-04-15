@@ -15,12 +15,14 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public HandPanel middlePanel;
 
     public Phase CurrentPhase { get; private set; }
-    public GameObject LocalPlayerInstance { get; set; }
+    public PlayerView LocalPlayerInstance { get; set; }
     public string LocalPlayerName;
 
     public int currentPriority; // player Id
     public BoardView boardView;
     public List<PlayerView> playerList;
+
+    #region Events
 
     public event Action OnMasterServerConnected;
     public event Action<Phase> ExecutePhases;
@@ -30,6 +32,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action OnGameStartedEvent;
     public event Action OnSelectingFinishedEvent;
     public event Action<CardView, bool> OnCardSelectedEvent;
+
+    #endregion
+
+    #region EventsInvokes
 
     public void OnCardSelected(CardView card, bool selected) {
         OnCardSelectedEvent?.Invoke(card, selected);
@@ -67,23 +73,22 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         OnMasterServerConnected?.Invoke();
     }
 
+    public void ChangePhase(Phase phase) {
+        CurrentPhase = phase;
+        ExecutePhases?.Invoke(CurrentPhase);
+    }
+
+    #endregion
+
     public void ApplyDamage(int playerId) {
     }
 
     public void ValidateHealthStatus() {
     }
 
-    public void ExecuteEffect() {
-    }
-
     public void PrepareForMatch(IMatchView matchView) {
         playerList.ForEach(player => player.PlayerController.ShuffleDeck());
         ChangePhase(new DrawPhase(matchView));
-    }
-
-    public void ChangePhase(Phase phase) {
-        CurrentPhase = phase;
-        ExecutePhases?.Invoke(CurrentPhase);
     }
 
     protected override void OnDestroy() {

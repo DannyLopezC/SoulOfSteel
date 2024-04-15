@@ -13,13 +13,15 @@ public interface IPlayerView {
     void CleanHandsPanel();
     CardView AddCardToPanel(CardType cardType);
     void InitAddCards(int amount);
+    PhotonView GetPv();
 }
 
 [Serializable]
-public class PlayerView : MonoBehaviour, IPlayerView {
+public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable {
     [SerializeField] private PhotonView pv;
     [SerializeField] private PlayerCardsInfo _deckInfo;
 
+    public bool _inAnimation;
     private GameObject _handCardsPanel;
 
     public GameObject HandCardsPanel {
@@ -48,7 +50,7 @@ public class PlayerView : MonoBehaviour, IPlayerView {
         GameManager.Instance.playerList.Add(this);
 
         if (pv.IsMine) {
-            GameManager.Instance.LocalPlayerInstance = gameObject;
+            GameManager.Instance.LocalPlayerInstance = this;
         }
 
         if (GameManager.Instance.testing) TurnOnSprite();
@@ -99,11 +101,16 @@ public class PlayerView : MonoBehaviour, IPlayerView {
         rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
         GO.TryGetComponent(out CardView card);
+        GO.SetActive(pv.IsMine);
         return card;
     }
 
     public void InitAddCards(int amount) {
         StartCoroutine(PlayerController.AddCards(amount));
+    }
+
+    public PhotonView GetPv() {
+        return pv;
     }
 
     public void SetCardsInfo() {
@@ -129,14 +136,29 @@ public class PlayerView : MonoBehaviour, IPlayerView {
     }
 
     public void DrawCards(int amount, bool fullDraw) {
-        if (pv.IsMine) {
-            PlayerController.DrawCards(amount, fullDraw);
-        }
+        PlayerController.DrawCards(amount, fullDraw);
     }
 
     public void SelectCards(CardType type, int amount) {
-        if (pv.IsMine) {
-            PlayerController.SelectCards(type, amount);
+        PlayerController.SelectCards(type, amount);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        if (stream.IsWriting) {
+            stream.SendNext(PlayerController.GetCardsSelected());
+            stream.SendNext(PlayerController.GetPlayerId());
+            // Debug.Log($"sent message {PlayerController.GetCardsSelected()}");
+        }
+        else if (stream.IsReading) {
+            bool receivedSelection = (bool)stream.ReceiveNext();
+            int receivedPlayerId = (int)stream.ReceiveNext();
+
+            // Debug.Log($"received message {receivedSelection}");
+            foreach (PlayerView player in GameManager.Instance.playerList) {
+                if (receivedPlayerId == player.pv.Owner.ActorNumber) {
+                    player.PlayerController.SetCardsSelected(receivedSelection);
+                }
+            }
         }
     }
 }

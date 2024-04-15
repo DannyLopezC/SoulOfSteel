@@ -1,5 +1,6 @@
 ﻿using System;
 using DG.Tweening;
+using Photon.Pun;
 using UnityEngine;
 
 [Flags]
@@ -80,32 +81,46 @@ public abstract class CardController : ICardController {
     public abstract CardType GetCardType();
 
     public void Select(bool deselect = false) {
+        if (GameManager.Instance.LocalPlayerInstance._inAnimation) return;
+        if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetCardsSelected() && !_selected) return;
+
         if (_isSelecting) {
             _selected = !deselect && !_selected;
             SelectAnimation(_selected);
             GameManager.Instance.OnCardSelected(_view.GetGameObject().GetComponent<CardView>(), _selected);
         }
-        else {
+        else if (!_isSelecting && _selected) {
             _selected = !deselect;
+            SelectAnimation(_selected);
         }
     }
 
-    public void SelectAnimation(bool select) {
+    private void SelectAnimation(bool select) {
         Transform animationReference = GameManager.Instance.handPanel.animationReference;
-        var parent = GameManager.Instance.handPanel.transform.parent;
+        Transform parent = GameManager.Instance.handPanel.transform.parent;
+
         animationReference.SetParent(parent);
+
         Transform t = _view.GetGameObject().transform;
         t.SetParent(parent);
+
         Vector3 endPos = select
             ? GameManager.Instance.middlePanel.transform.position
             : animationReference.position;
+
         if (select) animationReference.SetParent(GameManager.Instance.handPanel.transform);
+
+        GameManager.Instance.LocalPlayerInstance._inAnimation = true;
         t.DOMove(endPos, 0.5f).OnComplete(() => {
             t.SetParent(select
                 ? GameManager.Instance.middlePanel.transform
                 : GameManager.Instance.handPanel.transform);
 
-            if (!select) animationReference.SetParent(GameManager.Instance.handPanel.transform);
+            if (!select) {
+                animationReference.SetParent(GameManager.Instance.handPanel.transform);
+            }
+
+            GameManager.Instance.LocalPlayerInstance._inAnimation = false;
         });
     }
 

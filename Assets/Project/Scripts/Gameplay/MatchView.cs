@@ -25,6 +25,7 @@ public class MatchView : MonoBehaviour, IMatchView {
     }
 
     private void Start() {
+        if (GameManager.Instance.testing) PrepareMatch();
     }
 
     [Button]

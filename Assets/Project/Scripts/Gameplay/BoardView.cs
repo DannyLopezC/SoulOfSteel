@@ -22,7 +22,7 @@ public class BoardView : MonoBehaviour, IBoardView {
     [OnValueChanged("GenerateBoard")] public float offset;
     public GameObject cellPrefab;
 
-    [ShowInInspector] public List<List<CellView>> _boardStatus = new List<List<CellView>>();
+    [ShowInInspector] private List<List<CellView>> _boardStatus = new List<List<CellView>>();
 
     private IBoardController _boardController;
 
@@ -79,6 +79,10 @@ public class BoardView : MonoBehaviour, IBoardView {
 
     public void SetBoardStatus(List<List<CellView>> board) {
         _boardStatus = board;
+    }
+
+    public void SetBoardStatusCellType(Vector2 index, CellType cellType) {
+        _boardStatus[(int)index.y][(int)index.x].CellController.SetType(cellType);
     }
 
     private void SetBoardStatusInPlaymode() {

@@ -21,6 +21,7 @@ public interface IPlayerController {
     int GetPlayerId();
     bool GetCardsSelected();
     void SetCardsSelected(bool cardsSelected);
+    IEnumerator SelectCells(int amount);
 }
 
 public class PlayerController : IPlayerController {
@@ -41,6 +42,9 @@ public class PlayerController : IPlayerController {
     private EquipmentCardView _bodyArmor;
 
     private bool _cardsSelected;
+    private bool _selectingCells;
+
+    private List<Vector2> cellsSelected;
 
     public PlayerController(IPlayerView view, PlayerCardsInfo deck) {
         _view = view;
@@ -69,7 +73,7 @@ public class PlayerController : IPlayerController {
             int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
             CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[random];
             CardView card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
-            card.InitCard(cardInfoStruct.CardName, cardInfoStruct.Description, cardInfoStruct.Cost,
+            card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description, cardInfoStruct.Cost,
                 cardInfoStruct.Recovery, cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource,
                 cardInfoStruct.Health, cardInfoStruct.DefaultMovement, cardInfoStruct.TypeEnum);
             _hand.Add(card);
@@ -134,5 +138,28 @@ public class PlayerController : IPlayerController {
                 card.SetIsSelecting(true);
             }
         }
+    }
+
+    public IEnumerator SelectCells(int amount) {
+        int currentAmount = amount;
+        cellsSelected = new List<Vector2>();
+        cellsSelected.Clear();
+
+        _selectingCells = true;
+        EffectManager.Instance.OnSelectedCellEvent += CellSelected;
+
+        while (currentAmount > 0) {
+            yield return null;
+            currentAmount = amount - cellsSelected.Count;
+        }
+
+        _selectingCells = false;
+        EffectManager.Instance.OnSelectedCellEvent -= CellSelected;
+
+        EffectManager.Instance.CellsSelected(cellsSelected);
+    }
+
+    private void CellSelected(Vector2 index) {
+        cellsSelected.Add(index);
     }
 }

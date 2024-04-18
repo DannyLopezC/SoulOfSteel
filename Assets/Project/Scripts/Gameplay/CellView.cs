@@ -13,11 +13,13 @@ public interface ICellView {
 public class CellView : MonoBehaviour, ICellView, IPointerEnterHandler, IPointerExitHandler,
     IPointerClickHandler {
     [SerializeField] private Outline outline;
-    
+
     public float cellXSize;
     public float cellYSize;
 
     public Vector2 index;
+
+    private Image _cellImage;
 
     private ICellController _cellController;
 
@@ -26,6 +28,13 @@ public class CellView : MonoBehaviour, ICellView, IPointerEnterHandler, IPointer
     }
 
     private void Start() {
+        _cellImage = GetComponent<Image>();
+    }
+
+    private void Update() {
+        if (CellController.GetCellType() == CellType.Mined) {
+            _cellImage.color = Color.red;
+        }
     }
 
     public void SetSize() {
@@ -44,5 +53,6 @@ public class CellView : MonoBehaviour, ICellView, IPointerEnterHandler, IPointer
 
     public void OnPointerClick(PointerEventData eventData) {
         GameManager.Instance.OnCellClicked(index);
+        EffectManager.Instance.CellSelected(index);
     }
 }

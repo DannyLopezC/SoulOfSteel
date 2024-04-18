@@ -9,7 +9,7 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
     private IEquipmentCardController _equipmentCardController;
 
     private void Start() {
-        EquipmentCardController.InitEquipmentCard("Cota de espinas",
+        EquipmentCardController.InitEquipmentCard(0, "Cota de espinas",
             "Devuelve el daño",
             Random.Range(3, 7),
             Random.Range(3, 7),
@@ -26,13 +26,13 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
         EquipmentCardController.Select(deselect);
     }
 
-    public override void DoEffect() {
-        EquipmentCardController.DoEffect();
+    public override void DoEffect(int originId) {
+        EquipmentCardController.DoEffect(originId);
     }
 
-    public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+    public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
-        EquipmentCardController.InitEquipmentCard(cardName, cardDescription, scrapCost, scrapRecovery,
+        EquipmentCardController.InitEquipmentCard(id, cardName, cardDescription, scrapCost, scrapRecovery,
             isCampEffect, imageSource, type);
     }
 

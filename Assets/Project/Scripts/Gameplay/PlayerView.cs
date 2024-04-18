@@ -117,7 +117,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         if (pv.IsMine) {
             // Debug.Log($"actor number: {pv.Owner.ActorNumber}");
 
-            int actorNumber = GameManager.Instance.testing ? 1 : pv.Owner.ActorNumber;
+            int actorNumber = GameManager.Instance.testing ? 0 : pv.Owner.ActorNumber;
             int count = GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Count;
             int halfCount = count / 2;
 
@@ -125,9 +125,14 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
 
-            _deckInfo.SetPlayerCards(Enumerable
-                .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
-                .ToList());
+            if (!GameManager.Instance.testing) {
+                _deckInfo.SetPlayerCards(Enumerable
+                    .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
+                    .ToList());
+            }
+            else {
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 });
+            }
         }
     }
 
@@ -160,5 +165,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 }
             }
         }
+    }
+
+    public void SelectCells(int amount) {
+        StartCoroutine(PlayerController.SelectCells(amount));
     }
 }

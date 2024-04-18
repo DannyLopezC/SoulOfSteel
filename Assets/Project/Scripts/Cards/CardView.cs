@@ -54,9 +54,9 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public abstract bool GetSelected();
     public abstract void Select(bool deselect = false);
 
-    public abstract void DoEffect();
+    public abstract void DoEffect(int originId);
     // public abstract void SelectAnimation();
 
-    public abstract void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+    public abstract void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type);
 }

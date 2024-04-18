@@ -23,7 +23,7 @@ public interface ICardController {
     void Select(bool deselect = false);
     void IsSelecting(bool isSelecting);
     bool GetSelected();
-    void DoEffect();
+    void DoEffect(int originId);
 }
 
 public abstract class CardController : ICardController {
@@ -40,13 +40,15 @@ public abstract class CardController : ICardController {
     protected string CardDescription { get; private set; }
     protected int ScrapCost { get; private set; }
     protected Sprite ImageSource { get; private set; }
+    protected int Id;
 
     protected CardController(ICardView view) {
         _view = view;
     }
 
-    protected void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+    protected void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, CardType type) {
+        Id = id;
         CardName = cardName;
         CardDescription = cardDescription;
         ScrapCost = scrapCost;
@@ -132,7 +134,7 @@ public abstract class CardController : ICardController {
         return _selected;
     }
 
-    public virtual void DoEffect() {
+    public virtual void DoEffect(int originId) {
         Debug.Log($"doing effect from {CardName}");
     }
 }

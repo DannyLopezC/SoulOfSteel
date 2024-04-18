@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 
-public enum Effect {
-    Damage,
-    Heal
-}
 
 public interface IEffectCardView : ICardView {
 }
@@ -39,11 +35,11 @@ public class EffectCardView : CardView, IEffectCardView {
         EffectCardController.Select(deselect);
     }
 
-    public override void DoEffect() {
-        EffectCardController.DoEffect();
+    public override void DoEffect(int originId) {
+        EffectCardController.DoEffect(originId);
     }
 
-    public override void InitCard(string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+    public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
     }
 }

@@ -29,14 +29,14 @@ public class RechargePhase : Phase {
                 }
             }
 
-            _allCardSelected = localAllSelected && !GameManager.Instance.testing;
+            _allCardSelected = localAllSelected && GameManager.Instance.testing;
 
             yield return null;
         }
 
         foreach (CardView card in _effectCards) {
-            card.DoEffect();
-            yield return new WaitForSeconds(1);
+            card.DoEffect(GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
+            yield return new WaitForSeconds(20);
             card.SetIsSelecting(false);
             card.Select(true);
         }

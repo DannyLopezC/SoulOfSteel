@@ -135,6 +135,6 @@ public abstract class CardController : ICardController {
     }
 
     public virtual void DoEffect(int originId) {
-        Debug.Log($"doing effect from {CardName}");
+        // Debug.Log($"doing effect from {CardName}");
     }
 }

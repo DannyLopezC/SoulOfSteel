@@ -85,7 +85,7 @@ public class BoardView : MonoBehaviour, IBoardView {
         _boardStatus[(int)index.y][(int)index.x].CellController.SetType(cellType);
     }
 
-    private void SetBoardStatusInPlaymode() {
+    public void SetBoardStatusInPlaymode() {
         _boardStatus = new List<List<CellView>>();
 
         for (int i = 0; i < transform.childCount / BoardController.GetBoardCount(); i++) {

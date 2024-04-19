@@ -7,8 +7,6 @@ using UnityEngine;
 public class Movement : MonoBehaviour {
     public PhotonView pv;
 
-    private BoardView _board;
-
     private void Start() {
         pv = GetComponent<PhotonView>();
         GameManager.Instance.OnCellClickedEvent += OnMovement;
@@ -18,6 +16,8 @@ public class Movement : MonoBehaviour {
     }
 
     private void OnMovement(Vector2 index) {
+        if (!GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
+
         if (pv.IsMine) {
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
         }

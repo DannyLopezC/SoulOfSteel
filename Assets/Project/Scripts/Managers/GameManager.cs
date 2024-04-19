@@ -32,10 +32,20 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action OnGameStartedEvent;
     public event Action OnSelectingFinishedEvent;
     public event Action<CardView, bool> OnCardSelectedEvent;
+    public event Action OnAllEffectsFinishedEvent;
+    public event Action<int> OnPrioritySetEvent;
 
     #endregion
 
     #region EventsInvokes
+
+    public void OnPrioritySet(int priority) {
+        OnPrioritySetEvent?.Invoke(priority);
+    }
+
+    public void OnAllEffectsFinished() {
+        OnAllEffectsFinishedEvent?.Invoke();
+    }
 
     public void OnCardSelected(CardView card, bool selected) {
         OnCardSelectedEvent?.Invoke(card, selected);

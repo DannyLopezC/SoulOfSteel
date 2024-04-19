@@ -23,6 +23,19 @@ public class CellController : ICellController {
 
     public void SetType(CellType type) {
         CellType = type;
+
+        switch (CellType) {
+            case CellType.Normal:
+                _view.SetCellColor(_view.GetOriginalColor());
+                break;
+            case CellType.Mined:
+                _view.SetCellColor(Color.red);
+                break;
+            default:
+                _view.SetCellColor(_view.GetOriginalColor());
+                Debug.Log($"not valid type, using normal color");
+                break;
+        }
     }
 
     public CellType GetCellType() {

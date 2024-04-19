@@ -22,7 +22,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [SerializeField] private PlayerCardsInfo _deckInfo;
 
     public bool _inAnimation;
+    private bool _receivePriority;
     private GameObject _handCardsPanel;
+    private bool _myEffectTurn;
 
     public GameObject HandCardsPanel {
         get { return _handCardsPanel ??= GameManager.Instance.handPanel.gameObject; }
@@ -43,17 +45,16 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     private void Awake() {
         GameManager.Instance.OnGameStartedEvent += TurnOnSprite;
-    }
-
-    private void Start() {
         pv = GetComponent<PhotonView>();
         GameManager.Instance.playerList.Add(this);
-
         if (pv.IsMine) {
             GameManager.Instance.LocalPlayerInstance = this;
         }
+    }
 
+    private void Start() {
         if (GameManager.Instance.testing) TurnOnSprite();
+        GameManager.Instance.OnPrioritySetEvent += ReceivePriority;
     }
 
     public void TurnOnSprite() {
@@ -123,12 +124,14 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             int startIndex = actorNumber == 1 ? 0 : halfCount;
 
-            _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
+            _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{1}");
 
             if (!GameManager.Instance.testing) {
-                _deckInfo.SetPlayerCards(Enumerable
-                    .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
-                    .ToList());
+                // _deckInfo.SetPlayerCards(Enumerable
+                //     .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
+                //     .ToList());
+
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
             }
             else {
                 _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 });
@@ -137,7 +140,10 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     }
 
     private void OnDestroy() {
-        if (GameManager.HasInstance()) GameManager.Instance.OnGameStartedEvent -= TurnOnSprite;
+        if (GameManager.HasInstance()) {
+            GameManager.Instance.OnPrioritySetEvent -= ReceivePriority;
+            GameManager.Instance.OnGameStartedEvent -= TurnOnSprite;
+        }
     }
 
     public void DrawCards(int amount, bool fullDraw) {
@@ -148,15 +154,24 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         PlayerController.SelectCards(type, amount);
     }
 
+    public void ReceivePriority(int priority) {
+        _receivePriority = true;
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
             stream.SendNext(PlayerController.GetCardsSelected());
             stream.SendNext(PlayerController.GetPlayerId());
-            // Debug.Log($"sent message {PlayerController.GetCardsSelected()}");
+            stream.SendNext(GameManager.Instance.currentPriority);
+            stream.SendNext(EffectManager.Instance.effectTurn);
+            stream.SendNext(PlayerController.GetAllEffectsDone());
         }
         else if (stream.IsReading) {
             bool receivedSelection = (bool)stream.ReceiveNext();
             int receivedPlayerId = (int)stream.ReceiveNext();
+            int receivedPriority = (int)stream.ReceiveNext();
+            int receivedEffectTurn = (int)stream.ReceiveNext();
+            bool receivedAllEffectsDone = (bool)stream.ReceiveNext();
 
             // Debug.Log($"received message {receivedSelection}");
             foreach (PlayerView player in GameManager.Instance.playerList) {
@@ -164,10 +179,28 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                     player.PlayerController.SetCardsSelected(receivedSelection);
                 }
             }
+
+            foreach (PlayerView player in GameManager.Instance.playerList) {
+                if (receivedPlayerId == player.pv.Owner.ActorNumber) {
+                    player.PlayerController.SetAllEffectsDone(receivedAllEffectsDone);
+                }
+            }
+
+            if (!_myEffectTurn) EffectManager.Instance.effectTurn = receivedEffectTurn;
+
+            if (!PhotonNetwork.IsMasterClient && _receivePriority) {
+                GameManager.Instance.currentPriority = receivedPriority;
+                Debug.Log($"received priority: {receivedPriority}");
+                _receivePriority = false;
+            }
         }
     }
 
     public void SelectCells(int amount) {
         StartCoroutine(PlayerController.SelectCells(amount));
+    }
+
+    public void SetMyEffectTurn(bool myEffectTurn) {
+        this._myEffectTurn = myEffectTurn;
     }
 }

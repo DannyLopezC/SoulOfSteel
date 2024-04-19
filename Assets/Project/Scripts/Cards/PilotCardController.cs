@@ -40,7 +40,7 @@ public class PilotCardController : CardController, IPilotCardController {
 
     public override void DoEffect(int originId) {
         base.DoEffect(originId);
-        Debug.Log($"putting mines");
+        // Debug.Log($"putting mines");
 
         switch (Id) {
             case 0:

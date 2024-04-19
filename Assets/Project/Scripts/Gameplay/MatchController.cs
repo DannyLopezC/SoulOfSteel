@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
+using Photon.Pun;
 using Random = UnityEngine.Random;
 
 public interface IMatchController {
@@ -10,19 +11,24 @@ public interface IMatchController {
 }
 
 public class MatchController : IMatchController {
-    
     private int _matchId;
     private List<string> _matchLog;
-    
+
     private readonly IMatchView _view;
-    
+
     public MatchController(IMatchView view) {
         _view = view;
     }
 
     private void ThrowPriorityDice() {
-        GameManager.Instance.currentPriority = Random.Range(0, 1);
-        _view.SetCurrentPhaseText($"Throwing priority dice, result={GameManager.Instance.currentPriority}");
+        if (PhotonNetwork.IsMasterClient) {
+            GameManager.Instance.currentPriority = Random.Range(1, 3);
+            Debug.Log($"master priority {GameManager.Instance.currentPriority}");
+        }
+
+        GameManager.Instance.OnPrioritySet(GameManager.Instance.currentPriority);
+
+        _view.SetCurrentPhaseText($"Throwing priority dice, result = {GameManager.Instance.currentPriority}");
     }
 
     private void SelectQuadrant() {
@@ -30,6 +36,7 @@ public class MatchController : IMatchController {
     }
 
     public IEnumerator PrepareMatch() {
+        yield return new WaitForSeconds(2);
         ThrowPriorityDice();
         yield return new WaitForSeconds(2);
         SelectQuadrant();

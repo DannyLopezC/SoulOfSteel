@@ -22,6 +22,11 @@ public interface IPlayerController {
     bool GetCardsSelected();
     void SetCardsSelected(bool cardsSelected);
     IEnumerator SelectCells(int amount);
+    bool GetMoving();
+    bool GetDoingEffect();
+    void SetDoingEffect(bool doingEffect);
+    bool GetAllEffectsDone();
+    void SetAllEffectsDone(bool allEffectsDone);
 }
 
 public class PlayerController : IPlayerController {
@@ -43,6 +48,9 @@ public class PlayerController : IPlayerController {
 
     private bool _cardsSelected;
     private bool _selectingCells;
+    private bool _moving;
+    private bool _doingEffect;
+    private bool _allEffectsDone;
 
     private List<Vector2> cellsSelected;
 
@@ -159,7 +167,28 @@ public class PlayerController : IPlayerController {
         EffectManager.Instance.CellsSelected(cellsSelected);
     }
 
-    private void CellSelected(Vector2 index) {
-        cellsSelected.Add(index);
+    public bool GetMoving() {
+        return _moving;
+    }
+
+    public bool GetDoingEffect() {
+        return _doingEffect;
+    }
+
+    public void SetDoingEffect(bool doingEffect) {
+        _doingEffect = doingEffect;
+    }
+
+    public bool GetAllEffectsDone() {
+        return _allEffectsDone;
+    }
+
+    public void SetAllEffectsDone(bool allEffectsDone) {
+        _allEffectsDone = allEffectsDone;
+    }
+
+    private void CellSelected(Vector2 index, bool select) {
+        if (select) cellsSelected.Add(index);
+        else cellsSelected.Remove(index);
     }
 }

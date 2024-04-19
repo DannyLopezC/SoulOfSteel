@@ -14,19 +14,23 @@ public class MineEffectController : EffectController, IMineEffectController {
     }
 
     public override void Activate(int originId) {
-        EffectManager.Instance.OnCellsSelectedEvent += SetMines;
+        GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(true);
+
+        EffectManager.Instance.OnCellsSelectedEvent += StopSettingMines;
+        EffectManager.Instance.OnSelectedCellEvent += SetMines;
         GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() == originId)
             .SelectCells(_minesAmount);
     }
 
-    private void SetMines(List<Vector2> cellsSelected) {
-        BoardView board = GameManager.Instance.boardView;
+    private void SetMines(Vector2 index, bool select) {
+        GameManager.Instance.boardView.SetBoardStatusCellType(index, select ? CellType.Mined : CellType.Normal);
+    }
 
-        foreach (Vector2 index in cellsSelected) {
-            GameManager.Instance.boardView.SetBoardStatusCellType(index, CellType.Mined);
-        }
-
-        Debug.Log($"mines put");
-        EffectManager.Instance.OnCellsSelectedEvent -= SetMines;
+    private void StopSettingMines(List<Vector2> cellsSelected) {
+        // Debug.Log($"mines put");
+        GameManager.Instance.OnAllEffectsFinished();
+        GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
+        EffectManager.Instance.OnSelectedCellEvent -= SetMines;
+        EffectManager.Instance.OnCellsSelectedEvent -= StopSettingMines;
     }
 }

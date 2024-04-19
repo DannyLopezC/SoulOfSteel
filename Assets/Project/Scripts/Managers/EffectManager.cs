@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EffectManager : MonoBehaviourSingleton<EffectManager> {
+    public int effectTurn;
     private MineEffectController _mineEffectController;
 
-    public event Action<Vector2> OnSelectedCellEvent; //when selecting a single cell
+    public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
     public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
 
     public void PutMines(int originId, int amount) {
@@ -17,7 +18,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager> {
         OnCellsSelectedEvent?.Invoke(cellsSelected);
     }
 
-    public void CellSelected(Vector2 index) {
-        OnSelectedCellEvent?.Invoke(index);
+    public void CellSelected(Vector2 index, bool select) {
+        OnSelectedCellEvent?.Invoke(index, select);
     }
 }

@@ -12,7 +12,7 @@ public class ChangePriorityPhase : Phase {
         if (PhotonNetwork.IsMasterClient) {
             GameManager.Instance.currentPriority =
                 (GameManager.Instance.currentPriority % GameManager.Instance.playerList.Count) + 1;
-            Debug.Log($"master priority {GameManager.Instance.currentPriority}");
+            // Debug.Log($"master priority {GameManager.Instance.currentPriority}");
         }
 
         GameManager.Instance.OnPrioritySet(GameManager.Instance.currentPriority);

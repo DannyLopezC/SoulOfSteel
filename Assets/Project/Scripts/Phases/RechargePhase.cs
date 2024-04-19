@@ -38,16 +38,17 @@ public class RechargePhase : Phase {
         }
 
         // doing cards effects        
-        EffectManager.Instance.effectTurn = GameManager.Instance.testing ? 0 : GameManager.Instance.currentPriority;
+        EffectManager.Instance.effectTurn = GameManager.Instance.currentPriority;
 
         foreach (PlayerView p in GameManager.Instance.playerList) {
             p.PlayerController.SetAllEffectsDone(false);
+            p.SetEffectTurnDone(false);
         }
 
-        for (int i = 0; i < GameManager.Instance.playerList.Count; i++) {
-            PlayerView player = null;
-
-            do {
+        while (!_allEffectsDone) {
+            if (GameManager.Instance.LocalPlayerInstance.GetEffectTurnDone() ||
+                GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId() !=
+                EffectManager.Instance.effectTurn) {
                 bool localAllEffectsDone = true;
                 foreach (PlayerView p in GameManager.Instance.playerList) {
                     if (!p.PlayerController.GetAllEffectsDone()) {
@@ -56,18 +57,14 @@ public class RechargePhase : Phase {
                 }
 
                 _allEffectsDone = localAllEffectsDone;
-                if (_allEffectsDone) break;
-                yield return null;
-            } while (i == 1 && !_allEffectsDone || (EffectManager.Instance.effectTurn !=
-                                                    GameManager.Instance.LocalPlayerInstance.PlayerController
-                                                        .GetPlayerId()));
+                if (_allEffectsDone) GameManager.Instance.LocalPlayerInstance.PlayerController.SetAllEffectsDone(false);
 
-            if (!_allEffectsDone)
-                player = GameManager.Instance.playerList.Find(p =>
+                yield return null;
+            }
+            else {
+                PlayerView player = GameManager.Instance.playerList.Find(p =>
                     p.PlayerController.GetPlayerId() == EffectManager.Instance.effectTurn);
 
-
-            if (player != null) {
                 player.SetMyEffectTurn(true);
 
                 foreach (CardView card in _effectCards) {
@@ -83,17 +80,20 @@ public class RechargePhase : Phase {
                     card.Select(true);
                 }
 
-                player.PlayerController.SetAllEffectsDone(true);
                 player.SetMyEffectTurn(false);
+                player.SetEffectTurnDone(true);
+            }
+
+            if (GameManager.Instance.LocalPlayerInstance.GetEffectTurnDone()) {
+                GameManager.Instance.LocalPlayerInstance.PlayerController.SetAllEffectsDone(true);
             }
         }
 
+        GameManager.Instance.LocalPlayerInstance.PlayerController.SetCardsSelected(false);
+
         Debug.Log($"saliendo");
         _effectCards.Clear();
-        GameManager.Instance.LocalPlayerInstance.PlayerController.SetCardsSelected(false);
-        GameManager.Instance.LocalPlayerInstance.PlayerController.SetAllEffectsDone(false);
         GameManager.Instance.ChangePhase(new PrincipalPhase(matchView));
-
         GameManager.Instance.OnCardSelectedEvent -= CardSelected;
         GameManager.Instance.OnSelectingFinishedEvent -= AllCardsSelected;
         GameManager.Instance.OnAllEffectsFinishedEvent -= SetEffectTurn;

@@ -23,7 +23,7 @@ public class MatchController : IMatchController {
     private void ThrowPriorityDice() {
         if (PhotonNetwork.IsMasterClient) {
             GameManager.Instance.currentPriority = Random.Range(1, 3);
-            Debug.Log($"master priority {GameManager.Instance.currentPriority}");
+            // Debug.Log($"master priority {GameManager.Instance.currentPriority}");
         }
 
         GameManager.Instance.OnPrioritySet(GameManager.Instance.currentPriority);

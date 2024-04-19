@@ -56,6 +56,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
             .GetChild(0)
             .TryGetComponent(out PlayerView currentPlayer);
 
+        Debug.Log($"setting player id {PhotonNetwork.LocalPlayer.ActorNumber}");
         currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber);
     }
 

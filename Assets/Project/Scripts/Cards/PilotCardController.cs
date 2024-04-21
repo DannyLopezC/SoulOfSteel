@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public interface IPilotCardController : ICardController {
     void InitializePilotCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type,
+        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type,
         int defaultDamage = 0);
 }
 
@@ -11,7 +12,7 @@ public class PilotCardController : CardController, IPilotCardController {
 
     [Header("Pilot Properties")] private int _health;
     private int _defaultDamage;
-    private BoardView _defaultMovement;
+    private List<Movement> _defaultMovement;
     [Space(20)] public Vector2 position;
 
     public PilotCardController(IPilotCardView view) : base(view) {
@@ -19,7 +20,7 @@ public class PilotCardController : CardController, IPilotCardController {
     }
 
     public void InitializePilotCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type,
+        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type,
         int defaultDamage = 0) {
         _health = health;
         _defaultMovement = defaultMovement;

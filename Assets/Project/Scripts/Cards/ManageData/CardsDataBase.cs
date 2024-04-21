@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 [Serializable]
 public class CardInfoSerialized {
@@ -41,18 +43,26 @@ public class CardInfoSerialized {
         [FoldoutGroup("Card")] public bool IsCampEffect;
         [FoldoutGroup("Card")] public Sprite ImageSource;
         [FoldoutGroup("Card")] public int Health;
-        [FoldoutGroup("Card")] public BoardView DefaultMovement;
+        [FoldoutGroup("Card")] public List<Movement> SerializedMovements;
+
+        [OnValueChanged("SetType"), HideInInspector]
+        public string Movements;
 
         public void SetType() {
             Type = Type.Replace(" ", "");
             if (Type == "Brazo/Arma") Type = "Arma";
-            Debug.Log($"{Type}");
+            // Debug.Log($"{Type}");
             if (typeMapping.TryGetValue(Type, out CardType enumValue)) {
                 TypeEnum = enumValue;
             }
             else {
                 throw new ArgumentException($"Invalid CardType Type: {Type}");
             }
+        }
+
+        public void SetMovements() {
+            if (Movements.IsNullOrEmpty() || Movements == "0") return;
+            SerializedMovements = Movement.FromString(Movements);
         }
     }
 }

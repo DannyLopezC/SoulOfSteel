@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class Movement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviour {
     public PhotonView pv;
 
     private void Start() {

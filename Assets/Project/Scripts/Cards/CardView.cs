@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -58,5 +59,5 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     // public abstract void SelectAnimation();
 
     public abstract void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type);
+        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type);
 }

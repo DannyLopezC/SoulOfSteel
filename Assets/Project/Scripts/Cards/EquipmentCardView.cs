@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,7 +32,7 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
     }
 
     public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
+        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type) {
         EquipmentCardController.InitEquipmentCard(id, cardName, cardDescription, scrapCost, scrapRecovery,
             isCampEffect, imageSource, type);
     }

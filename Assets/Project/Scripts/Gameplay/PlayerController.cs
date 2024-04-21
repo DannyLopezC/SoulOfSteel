@@ -83,7 +83,7 @@ public class PlayerController : IPlayerController {
             CardView card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
             card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description, cardInfoStruct.Cost,
                 cardInfoStruct.Recovery, cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource,
-                cardInfoStruct.Health, cardInfoStruct.DefaultMovement, cardInfoStruct.TypeEnum);
+                cardInfoStruct.Health, cardInfoStruct.SerializedMovements, cardInfoStruct.TypeEnum);
             _hand.Add(card);
             _shuffledDeck.playerCards.RemoveAt(random);
             if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck();

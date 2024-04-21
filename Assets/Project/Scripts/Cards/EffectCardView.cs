@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 public interface IEffectCardView : ICardView {
@@ -40,6 +41,6 @@ public class EffectCardView : CardView, IEffectCardView {
     }
 
     public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, BoardView defaultMovement, CardType type) {
+        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type) {
     }
 }

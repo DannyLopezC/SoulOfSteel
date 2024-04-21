@@ -20,6 +20,7 @@ public interface IPlayerView {
 public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable {
     [SerializeField] private PhotonView pv;
     [SerializeField] private PlayerCardsInfo _deckInfo;
+    private PlayerMovement _playerMovement;
 
     public bool _inAnimation;
     private bool _receivePriority;
@@ -47,6 +48,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     private void Awake() {
         GameManager.Instance.OnGameStartedEvent += TurnOnSprite;
         pv = GetComponent<PhotonView>();
+        _playerMovement = GetComponent<PlayerMovement>();
         GameManager.Instance.playerList.Add(this);
         if (pv.IsMine) {
             GameManager.Instance.LocalPlayerInstance = this;

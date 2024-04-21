@@ -31,11 +31,11 @@ public class BoardView : MonoBehaviour, IBoardView {
     }
 
     private void Awake() {
-        GameManager.Instance.boardView = this;
+        SetBoardStatusInPlaymode();
     }
 
     private void Start() {
-        SetBoardStatusInPlaymode();
+        GameManager.Instance.boardView = this;
     }
 
     public Transform GetTransform() {

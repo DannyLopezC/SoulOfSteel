@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MovementPhase : Phase {
     public MovementPhase(IMatchView matchView) : base(matchView) {
+        GameManager.Instance.OnMovementFinishedEvent += MovementFinished;
     }
 
     public override IEnumerator Start() {
@@ -12,8 +13,12 @@ public class MovementPhase : Phase {
 
         GameManager.Instance.playerList.ForEach(p => p.PlayerController.SelectMovement());
 
-        // GameManager.Instance.ChangePhase(new BattlePhase(matchView));
 
         yield break;
+    }
+
+    public void MovementFinished() {
+        GameManager.Instance.ChangePhase(new BattlePhase(matchView));
+        GameManager.Instance.OnMovementFinishedEvent -= MovementFinished;
     }
 }

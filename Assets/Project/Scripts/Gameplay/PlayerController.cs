@@ -68,6 +68,9 @@ public class PlayerController : IPlayerController {
 
         _hand = new List<CardView>();
         _shuffledDeck = ScriptableObject.CreateInstance<PlayerCardsInfo>();
+        _moving = false;
+        _currentDegrees = 270;
+        _currentCell = new Vector2(5, 5);
     }
 
     public void DrawCards(int amount, bool fullDraw) {
@@ -89,7 +92,11 @@ public class PlayerController : IPlayerController {
             int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
             CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[random];
 
-            CardView card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
+            CardView card = null;
+
+            if (cardInfoStruct.TypeEnum != CardType.Pilot) {
+                card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
+            }
 
             switch (cardInfoStruct.TypeEnum) {
                 case CardType.Pilot:
@@ -159,6 +166,7 @@ public class PlayerController : IPlayerController {
 
         _shuffledDeck.playerCards = temporalDeck;
         if (firstTime) SetPilotCard();
+        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
     }
 
     public void SelectAttack() {

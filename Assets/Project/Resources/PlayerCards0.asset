@@ -30,7 +30,8 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -48,7 +49,8 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -66,7 +68,8 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -84,7 +87,8 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -102,7 +106,8 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -120,7 +125,8 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -138,4 +144,24 @@ MonoBehaviour:
     IsCampEffect: 0
     ImageSource: {fileID: 0}
     Health: 0
-    DefaultMovement: {fileID: 0}
+    SerializedMovements: []
+    Movements: 
+  - Id: 33
+    CardName: PilotoGenerica
+    Type: 
+    TypeEnum: 0
+    Description: eoeoeoeo
+    Cost: 1
+    Energy: 2
+    Damage: 3
+    Shield: 4
+    Recovery: 5
+    IsCampEffect: 0
+    ImageSource: {fileID: 0}
+    Health: 10
+    SerializedMovements:
+    - steps:
+      - Steps: 4
+        Direction: "\u2191"
+      degrees: 5a000000
+    Movements: 

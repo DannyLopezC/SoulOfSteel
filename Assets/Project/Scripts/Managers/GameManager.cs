@@ -33,10 +33,15 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action OnCardSelectingFinishedEvent; // all cards has been selected
     public event Action<int> OnPrioritySetEvent;
     public event Action<Movement, PlayerView> OnMovementSelectedEvent;
+    public event Action OnMovementFinishedEvent;
 
     #endregion
 
     #region EventsInvokes
+
+    public void OnMovementFinished() {
+        OnMovementFinishedEvent?.Invoke();
+    }
 
     public void OnMovementSelected(Movement movement, PlayerView player) {
         OnMovementSelectedEvent?.Invoke(movement, player);

@@ -33,6 +33,18 @@ public class MatchController : IMatchController {
 
     private void SelectQuadrant() {
         _view.SetCurrentPhaseText("Selecting quadrant");
+
+        foreach (PlayerView p in GameManager.Instance.playerList) {
+            Vector2 nextCell = p.PlayerController.GetPlayerId() == 1
+                ? Vector2.zero
+                : new Vector2(GameManager.Instance.boardView.BoardController.GetBoardCount() - 1,
+                    GameManager.Instance.boardView.BoardController.GetBoardCount() - 1);
+
+            p.GetComponent<PlayerMovement>().MoveToCell(nextCell);
+
+            p.PlayerController.SetCurrentCell(nextCell);
+            p.PlayerController.SetCurrentDegrees(p.PlayerController.GetPlayerId() == 1 ? 270 : 90);
+        }
     }
 
     public IEnumerator PrepareMatch() {

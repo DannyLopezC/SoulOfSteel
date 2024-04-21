@@ -2,18 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
     public PhotonView pv;
+    public Movement currentMovement;
 
     private void Start() {
         pv = GetComponent<PhotonView>();
         GameManager.Instance.OnMovementSelectedEvent += DoMove;
-        MoveToCell(new Vector2(5, 5));
     }
 
     private void DoMove(Movement movement, PlayerView player) {
+        if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
+        currentMovement = movement;
         StartCoroutine(StartMoving(movement, player));
     }
 
@@ -26,11 +29,10 @@ public class PlayerMovement : MonoBehaviour {
 
         foreach (Movement.MovementInfo step in steps) {
             int currentSteps = step.Steps;
+            Vector2 nextCell = currentCell;
 
             while (currentSteps > 0) {
                 yield return new WaitForSeconds(0.5f);
-
-                Vector2 nextCell = currentCell;
 
                 int adjustedDirection;
 
@@ -57,24 +59,31 @@ public class PlayerMovement : MonoBehaviour {
                         nextCell.x += 1;
                         break;
                     case 90:
-                        nextCell.y += 1;
+                        nextCell.y -= 1;
                         break;
                     case 270:
-                        nextCell.y -= 1;
+                        nextCell.y += 1;
                         break;
                 }
 
+                Debug.Log($"{nextCell}");
                 MoveToCell(nextCell);
                 currentSteps--;
                 yield return null;
             }
+
+            player.PlayerController.SetCurrentCell(nextCell);
+            player.PlayerController.SetCurrentDegrees(nextDegrees);
+            GameManager.Instance.OnMovementFinished();
         }
     }
 
-    private void MoveToCell(Vector2 index) {
-        if (!GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
-
+    public void MoveToCell(Vector2 index) {
         if (pv.IsMine) {
+            index = new Vector2(
+                Mathf.Clamp(index.x, index.x, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
+                Mathf.Clamp(index.y, index.y, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
+            Debug.Log($"moving {index}");
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
         }
     }

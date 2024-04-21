@@ -40,7 +40,9 @@ public class EffectCardView : CardView, IEffectCardView {
         EffectCardController.DoEffect(originId);
     }
 
-    public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type) {
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, CardType type) {
+        EffectCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, isCampEffect,
+            imageSource, type);
     }
 }

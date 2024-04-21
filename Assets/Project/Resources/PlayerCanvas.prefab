@@ -333,10 +333,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9222168076730135389}
     - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: pv
-      value: 
-      objectReference: {fileID: 8721658058917753229}
-    - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: _info
       value: 
       objectReference: {fileID: 11400000, guid: de63f29cdcce15c4e89ea341b007d641, type: 2}
@@ -351,30 +347,6 @@ PrefabInstance:
     - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: deck.Array.size
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: pilotCardPrefab
-      value: 
-      objectReference: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
-    - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: effectCardPrefab
-      value: 
-      objectReference: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
-    - target: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: equipmentCardPrefab
-      value: 
-      objectReference: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
-    - target: {fileID: 5653610870994882779, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: m_Size.x
-      value: 20.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 5653610870994882779, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: m_Size.y
-      value: 20.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 5653610870994882779, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8823648603394773729, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: m_Name
@@ -393,17 +365,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1084125283442225677, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
   m_PrefabInstance: {fileID: 6577569636520118339}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8721658058917753229 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2468453596436003278, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
-  m_PrefabInstance: {fileID: 6577569636520118339}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &9222168076730135389 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2644600055320754974, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}

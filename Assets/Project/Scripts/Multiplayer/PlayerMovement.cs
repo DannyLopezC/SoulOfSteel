@@ -9,13 +9,15 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Start() {
         pv = GetComponent<PhotonView>();
-        GameManager.Instance.OnCellClickedEvent += OnMovement;
+        GameManager.Instance.OnMovementSelectedEvent += DoMove;
+        
     }
 
-    private void Update() {
+    private void DoMove(Movement movement) {
+        
     }
 
-    private void OnMovement(Vector2 index) {
+    private void MoveToCell(Vector2 index) {
         if (!GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
 
         if (pv.IsMine) {
@@ -24,6 +26,6 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        if (GameManager.HasInstance()) GameManager.Instance.OnCellClickedEvent -= OnMovement;
+        if (GameManager.HasInstance()) GameManager.Instance.OnMovementSelectedEvent -= DoMove;
     }
 }

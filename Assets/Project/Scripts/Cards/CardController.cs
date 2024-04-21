@@ -33,7 +33,6 @@ public abstract class CardController : ICardController {
     private bool _isSelecting;
     private bool _selected;
     private int _scrapRecovery;
-    private bool _isCampEffect;
 
     protected CardType Type;
     protected string CardName { get; private set; }
@@ -46,14 +45,13 @@ public abstract class CardController : ICardController {
         _view = view;
     }
 
-    protected void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, CardType type) {
+    public virtual void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        Sprite imageSource, CardType type) {
         Id = id;
         CardName = cardName;
         CardDescription = cardDescription;
         ScrapCost = scrapCost;
         _scrapRecovery = scrapRecovery;
-        _isCampEffect = isCampEffect;
         ImageSource = imageSource;
         Type = type;
 

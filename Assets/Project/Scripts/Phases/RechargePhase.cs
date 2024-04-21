@@ -11,8 +11,8 @@ public class RechargePhase : Phase {
 
     public RechargePhase(IMatchView matchView) : base(matchView) {
         GameManager.Instance.OnCardSelectedEvent += CardSelected;
-        GameManager.Instance.OnSelectingFinishedEvent += AllCardsSelected;
-        GameManager.Instance.OnAllEffectsFinishedEvent += SetEffectTurn;
+        GameManager.Instance.OnCardSelectingFinishedEvent += AllCardsSelected;
+        EffectManager.Instance.OnAllEffectsFinishedEvent += SetEffectTurn;
 
         _effectCards = new List<CardView>();
     }
@@ -95,8 +95,8 @@ public class RechargePhase : Phase {
         _effectCards.Clear();
         GameManager.Instance.ChangePhase(new PrincipalPhase(matchView));
         GameManager.Instance.OnCardSelectedEvent -= CardSelected;
-        GameManager.Instance.OnSelectingFinishedEvent -= AllCardsSelected;
-        GameManager.Instance.OnAllEffectsFinishedEvent -= SetEffectTurn;
+        GameManager.Instance.OnCardSelectingFinishedEvent -= AllCardsSelected;
+        EffectManager.Instance.OnAllEffectsFinishedEvent -= SetEffectTurn;
     }
 
     private void CardSelected(CardView card, bool selected) {

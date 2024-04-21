@@ -14,6 +14,7 @@ public interface IPlayerView {
     CardView AddCardToPanel(CardType cardType);
     void InitAddCards(int amount);
     PhotonView GetPv();
+    void SelectCards(CardType type, int amount);
 }
 
 [Serializable]
@@ -54,7 +55,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             GameManager.Instance.LocalPlayerInstance = this;
         }
 
-        PlayerController.SetPlayerId(pv.Owner.ActorNumber);
+        PlayerController.SetPlayerId(GameManager.Instance.testing ? 0 : pv.Owner.ActorNumber);
     }
 
     private void Start() {
@@ -100,7 +101,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 break;
         }
 
-        GameObject GO = Instantiate(prefab, HandCardsPanel.transform);
+        Transform parent = cardType == CardType.Pilot ? null : HandCardsPanel.transform;
+        GameObject GO = Instantiate(prefab, parent);
 
         GO.TryGetComponent(out RectTransform rt);
         rt.sizeDelta = new Vector2(250, 350);
@@ -129,17 +131,18 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             int startIndex = actorNumber == 1 ? 0 : halfCount;
 
-            _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{1}");
+            _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
 
             if (!GameManager.Instance.testing) {
-                // _deckInfo.SetPlayerCards(Enumerable
-                //     .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
-                //     .ToList());
+                _deckInfo.SetPlayerCards(Enumerable
+                    .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
+                    .ToList());
 
-                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+                // _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
             }
             else {
-                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 });
+                _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33 });
             }
         }
     }

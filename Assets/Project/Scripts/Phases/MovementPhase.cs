@@ -8,9 +8,11 @@ public class MovementPhase : Phase {
     public override IEnumerator Start() {
         matchView.SetCurrentPhaseText("movement phase");
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
 
-        GameManager.Instance.ChangePhase(new BattlePhase(matchView));
+        GameManager.Instance.playerList.ForEach(p => p.PlayerController.SelectMovement());
+
+        // GameManager.Instance.ChangePhase(new BattlePhase(matchView));
 
         yield break;
     }

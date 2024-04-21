@@ -27,32 +27,32 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action OnMasterServerConnected;
     public event Action<Phase> ExecutePhases;
     public event Action OnDrawFinishedEvent;
-    public event Action<string> OnDataDownloadedEvent;
     public event Action<Vector2> OnCellClickedEvent;
     public event Action OnGameStartedEvent;
-    public event Action OnSelectingFinishedEvent;
-    public event Action<CardView, bool> OnCardSelectedEvent;
-    public event Action OnAllEffectsFinishedEvent;
+    public event Action<CardView, bool> OnCardSelectedEvent; // card has been selected or deselected
+    public event Action OnCardSelectingFinishedEvent; // all cards has been selected
     public event Action<int> OnPrioritySetEvent;
+    public event Action<Movement> OnMovementSelectedEvent;
 
     #endregion
 
     #region EventsInvokes
 
+    public void OnMovementSelected(Movement movement) {
+        OnMovementSelectedEvent?.Invoke(movement);
+    }
+
     public void OnPrioritySet(int priority) {
         OnPrioritySetEvent?.Invoke(priority);
     }
 
-    public void OnAllEffectsFinished() {
-        OnAllEffectsFinishedEvent?.Invoke();
-    }
 
     public void OnCardSelected(CardView card, bool selected) {
         OnCardSelectedEvent?.Invoke(card, selected);
     }
 
     public void OnSelectingFinished() {
-        OnSelectingFinishedEvent?.Invoke();
+        OnCardSelectingFinishedEvent?.Invoke();
     }
 
     public void OnCellClicked(Vector2 index) {
@@ -69,10 +69,6 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         }
 
         OnGameStartedEvent?.Invoke();
-    }
-
-    public void OnDataDownloaded(string data) {
-        OnDataDownloadedEvent?.Invoke(data);
     }
 
     public void OnDrawFinished() {
@@ -97,7 +93,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     }
 
     public void PrepareForMatch(IMatchView matchView) {
-        playerList.ForEach(player => player.PlayerController.ShuffleDeck());
+        playerList.ForEach(player => player.PlayerController.ShuffleDeck(true));
         ChangePhase(new DrawPhase(matchView));
     }
 

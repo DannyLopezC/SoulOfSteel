@@ -10,11 +10,10 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
     private IEquipmentCardController _equipmentCardController;
 
     private void Start() {
-        EquipmentCardController.InitEquipmentCard(0, "Cota de espinas",
+        InitCard(0, "Cota de espinas",
             "Devuelve el daño",
             Random.Range(3, 7),
             Random.Range(3, 7),
-            false,
             null,
             CardType.Armor);
     }
@@ -31,10 +30,9 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
         EquipmentCardController.DoEffect(originId);
     }
 
-    public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type) {
-        EquipmentCardController.InitEquipmentCard(id, cardName, cardDescription, scrapCost, scrapRecovery,
-            isCampEffect, imageSource, type);
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        Sprite imageSource, CardType type) {
+        EquipmentCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
 
     public IEquipmentCardController EquipmentCardController {

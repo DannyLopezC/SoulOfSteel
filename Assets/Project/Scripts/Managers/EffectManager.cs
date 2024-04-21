@@ -6,6 +6,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager> {
     public int effectTurn;
     private MineEffectController _mineEffectController;
 
+    public event Action OnAllEffectsFinishedEvent;
     public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
     public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
 
@@ -20,5 +21,9 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager> {
 
     public void CellSelected(Vector2 index, bool select) {
         OnSelectedCellEvent?.Invoke(index, select);
+    }
+
+    public void OnAllEffectsFinished() {
+        OnAllEffectsFinishedEvent?.Invoke();
     }
 }

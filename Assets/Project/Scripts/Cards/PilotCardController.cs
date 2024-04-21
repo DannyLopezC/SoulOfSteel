@@ -2,9 +2,10 @@
 using UnityEngine;
 
 public interface IPilotCardController : ICardController {
-    void InitializePilotCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type,
-        int defaultDamage = 0);
+    void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery, Sprite imageSource,
+        int health, Movement defaultMovement, CardType type, int defaultDamage = 0);
+
+    Movement GetDefaultMovement();
 }
 
 public class PilotCardController : CardController, IPilotCardController {
@@ -12,15 +13,15 @@ public class PilotCardController : CardController, IPilotCardController {
 
     [Header("Pilot Properties")] private int _health;
     private int _defaultDamage;
-    private List<Movement> _defaultMovement;
+    private Movement _defaultMovement;
     [Space(20)] public Vector2 position;
 
     public PilotCardController(IPilotCardView view) : base(view) {
         _view = view;
     }
 
-    public void InitializePilotCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type,
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        Sprite imageSource, int health, Movement defaultMovement, CardType type,
         int defaultDamage = 0) {
         _health = health;
         _defaultMovement = defaultMovement;
@@ -28,7 +29,11 @@ public class PilotCardController : CardController, IPilotCardController {
 
         /* Init card method called at the end because I am calling SetCardUI from it,
            and in this class I am modifying the SetCardUI*/
-        InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, isCampEffect, imageSource, type);
+        base.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
+    }
+
+    public Movement GetDefaultMovement() {
+        return _defaultMovement;
     }
 
     protected override void SetCardUI() {

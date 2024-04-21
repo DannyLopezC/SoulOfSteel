@@ -28,7 +28,7 @@ public class MineEffectController : EffectController, IMineEffectController {
 
     private void StopSettingMines(List<Vector2> cellsSelected) {
         // Debug.Log($"mines put");
-        GameManager.Instance.OnAllEffectsFinished();
+        EffectManager.Instance.OnAllEffectsFinished();
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
         EffectManager.Instance.OnSelectedCellEvent -= SetMines;
         EffectManager.Instance.OnCellsSelectedEvent -= StopSettingMines;

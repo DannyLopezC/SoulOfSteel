@@ -58,6 +58,7 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public abstract void DoEffect(int originId);
     // public abstract void SelectAnimation();
 
-    public abstract void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type);
+    protected virtual void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        Sprite imageSource, CardType type) {
+    }
 }

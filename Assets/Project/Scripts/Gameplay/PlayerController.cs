@@ -11,7 +11,7 @@ public interface IPlayerController {
     void DrawCards(int amount, bool fullDraw);
     void EquipCard(int indexHandList);
     void DismissCard(int indexHandList);
-    void ShuffleDeck();
+    void ShuffleDeck(bool firstTime);
     void SelectAttack();
     void SelectMovement();
     void SelectDefense();
@@ -27,6 +27,8 @@ public interface IPlayerController {
     void SetDoingEffect(bool doingEffect);
     bool GetAllEffectsDone();
     void SetAllEffectsDone(bool allEffectsDone);
+    void SetCurrentCell(Vector2 currentCell);
+    Vector2 GetCurrentCell();
 }
 
 public class PlayerController : IPlayerController {
@@ -35,13 +37,13 @@ public class PlayerController : IPlayerController {
     private int _playerId;
     [ShowInInspector] private int _health;
     private int _scrapPoints;
-    private readonly PlayerCardsInfo _deckInfo;
+    private PlayerCardsInfo _deckInfo;
     private PlayerCardsInfo _shuffledDeck;
     private List<CardView> _hand;
     private List<CardView> _scrapPile;
     private List<CardView> _factory;
     private PilotCardView _pilot;
-    private EquipmentCardView _legs;
+    private LegsCardView _legs;
     private EquipmentCardView _leftArm;
     private EquipmentCardView _rightArm;
     private EquipmentCardView _bodyArmor;
@@ -53,6 +55,8 @@ public class PlayerController : IPlayerController {
     private bool _allEffectsDone;
 
     private List<Vector2> cellsSelected;
+
+    private Vector2 _currentCell;
 
     public PlayerController(IPlayerView view, PlayerCardsInfo deck) {
         _view = view;
@@ -80,13 +84,41 @@ public class PlayerController : IPlayerController {
             UIManager.Instance.SetText($"adding cards {amount}");
             int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
             CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[random];
+
             CardView card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
-            card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description, cardInfoStruct.Cost,
-                cardInfoStruct.Recovery, cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource,
-                cardInfoStruct.Health, cardInfoStruct.SerializedMovements, cardInfoStruct.TypeEnum);
+
+            switch (cardInfoStruct.TypeEnum) {
+                case CardType.Pilot:
+                    Debug.Log($"Cannot have pilot card here");
+                    continue;
+                case CardType.CampEffect:
+                case CardType.Hacking:
+                case CardType.Generator:
+                    ((EffectCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                        cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+                        cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                    break;
+                case CardType.Weapon:
+                case CardType.Armor:
+                case CardType.Arm:
+                case CardType.Legs:
+                    ((LegsCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                        cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+                        cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                    break;
+                case CardType.Chest:
+                    ((EquipmentCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                        cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+                        cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+
             _hand.Add(card);
             _shuffledDeck.playerCards.RemoveAt(random);
-            if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck();
+            if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck(false);
             amount--;
         }
 
@@ -111,7 +143,7 @@ public class PlayerController : IPlayerController {
     public void DismissCard(int indexHandList) {
     }
 
-    public void ShuffleDeck() {
+    public void ShuffleDeck(bool firstTime) {
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _deckInfo.playerCards.ToList();
 
         int n = temporalDeck.Count;
@@ -122,12 +154,22 @@ public class PlayerController : IPlayerController {
         }
 
         _shuffledDeck.playerCards = temporalDeck;
+        if (firstTime) SetPilotCard();
     }
 
     public void SelectAttack() {
     }
 
     public void SelectMovement() {
+        Movement movement;
+
+        if (_legs == null) {
+            movement = _pilot.PilotCardController.GetDefaultMovement();
+            GameManager.Instance.OnMovementSelected(movement);
+        }
+        else {
+            // _view.SelectCards(CardType.Legs, 1);
+        }
     }
 
     public void SelectDefense() {
@@ -187,8 +229,27 @@ public class PlayerController : IPlayerController {
         _allEffectsDone = allEffectsDone;
     }
 
+    public void SetCurrentCell(Vector2 currentCell) {
+        _currentCell = currentCell;
+    }
+
+    public Vector2 GetCurrentCell() {
+        return _currentCell;
+    }
+
     private void CellSelected(Vector2 index, bool select) {
         if (select) cellsSelected.Add(index);
         else cellsSelected.Remove(index);
+    }
+
+    private void SetPilotCard() {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct =
+            _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
+        PilotCardView card = (PilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+            cardInfoStruct.ImageSource, cardInfoStruct.Health, cardInfoStruct.TypeEnum,
+            cardInfoStruct.SerializedMovements[0]);
     }
 }

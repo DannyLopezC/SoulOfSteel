@@ -20,18 +20,6 @@ public class PilotCardView : CardView, IPilotCardView {
         get { return _pilotCardController ??= new PilotCardController(this); }
     }
 
-    private void Start() {
-        // PilotCardController.InitializePilotCard("Charizard",
-        //     "esta carta está rotisima no hay nada que hacer contra ella",
-        //     Random.Range(3, 7),
-        //     Random.Range(3, 7),
-        //     false,
-        //     null,
-        //     Random.Range(1, 100),
-        //     null,
-        //     CardType.Pilot);
-    }
-
     public override bool GetSelected() {
         return PilotCardController.GetSelected();
     }
@@ -44,10 +32,10 @@ public class PilotCardView : CardView, IPilotCardView {
         PilotCardController.DoEffect(originId);
     }
 
-    public override void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        bool isCampEffect, Sprite imageSource, int health, List<Movement> defaultMovement, CardType type) {
-        PilotCardController.InitializePilotCard(id, cardName, cardDescription, scrapCost, scrapRecovery,
-            isCampEffect, imageSource, health, defaultMovement, type);
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        Sprite imageSource, int health, CardType type, Movement defaultMovement) {
+        PilotCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, health,
+            defaultMovement, type);
     }
 
     public void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int _health) {

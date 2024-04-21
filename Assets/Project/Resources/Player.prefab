@@ -61,6 +61,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5667776753973533000}
+  - {fileID: 2644600055320754974}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -92,11 +93,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152b9e5e4df0464283a2109c3ab0503d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deck: []
-  handCardsPanel: {fileID: 0}
-  equipmentCardPrefab: {fileID: 0}
-  pilotCardPrefab: {fileID: 0}
-  effectCardPrefab: {fileID: 0}
+  pv: {fileID: 2468453596436003278}
+  _deckInfo: {fileID: 0}
+  _inAnimation: 0
+  equipmentCardPrefab: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+  pilotCardPrefab: {fileID: 91858852959927813, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
+  effectCardPrefab: {fileID: 1239522931296720530, guid: 26a20748aff6bc846a91feea8c7ff6c1, type: 3}
+  playerName: {fileID: 0}
 --- !u!114 &5027198364437857960
 MonoBehaviour:
   m_ObjectHideFlags: 0

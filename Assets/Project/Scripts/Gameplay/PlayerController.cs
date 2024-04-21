@@ -267,5 +267,6 @@ public class PlayerController : IPlayerController {
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
             cardInfoStruct.ImageSource, cardInfoStruct.Health, cardInfoStruct.TypeEnum,
             cardInfoStruct.SerializedMovements[0]);
+        _pilot = card;
     }
 }

@@ -23,12 +23,15 @@ public interface IPlayerController {
     void SetCardsSelected(bool cardsSelected);
     IEnumerator SelectCells(int amount);
     bool GetMoving();
+    void SetMoving(bool moving);
     bool GetDoingEffect();
     void SetDoingEffect(bool doingEffect);
     bool GetAllEffectsDone();
     void SetAllEffectsDone(bool allEffectsDone);
     void SetCurrentCell(Vector2 currentCell);
     Vector2 GetCurrentCell();
+    void SetCurrentDegrees(int currentDegrees);
+    int GetCurrentDegrees();
 }
 
 public class PlayerController : IPlayerController {
@@ -57,6 +60,7 @@ public class PlayerController : IPlayerController {
     private List<Vector2> cellsSelected;
 
     private Vector2 _currentCell;
+    private int _currentDegrees;
 
     public PlayerController(IPlayerView view, PlayerCardsInfo deck) {
         _view = view;
@@ -165,7 +169,7 @@ public class PlayerController : IPlayerController {
 
         if (_legs == null) {
             movement = _pilot.PilotCardController.GetDefaultMovement();
-            GameManager.Instance.OnMovementSelected(movement);
+            GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view);
         }
         else {
             // _view.SelectCards(CardType.Legs, 1);
@@ -213,6 +217,10 @@ public class PlayerController : IPlayerController {
         return _moving;
     }
 
+    public void SetMoving(bool moving) {
+        _moving = moving;
+    }
+
     public bool GetDoingEffect() {
         return _doingEffect;
     }
@@ -235,6 +243,14 @@ public class PlayerController : IPlayerController {
 
     public Vector2 GetCurrentCell() {
         return _currentCell;
+    }
+
+    public void SetCurrentDegrees(int currentDegrees) {
+        _currentDegrees = currentDegrees;
+    }
+
+    public int GetCurrentDegrees() {
+        return _currentDegrees;
     }
 
     private void CellSelected(Vector2 index, bool select) {

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     public HandPanel handPanel;
     public HandPanel middlePanel;
+    public ScrapPanel scrapPanel;
 
     public Phase CurrentPhase { get; private set; }
     public PlayerView LocalPlayerInstance { get; set; }

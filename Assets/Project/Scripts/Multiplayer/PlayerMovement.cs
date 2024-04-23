@@ -81,8 +81,8 @@ public class PlayerMovement : MonoBehaviour {
     public void MoveToCell(Vector2 index) {
         if (pv.IsMine) {
             index = new Vector2(
-                Mathf.Clamp(index.x, index.x, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
-                Mathf.Clamp(index.y, index.y, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
+                Mathf.Clamp(index.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
+                Mathf.Clamp(index.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
             Debug.Log($"moving {index}");
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
         }

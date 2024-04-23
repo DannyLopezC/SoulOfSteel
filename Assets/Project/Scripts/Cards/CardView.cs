@@ -10,7 +10,9 @@ public interface ICardView {
     void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource);
 
     GameObject GetGameObject();
+
     // void SelectAnimation();
+    void SetDismissTextSizes();
 }
 
 [Serializable]
@@ -54,6 +56,12 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public abstract CardType GetCardType();
     public abstract bool GetSelected();
     public abstract void Select(bool deselect = false);
+    public abstract void Dismiss();
+
+    public void SetDismissTextSizes() {
+        nameTMP.fontSize = 10;
+        descriptionTMP.fontSize = 5;
+    }
 
     public abstract void DoEffect(int originId);
     // public abstract void SelectAnimation();

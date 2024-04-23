@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public interface ILegsCardView : IEquipmentCardView {
@@ -9,6 +10,17 @@ public class LegsCardView : EquipmentCardView, ILegsCardView {
 
     public ILegsCardController LegsCardController {
         get { return _legsCardController ??= new LegsCardController(this); }
+    }
+
+    protected override void Start() {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct =
+            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.TypeEnum == CardType.Legs);
+
+        InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
+            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.SerializedMovements,
+            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+
+        // GameManager.Instance.LocalPlayerInstance.PlayerController.SetLegsCard(this);
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
@@ -43,5 +55,9 @@ public class LegsCardView : EquipmentCardView, ILegsCardView {
 
     public override void DoEffect(int originId) {
         LegsCardController.DoEffect(originId);
+    }
+
+    public override void Dismiss() {
+        LegsCardController.DismissCard();
     }
 }

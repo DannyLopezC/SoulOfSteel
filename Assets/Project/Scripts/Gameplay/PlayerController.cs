@@ -10,12 +10,11 @@ public interface IPlayerController {
     void SetPlayerId(int id);
     void DrawCards(int amount, bool fullDraw);
     void EquipCard(int indexHandList);
-    void DismissCard(int indexHandList);
     void ShuffleDeck(bool firstTime);
     void SelectAttack();
     void SelectMovement();
     void SelectDefense();
-    void SelectCards(CardType type, int amount);
+    void SelectCards(CardType type, int amount, bool setIsSelecting = true);
     void DoDamage(int damage);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
@@ -32,6 +31,7 @@ public interface IPlayerController {
     Vector2 GetCurrentCell();
     void SetCurrentDegrees(int currentDegrees);
     int GetCurrentDegrees();
+    void SetLegsCard(LegsCardView legsCardView);
 }
 
 public class PlayerController : IPlayerController {
@@ -151,9 +151,6 @@ public class PlayerController : IPlayerController {
     public void EquipCard(int indexHandList) {
     }
 
-    public void DismissCard(int indexHandList) {
-    }
-
     public void ShuffleDeck(bool firstTime) {
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _deckInfo.playerCards.ToList();
 
@@ -180,7 +177,6 @@ public class PlayerController : IPlayerController {
             GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view);
         }
         else {
-            // _view.SelectCards(CardType.Legs, 1);
         }
     }
 
@@ -194,10 +190,10 @@ public class PlayerController : IPlayerController {
         _playerId = id;
     }
 
-    public void SelectCards(CardType type, int amount) {
+    public void SelectCards(CardType type, int amount, bool setSelecting = true) {
         foreach (CardView card in _hand) {
             if (card.GetCardType() == type) {
-                card.SetIsSelecting(true);
+                card.SetIsSelecting(setSelecting);
             }
         }
     }
@@ -259,6 +255,10 @@ public class PlayerController : IPlayerController {
 
     public int GetCurrentDegrees() {
         return _currentDegrees;
+    }
+
+    public void SetLegsCard(LegsCardView legsCardView) {
+        _legs = legsCardView;
     }
 
     private void CellSelected(Vector2 index, bool select) {

@@ -37,6 +37,8 @@ public class RechargePhase : Phase {
             yield return null;
         }
 
+        GameManager.Instance.playerList.ForEach(player => player.SelectCards(CardType.CampEffect, 1, false));
+
         // doing cards effects        
         EffectManager.Instance.effectTurn = GameManager.Instance.currentPriority;
 
@@ -78,6 +80,7 @@ public class RechargePhase : Phase {
                 foreach (CardView card in _effectCards) {
                     card.SetIsSelecting(false);
                     card.Select(true);
+                    card.Dismiss();
                 }
 
                 player.SetMyEffectTurn(false);

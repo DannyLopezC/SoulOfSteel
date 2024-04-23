@@ -36,6 +36,10 @@ public class EffectCardView : CardView, IEffectCardView {
         EffectCardController.Select(deselect);
     }
 
+    public override void Dismiss() {
+        EffectCardController.DismissCard();
+    }
+
     public override void DoEffect(int originId) {
         EffectCardController.DoEffect(originId);
     }

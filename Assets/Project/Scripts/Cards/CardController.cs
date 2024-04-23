@@ -24,6 +24,7 @@ public interface ICardController {
     void IsSelecting(bool isSelecting);
     bool GetSelected();
     void DoEffect(int originId);
+    void DismissCard();
 }
 
 public abstract class CardController : ICardController {
@@ -91,7 +92,6 @@ public abstract class CardController : ICardController {
         }
         else if (!_isSelecting && _selected) {
             _selected = !deselect;
-            SelectAnimation(_selected);
         }
     }
 
@@ -119,6 +119,24 @@ public abstract class CardController : ICardController {
             if (!select) {
                 animationReference.SetParent(GameManager.Instance.handPanel.transform);
             }
+
+            GameManager.Instance.LocalPlayerInstance._inAnimation = false;
+        });
+    }
+
+    public void DismissCard() {
+        Transform t = _view.GetGameObject().transform;
+        ScrapPanel scrapPanel = GameManager.Instance.scrapPanel;
+
+        Vector3 endPos = scrapPanel.transform.TransformPoint(scrapPanel.transform.position);
+
+        GameManager.Instance.LocalPlayerInstance._inAnimation = true;
+        t.DOMove(endPos, 0.5f).OnComplete(() => {
+            scrapPanel.SendToBackup();
+            t.localScale = scrapPanel.transform.GetChild(0).localScale;
+            t.SetParent(scrapPanel.transform);
+            t.SetSiblingIndex(2);
+            _view.SetDismissTextSizes();
 
             GameManager.Instance.LocalPlayerInstance._inAnimation = false;
         });

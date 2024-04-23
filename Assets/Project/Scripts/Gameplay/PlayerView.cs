@@ -14,7 +14,7 @@ public interface IPlayerView {
     CardView AddCardToPanel(CardType cardType);
     void InitAddCards(int amount);
     PhotonView GetPv();
-    void SelectCards(CardType type, int amount);
+    void SelectCards(CardType type, int amount, bool setSelecting = true);
 }
 
 [Serializable]
@@ -158,8 +158,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         PlayerController.DrawCards(amount, fullDraw);
     }
 
-    public void SelectCards(CardType type, int amount) {
-        PlayerController.SelectCards(type, amount);
+    public void SelectCards(CardType type, int amount, bool setSelecting = true) {
+        PlayerController.SelectCards(type, amount, setSelecting);
     }
 
     public void ReceivePriority(int priority) {

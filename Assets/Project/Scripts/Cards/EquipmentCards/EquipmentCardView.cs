@@ -9,7 +9,7 @@ public interface IEquipmentCardView : ICardView {
 public class EquipmentCardView : CardView, IEquipmentCardView {
     private IEquipmentCardController _equipmentCardController;
 
-    private void Start() {
+    protected virtual void Start() {
         InitCard(0, "Cota de espinas",
             "Devuelve el daño",
             Random.Range(3, 7),
@@ -26,12 +26,16 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
         EquipmentCardController.Select(deselect);
     }
 
+    public override void Dismiss() {
+        EquipmentCardController.DismissCard();
+    }
+
     public override void DoEffect(int originId) {
         EquipmentCardController.DoEffect(originId);
     }
 
-    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        Sprite imageSource, CardType type) {
+    public void InitCard(int id, string cardName, string cardDescription,
+        int scrapCost, int scrapRecovery, Sprite imageSource, CardType type) {
         EquipmentCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
 

@@ -28,6 +28,10 @@ public class PilotCardView : CardView, IPilotCardView {
         PilotCardController.Select(deselect);
     }
 
+    public override void Dismiss() {
+        PilotCardController.DismissCard();
+    }
+
     public override void DoEffect(int originId) {
         PilotCardController.DoEffect(originId);
     }

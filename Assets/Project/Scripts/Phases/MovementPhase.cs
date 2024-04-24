@@ -11,7 +11,7 @@ public class MovementPhase : Phase {
 
         yield return new WaitForSeconds(1);
 
-        GameManager.Instance.playerList.ForEach(p => p.PlayerController.SelectMovement());
+        GameManager.Instance.playerList.ForEach(p => p.SelectMovement());
 
 
         yield break;

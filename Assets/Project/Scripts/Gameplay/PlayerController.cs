@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon.StructWrapping;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -95,7 +96,7 @@ public class PlayerController : IPlayerController {
 
             CardView card = null;
 
-            if (cardInfoStruct.TypeEnum != CardType.Pilot) {
+            if (cardInfoStruct.TypeEnum != CardType.Pilot && cardInfoStruct.TypeEnum != CardType.Legs) {
                 card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
             }
 
@@ -114,10 +115,10 @@ public class PlayerController : IPlayerController {
                 case CardType.Armor:
                 case CardType.Arm:
                 case CardType.Legs:
-                    ((LegsCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
-                        cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-                        cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
-                    break;
+                    // ((LegsCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    //     cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+                    //     cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                    continue;
                 case CardType.Chest:
                     ((EquipmentCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
@@ -168,7 +169,11 @@ public class PlayerController : IPlayerController {
             Debug.Log($"{shuffledDeckPlayerCard.CardName} \n");
         }
 
-        if (firstTime) SetPilotCard();
+        if (firstTime && _view.GetPv().IsMine) {
+            SetPilotCard();
+            SetLegsCard();
+        }
+
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
     }
 
@@ -282,6 +287,22 @@ public class PlayerController : IPlayerController {
     private void CellSelected(Vector2 index, bool select) {
         if (select) cellsSelected.Add(index);
         else cellsSelected.Remove(index);
+    }
+
+    public void SetLegsCard() {
+        // _view.ClearPanel(GameManager.Instance.myEquipmentPanel.transform);
+        // _view.ClearPanel(GameManager.Instance.enemyEquipmentPanel.transform);
+
+        CardInfoSerialized.CardInfoStruct cardInfoStruct =
+            _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Legs);
+
+
+        LegsCardView card = (LegsCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+            cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+        _legs = card;
     }
 
     private void SetPilotCard() {

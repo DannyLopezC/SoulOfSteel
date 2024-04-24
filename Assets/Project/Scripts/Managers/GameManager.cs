@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public HandPanel middlePanel;
     public ScrapPanel scrapPanel;
 
+    public EquipmentPanel myEquipmentPanel;
+    public EquipmentPanel enemyEquipmentPanel;
+
     public Phase CurrentPhase { get; private set; }
     public PlayerView LocalPlayerInstance { get; set; }
     public string LocalPlayerName;

@@ -10836,6 +10836,7 @@ GameObject:
   - component: {fileID: 6628460884682138963}
   - component: {fileID: 7696353397184404844}
   - component: {fileID: 8282874207923403589}
+  - component: {fileID: 2917578022812815257}
   m_Layer: 5
   m_Name: CardsPanel
   m_TagString: Untagged
@@ -10917,17 +10918,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 80
     m_Right: 0
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 110, y: 140}
   m_Spacing: {x: 40, y: 30}
   m_Constraint: 1
   m_ConstraintCount: 2
+--- !u!114 &2917578022812815257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4622936897641242055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed53dffc14be49bb89c823e47d633ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnemy: 1
 --- !u!1 &4688853605821262533
 GameObject:
   m_ObjectHideFlags: 0
@@ -17800,6 +17814,7 @@ GameObject:
   - component: {fileID: 5453919544165601587}
   - component: {fileID: 4283338595841921588}
   - component: {fileID: 6977064188859302592}
+  - component: {fileID: 5905913439500941948}
   m_Layer: 5
   m_Name: CardsPanel
   m_TagString: Untagged
@@ -17881,17 +17896,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 80
     m_Right: 0
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 110, y: 140}
   m_Spacing: {x: 40, y: 30}
   m_Constraint: 1
   m_ConstraintCount: 2
+--- !u!114 &5905913439500941948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741400762297423751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed53dffc14be49bb89c823e47d633ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnemy: 0
 --- !u!1 &7804531329020571252
 GameObject:
   m_ObjectHideFlags: 0
@@ -22633,6 +22661,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EquipmentCard
       objectReference: {fileID: 0}
+    - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22771,7 +22803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_AnchorMin.x
@@ -22779,15 +22811,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22819,11 +22851,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 8272419727778519146, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -22840,6 +22872,10 @@ PrefabInstance:
     - target: {fileID: 8925707687211894724, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
       propertyPath: m_Name
       value: LegsCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 8925707687211894724, guid: 342e2f4e0d12d474ea7c50fbaa69e4d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23525,7 +23561,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -23533,15 +23569,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23573,11 +23609,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -23594,6 +23630,10 @@ PrefabInstance:
     - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_Name
       value: EquipmentCard (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23835,7 +23875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -23843,15 +23883,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23883,11 +23923,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -23904,6 +23944,10 @@ PrefabInstance:
     - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_Name
       value: EquipmentCard (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23937,7 +23981,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -23945,15 +23989,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23985,11 +24029,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 135
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -24006,6 +24050,10 @@ PrefabInstance:
     - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_Name
       value: EquipmentCard (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24039,7 +24087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -24047,15 +24095,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24087,11 +24135,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -24108,6 +24156,10 @@ PrefabInstance:
     - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_Name
       value: EquipmentCard (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24251,7 +24303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -24259,15 +24311,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24299,11 +24351,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 135
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 2732566023194595265, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -24320,6 +24372,10 @@ PrefabInstance:
     - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
       propertyPath: m_Name
       value: EquipmentCard (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242578959208140911, guid: ac931f152e4601b46b01a2bfc51aedfd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

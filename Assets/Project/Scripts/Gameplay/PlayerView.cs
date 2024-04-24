@@ -15,6 +15,7 @@ public interface IPlayerView {
     void InitAddCards(int amount);
     PhotonView GetPv();
     void SelectCards(CardType type, int amount, bool setSelecting = true);
+    void ClearPanel(Transform panel);
 }
 
 [Serializable]
@@ -36,6 +37,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [SerializeField] private GameObject equipmentCardPrefab;
     [SerializeField] private GameObject pilotCardPrefab;
     [SerializeField] private GameObject effectCardPrefab;
+    [SerializeField] private GameObject legsCardPrefab;
 
     [SerializeField] private TMP_Text playerName;
 
@@ -83,30 +85,45 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     }
 
     public CardView AddCardToPanel(CardType cardType) {
-        GameObject prefab;
+        GameObject prefab = null;
+        Transform parent = null;
+
         switch (cardType) {
             case CardType.Pilot:
                 prefab = pilotCardPrefab;
                 break;
             case CardType.Weapon:
             case CardType.Armor:
+            case CardType.Arm:
+            case CardType.Chest:
+            case CardType.Generator:
                 prefab = equipmentCardPrefab;
+                parent = pv.IsMine
+                    ? GameManager.Instance.myEquipmentPanel.transform
+                    : GameManager.Instance.enemyEquipmentPanel.transform;
+                break;
+            case CardType.Legs:
+                prefab = legsCardPrefab;
+                parent = pv.IsMine
+                    ? GameManager.Instance.myEquipmentPanel.transform
+                    : GameManager.Instance.enemyEquipmentPanel.transform;
                 break;
             case CardType.CampEffect:
+            case CardType.Hacking:
                 prefab = effectCardPrefab;
+                parent = HandCardsPanel.transform;
                 break;
             default:
                 prefab = pilotCardPrefab;
-                // Debug.Log($"Prefab not found, using pilot prefab");
+                Debug.LogError($"Prefab not found");
                 break;
         }
 
-        Transform parent = cardType == CardType.Pilot ? null : HandCardsPanel.transform;
         GameObject GO = Instantiate(prefab, parent);
 
         GO.TryGetComponent(out RectTransform rt);
         rt.sizeDelta = new Vector2(250, 350);
-        rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        if (cardType != CardType.Legs) rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
         GO.TryGetComponent(out CardView card);
         GO.SetActive(pv.IsMine);
@@ -119,6 +136,12 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public PhotonView GetPv() {
         return pv;
+    }
+
+    public void ClearPanel(Transform panel) {
+        foreach (Transform t in panel) {
+            Destroy(t.gameObject);
+        }
     }
 
     public void SetCardsInfo() {
@@ -140,11 +163,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 //     .ToList());
 
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33 });
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32 });
             }
             else {
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33 });
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32 });
             }
 
             PlayerController.SetDeckInfo(_deckInfo);
@@ -164,6 +187,12 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public void SelectCards(CardType type, int amount, bool setSelecting = true) {
         PlayerController.SelectCards(type, amount, setSelecting);
+    }
+
+    public void SelectMovement() {
+        if (pv.IsMine) {
+            PlayerController.SelectMovement();
+        }
     }
 
     public void ReceivePriority(int priority) {

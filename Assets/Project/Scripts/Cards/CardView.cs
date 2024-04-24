@@ -61,6 +61,7 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public void SetDismissTextSizes() {
         nameTMP.fontSize = 10;
         descriptionTMP.fontSize = 5;
+        scrapCostTMP.fontSize = 12;
     }
 
     public abstract void DoEffect(int originId);

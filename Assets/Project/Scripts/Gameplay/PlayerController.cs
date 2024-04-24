@@ -15,7 +15,7 @@ public interface IPlayerController {
     void SelectMovement();
     void SelectDefense();
     void SelectCards(CardType type, int amount, bool setIsSelecting = true);
-    void DoDamage(int damage);
+    void GetDamage(int damage);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
     bool GetCardsSelected();
@@ -32,6 +32,7 @@ public interface IPlayerController {
     void SetCurrentDegrees(int currentDegrees);
     int GetCurrentDegrees();
     void SetLegsCard(LegsCardView legsCardView);
+    void SetDeckInfo(PlayerCardsInfo deckInfo);
 }
 
 public class PlayerController : IPlayerController {
@@ -162,6 +163,11 @@ public class PlayerController : IPlayerController {
         }
 
         _shuffledDeck.playerCards = temporalDeck;
+
+        foreach (CardInfoSerialized.CardInfoStruct shuffledDeckPlayerCard in _deckInfo.playerCards) {
+            Debug.Log($"{shuffledDeckPlayerCard.CardName} \n");
+        }
+
         if (firstTime) SetPilotCard();
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
     }
@@ -177,13 +183,21 @@ public class PlayerController : IPlayerController {
             GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view);
         }
         else {
+            GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
+            _legs.SelectMovement();
         }
+    }
+
+    public void OnMovementSelected(int movementId) {
+        GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[movementId], (PlayerView)_view);
+        GameManager.Instance.OnSelectionConfirmedEvent -= OnMovementSelected;
     }
 
     public void SelectDefense() {
     }
 
-    public void DoDamage(int damage) {
+    public void GetDamage(int damage) {
+        _health -= damage;
     }
 
     public void SetPlayerId(int id) {
@@ -261,6 +275,10 @@ public class PlayerController : IPlayerController {
         _legs = legsCardView;
     }
 
+    public void SetDeckInfo(PlayerCardsInfo deckInfo) {
+        _deckInfo = deckInfo;
+    }
+
     private void CellSelected(Vector2 index, bool select) {
         if (select) cellsSelected.Add(index);
         else cellsSelected.Remove(index);
@@ -269,6 +287,8 @@ public class PlayerController : IPlayerController {
     private void SetPilotCard() {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
+
+
         PilotCardView card = (PilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,

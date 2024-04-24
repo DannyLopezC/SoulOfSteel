@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 
 public enum CellType {
     Normal,
-    Mined
+    Mined,
+    Blocked
 }
 
 public interface ICellController {

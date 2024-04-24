@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private GameObject waitingForOpponentPanel;
     [SerializeField] private Canvas _currentWaitingForOpponentPanel;
 
+    [SerializeField] private GameObject selectionPanel;
+    [SerializeField] private SelectionPanel _currentSelectionPanel;
+
     public MatchView matchView;
 
     private void Start() {
@@ -48,6 +51,13 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
 
         _currentCardPanel.Init(cardName, cardDescription, scrapCost, imageSource);
         _currentCardPanel.gameObject.SetActive(activate);
+    }
+
+    public void ShowSelectionPanel(int optionsAmount, List<string> optionNames, bool activate = true) {
+        FindOrInstantiatePanel(ref _currentSelectionPanel, selectionPanel);
+
+        if (optionNames != null) _currentSelectionPanel.Init(optionsAmount, optionNames);
+        _currentSelectionPanel.gameObject.SetActive(activate);
     }
 
     private static void FindOrInstantiatePanel<T>(ref T panel, GameObject prefab) where T : Component {

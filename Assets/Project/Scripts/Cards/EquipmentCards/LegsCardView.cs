@@ -20,7 +20,7 @@ public class LegsCardView : EquipmentCardView, ILegsCardView {
             cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.SerializedMovements,
             cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
 
-        // GameManager.Instance.LocalPlayerInstance.PlayerController.SetLegsCard(this);
+        GameManager.Instance.LocalPlayerInstance.PlayerController.SetLegsCard(this);
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
@@ -59,5 +59,9 @@ public class LegsCardView : EquipmentCardView, ILegsCardView {
 
     public override void Dismiss() {
         LegsCardController.DismissCard();
+    }
+
+    public void SelectMovement() {
+        LegsCardController.SelectMovement();
     }
 }

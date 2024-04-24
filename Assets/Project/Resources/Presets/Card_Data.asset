@@ -511,18 +511,22 @@ MonoBehaviour:
       - steps:
         - Steps: 2
           Direction: "\u2191"
+        fullStrings: "2 \u2191, 0\xBA"
         degrees: 00000000
       - steps:
         - Steps: 3
           Direction: "\u2192"
+        fullStrings: "3 \u2192, 0\xBA"
         degrees: 00000000
       - steps:
         - Steps: 3
           Direction: "\u2190"
+        fullStrings: "3 \u2190, 0\xBA"
         degrees: 00000000
       - steps:
         - Steps: 0
           Direction: 
+        fullStrings: "0, 90\xBA \u2B82 o 180\xBA \u2B82"
         degrees: 5a000000b4000000
       Movements: "1) 2 \u2191, 0\xBA\n2) 3 \u2192, 0\xBA\n3) 3 \u2190, 0\xBA \n4)
         0, 90\xBA \u2B82 o 180\xBA \u2B82"
@@ -543,22 +547,26 @@ MonoBehaviour:
       - steps:
         - Steps: 3
           Direction: "\u2191"
+        fullStrings: "3 \u2191"
         degrees: ffffffff
       - steps:
         - Steps: 2
           Direction: "\u2191"
         - Steps: 2
           Direction: "\u2191"
+        fullStrings: "2 \u2191, 2\u2192, 90\xBA"
         degrees: 5a000000
       - steps:
         - Steps: 2
           Direction: "\u2191"
         - Steps: 2
           Direction: "\u2191"
+        fullStrings: "2 \u2191, 2\u2192, 90\xBA"
         degrees: 5a000000
       - steps:
         - Steps: 3
           Direction: "\u2191"
+        fullStrings: "3 \u2191, 180\xBA\u2B82"
         degrees: b4000000
       Movements: "1) 3 \u2191 \n2) 2 \u2191, 2\u2192, 90\xBA\n3) 2 \u2191, 2\u2192,
         90\xBA\n4) 3 \u2191, 180\xBA\u2B82"
@@ -579,30 +587,34 @@ MonoBehaviour:
       - steps:
         - Steps: 4
           Direction: "\u2191"
+        fullStrings: "4 \u2191"
         degrees: ffffffff
       - steps:
         - Steps: 3
           Direction: "\u2191"
         - Steps: 3
           Direction: "\u2191"
+        fullStrings: "3 \u2191, 2\u2192, 90\xBA"
         degrees: 5a000000
       - steps:
         - Steps: 3
           Direction: "\u2191"
         - Steps: 3
           Direction: "\u2191"
+        fullStrings: "3 \u2191, 2\u2192, 90\xBA"
         degrees: 5a000000
       - steps:
         - Steps: 4
           Direction: "\u2191"
+        fullStrings: "4 \u2191, 180\xBA\u2B82"
         degrees: b4000000
       Movements: "1) 4 \u2191 \n2) 3 \u2191, 2\u2192, 90\xBA\n3) 3 \u2191, 2\u2192,
         90\xBA\n4) 4 \u2191, 180\xBA\u2B82"
     - Id: 33
-      CardName: PilotoGenerica
+      CardName: pilotjeje
       Type: 
       TypeEnum: 0
-      Description: eoeoeoeo
+      Description: afasdkjfaksdlf
       Cost: 1
       Energy: 2
       Damage: 3
@@ -610,10 +622,11 @@ MonoBehaviour:
       Recovery: 5
       IsCampEffect: 0
       ImageSource: {fileID: 0}
-      Health: 10
+      Health: 1
       SerializedMovements:
       - steps:
         - Steps: 2
           Direction: "\u2191"
+        fullStrings: 
         degrees: 5a000000
       Movements: 

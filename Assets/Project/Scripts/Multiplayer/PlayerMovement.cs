@@ -66,25 +66,41 @@ public class PlayerMovement : MonoBehaviour {
                         break;
                 }
 
-                Debug.Log($"{nextCell}");
-                MoveToCell(nextCell);
+                MoveToCell(nextCell, adjustedDirection);
                 currentSteps--;
                 yield return null;
             }
 
             player.PlayerController.SetCurrentCell(nextCell);
             player.PlayerController.SetCurrentDegrees(nextDegrees);
+            player.transform.rotation = Quaternion.Euler(0, 0, nextDegrees);
+
+            if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
+                    .GetCellType() == CellType.Blocked) {
+                player.PlayerController.GetDamage(2);
+                nextCell = new Vector2(nextCell.x + 1, nextCell.y);
+                MoveToCell(nextCell);
+                player.PlayerController.SetCurrentCell(nextCell);
+            }
+
             GameManager.Instance.OnMovementFinished();
         }
     }
 
-    public void MoveToCell(Vector2 index) {
+    public void MoveToCell(Vector2 index, int adjustedDirection = -1) {
         if (pv.IsMine) {
             index = new Vector2(
                 Mathf.Clamp(index.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
                 Mathf.Clamp(index.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
-            Debug.Log($"moving {index}");
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
+            // if (adjustedDirection != -1) transform.rotation = Quaternion.Euler(0, 0, adjustedDirection);
+
+            CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
+
+            if (currentCell.CellController.GetCellType() == CellType.Mined) {
+                GetComponent<PlayerView>().PlayerController.GetDamage(3);
+                currentCell.CellController.SetType(CellType.Normal);
+            }
         }
     }
 

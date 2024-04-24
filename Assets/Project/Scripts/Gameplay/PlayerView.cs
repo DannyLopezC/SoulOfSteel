@@ -131,19 +131,23 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             int startIndex = actorNumber == 1 ? 0 : halfCount;
 
+            Debug.Log($" actor number {actorNumber}");
             _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
 
             if (!GameManager.Instance.testing) {
-                _deckInfo.SetPlayerCards(Enumerable
-                    .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
-                    .ToList());
+                // _deckInfo.SetPlayerCards(Enumerable
+                //     .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
+                //     .ToList());
 
-                // _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-            }
-            else {
-                _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
+                // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
                 _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33 });
             }
+            else {
+                // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33 });
+            }
+
+            PlayerController.SetDeckInfo(_deckInfo);
         }
     }
 
@@ -175,8 +179,6 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             stream.SendNext(EffectManager.Instance.effectTurn);
 
             stream.SendNext(PlayerController.GetAllEffectsDone());
-            Debug.Log(
-                $"sending from player {PlayerController.GetPlayerId()} get all effects done {PlayerController.GetAllEffectsDone()} \n");
         }
         else if (stream.IsReading) {
             bool receivedSelection = (bool)stream.ReceiveNext();

@@ -40,10 +40,11 @@ public class MatchController : IMatchController {
                 : new Vector2(GameManager.Instance.boardView.BoardController.GetBoardCount() - 1,
                     GameManager.Instance.boardView.BoardController.GetBoardCount() - 1);
 
-            p.GetComponent<PlayerMovement>().MoveToCell(nextCell);
+            int currentDegrees = p.PlayerController.GetPlayerId() == 1 ? 270 : 90;
 
             p.PlayerController.SetCurrentCell(nextCell);
-            p.PlayerController.SetCurrentDegrees(p.PlayerController.GetPlayerId() == 1 ? 270 : 90);
+            p.PlayerController.SetCurrentDegrees(currentDegrees);
+            p.GetComponent<PlayerMovement>().MoveToCell(nextCell, currentDegrees);
         }
     }
 

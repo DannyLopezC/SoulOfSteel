@@ -35,10 +35,15 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action<int> OnPrioritySetEvent;
     public event Action<Movement, PlayerView> OnMovementSelectedEvent;
     public event Action OnMovementFinishedEvent;
+    public event Action<int> OnSelectionConfirmedEvent;
 
     #endregion
 
     #region EventsInvokes
+
+    public void OnSelectionConfirmed(int id) {
+        OnSelectionConfirmedEvent?.Invoke(id);
+    }
 
     public void OnMovementFinished() {
         OnMovementFinishedEvent?.Invoke();

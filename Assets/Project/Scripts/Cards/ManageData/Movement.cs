@@ -4,6 +4,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class Movement {
@@ -19,7 +20,7 @@ public class Movement {
     }
 
     [ShowInInspector] public List<MovementInfo> steps;
-
+    public string fullStrings;
     public List<int> degrees;
 
     public static List<Movement> FromString(string movementString) {
@@ -39,9 +40,11 @@ public class Movement {
         List<int> steps = new() { };
         List<string> direction = new() { };
         List<int> degrees = new() { -1 };
+        string fullStrings;
 
         if (movementString.Length > 2) {
             movementString = movementString.Substring(3);
+            fullStrings = movementString.Replace("⮂", "");
             List<string> parts = movementString.Split(',').ToList();
             foreach (string part in parts) {
                 string localPart = part.Replace(" ", "");
@@ -85,7 +88,8 @@ public class Movement {
 
             return new Movement {
                 steps = stepsDictionary,
-                degrees = degrees // Use the parsed degrees or -1 for no rotation
+                degrees = degrees, // Use the parsed degrees or -1 for no rotation
+                fullStrings = fullStrings
             };
         }
 

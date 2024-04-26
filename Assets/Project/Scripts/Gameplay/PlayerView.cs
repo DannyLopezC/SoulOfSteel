@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -16,19 +17,22 @@ public interface IPlayerView {
     PhotonView GetPv();
     void SelectCards(CardType type, int amount, bool setSelecting = true);
     void ClearPanel(Transform panel);
+    PlayerCardsInfo GetDeckInfo();
 }
 
 [Serializable]
 public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable {
     [SerializeField] private PhotonView pv;
-    [SerializeField] private PlayerCardsInfo _deckInfo;
+    [ShowInInspector] public PlayerCardsInfo _deckInfo;
     private PlayerMovement _playerMovement;
 
     public bool _inAnimation;
     private bool _receivePriority;
     private GameObject _handCardsPanel;
+    private bool _myMovementTurn;
     private bool _myEffectTurn;
     private bool _effectTurnDone;
+    private bool _movementTurnDone;
 
     public GameObject HandCardsPanel {
         get { return _handCardsPanel ??= GameManager.Instance.handPanel.gameObject; }
@@ -45,7 +49,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     private IPlayerView _playerViewImplementation;
 
     public IPlayerController PlayerController {
-        get { return _playerController ??= new PlayerController(this, _deckInfo); }
+        get { return _playerController ??= new PlayerController(this); }
     }
 
     private void Awake() {
@@ -144,6 +148,10 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
+    public PlayerCardsInfo GetDeckInfo() {
+        return _deckInfo;
+    }
+
     public void SetCardsInfo() {
         if (pv.IsMine) {
             // Debug.Log($"actor number: {pv.Owner.ActorNumber}");
@@ -169,8 +177,6 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
                 _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32 });
             }
-
-            PlayerController.SetDeckInfo(_deckInfo);
         }
     }
 
@@ -190,9 +196,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     }
 
     public void SelectMovement() {
-        if (pv.IsMine) {
-            PlayerController.SelectMovement();
-        }
+        PlayerController.SelectMovement();
     }
 
     public void ReceivePriority(int priority) {
@@ -201,22 +205,32 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting && pv.IsMine) {
+            // selecting cards
             stream.SendNext(PlayerController.GetCardsSelected());
             stream.SendNext(PlayerController.GetPlayerId());
 
+            //priority
             stream.SendNext(GameManager.Instance.currentPriority);
-            stream.SendNext(EffectManager.Instance.effectTurn);
 
+            //effects
+            stream.SendNext(EffectManager.Instance.effectTurn);
             stream.SendNext(PlayerController.GetAllEffectsDone());
+
+            //movement
+            stream.SendNext(PlayerController.GetMovementSelected());
+            stream.SendNext(PlayerController.GetMovementDone());
         }
         else if (stream.IsReading) {
             bool receivedSelection = (bool)stream.ReceiveNext();
             int receivedPlayerId = (int)stream.ReceiveNext();
 
             int receivedPriority = (int)stream.ReceiveNext();
-            int receivedEffectTurn = (int)stream.ReceiveNext();
 
+            int receivedEffectTurn = (int)stream.ReceiveNext();
             bool receivedAllEffectsDone = (bool)stream.ReceiveNext();
+
+            bool receivedMovementSelected = (bool)stream.ReceiveNext();
+            bool receivedMovementDone = (bool)stream.ReceiveNext();
 
             foreach (PlayerView player in GameManager.Instance.playerList) {
                 if (receivedPlayerId == player.pv.Owner.ActorNumber) {
@@ -227,6 +241,18 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             foreach (PlayerView player in GameManager.Instance.playerList) {
                 if (receivedPlayerId == player.PlayerController.GetPlayerId()) {
                     player.PlayerController.SetAllEffectsDone(receivedAllEffectsDone);
+                }
+            }
+
+            foreach (PlayerView player in GameManager.Instance.playerList) {
+                if (receivedPlayerId == player.pv.Owner.ActorNumber) {
+                    player.PlayerController.SetMovementSelected(receivedMovementSelected);
+                }
+            }
+
+            foreach (PlayerView player in GameManager.Instance.playerList) {
+                if (receivedPlayerId == player.pv.Owner.ActorNumber) {
+                    player.PlayerController.SetMovementDone(receivedMovementDone);
                 }
             }
 
@@ -244,7 +270,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     }
 
     public void SetMyEffectTurn(bool myEffectTurn) {
-        this._myEffectTurn = myEffectTurn;
+        _myEffectTurn = myEffectTurn;
+    }
+
+    public void SetMyMovementTurn(bool myMovementTurn) {
+        _myMovementTurn = myMovementTurn;
     }
 
     public void SetEffectTurnDone(bool effectTurnDone) {
@@ -253,5 +283,28 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public bool GetEffectTurnDone() {
         return _effectTurnDone;
+    }
+
+    public void SetMovementTurnDone(bool movementTurnDone) {
+        _movementTurnDone = movementTurnDone;
+    }
+
+    public bool GetMovementTurnDone() {
+        return _movementTurnDone;
+    }
+
+    public void DoMove() {
+        PlayerController.DoMovement();
+    }
+
+    [PunRPC]
+    public void RpcSetTurn() {
+        GameManager.Instance.movementTurn =
+            (GameManager.Instance.movementTurn % GameManager.Instance.playerList.Count) + 1;
+    }
+
+    [PunRPC]
+    public void RpcUpdateTurn(int newTurn) {
+        GameManager.Instance.movementTurn = newTurn;
     }
 }

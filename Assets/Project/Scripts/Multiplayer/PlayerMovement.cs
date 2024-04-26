@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void DoMove(Movement movement, PlayerView player) {
         if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
+        player.PlayerController.SetMoving(true);
         currentMovement = movement;
         StartCoroutine(StartMoving(movement, player));
     }
@@ -74,6 +75,8 @@ public class PlayerMovement : MonoBehaviour {
             player.PlayerController.SetCurrentCell(nextCell);
             player.PlayerController.SetCurrentDegrees(nextDegrees);
             player.transform.rotation = Quaternion.Euler(0, 0, nextDegrees);
+            player.PlayerController.SetMoving(false);
+            GameManager.Instance.OnMovementTurnDone();
 
             if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
                     .GetCellType() == CellType.Blocked) {
@@ -82,8 +85,6 @@ public class PlayerMovement : MonoBehaviour {
                 MoveToCell(nextCell);
                 player.PlayerController.SetCurrentCell(nextCell);
             }
-
-            GameManager.Instance.OnMovementFinished();
         }
     }
 

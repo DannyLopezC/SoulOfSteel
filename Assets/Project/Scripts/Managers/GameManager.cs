@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     public bool testing;
 
+    public int movementTurn;
+
     public HandPanel handPanel;
     public HandPanel middlePanel;
     public ScrapPanel scrapPanel;
@@ -39,10 +41,20 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action<Movement, PlayerView> OnMovementSelectedEvent;
     public event Action OnMovementFinishedEvent;
     public event Action<int> OnSelectionConfirmedEvent;
+    public event Action OnAllMovementSelectedEvent;
+    public event Action OnMovementTurnDoneEvent;
 
     #endregion
 
     #region EventsInvokes
+
+    public void OnMovementTurnDone() {
+        OnMovementTurnDoneEvent?.Invoke();
+    }
+
+    public void OnAllMovementSelected() {
+        OnAllMovementSelectedEvent?.Invoke();
+    }
 
     public void OnSelectionConfirmed(int id) {
         OnSelectionConfirmedEvent?.Invoke(id);

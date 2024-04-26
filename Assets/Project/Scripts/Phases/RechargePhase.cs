@@ -94,7 +94,6 @@ public class RechargePhase : Phase {
 
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetCardsSelected(false);
 
-        Debug.Log($"saliendo");
         _effectCards.Clear();
         GameManager.Instance.ChangePhase(new PrincipalPhase(matchView));
         GameManager.Instance.OnCardSelectedEvent -= CardSelected;

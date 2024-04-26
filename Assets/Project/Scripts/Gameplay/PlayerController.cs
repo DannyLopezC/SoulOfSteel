@@ -33,7 +33,11 @@ public interface IPlayerController {
     void SetCurrentDegrees(int currentDegrees);
     int GetCurrentDegrees();
     void SetLegsCard(LegsCardView legsCardView);
-    void SetDeckInfo(PlayerCardsInfo deckInfo);
+    bool GetMovementSelected();
+    void SetMovementSelected(bool movementSelected);
+    bool GetMovementDone();
+    void SetMovementDone(bool movementDone);
+    void DoMovement();
 }
 
 public class PlayerController : IPlayerController {
@@ -42,7 +46,6 @@ public class PlayerController : IPlayerController {
     private int _playerId;
     [ShowInInspector] private int _health;
     private int _scrapPoints;
-    private PlayerCardsInfo _deckInfo;
     private PlayerCardsInfo _shuffledDeck;
     private List<CardView> _hand;
     private List<CardView> _scrapPile;
@@ -53,20 +56,24 @@ public class PlayerController : IPlayerController {
     private EquipmentCardView _rightArm;
     private EquipmentCardView _bodyArmor;
 
+    private bool _movementSelected;
+    private bool _movementDone;
+
     private bool _cardsSelected;
     private bool _selectingCells;
     private bool _moving;
     private bool _doingEffect;
     private bool _allEffectsDone;
 
+    private int _currentMovementId;
+
     private List<Vector2> cellsSelected;
 
     private Vector2 _currentCell;
     private int _currentDegrees;
 
-    public PlayerController(IPlayerView view, PlayerCardsInfo deck) {
+    public PlayerController(IPlayerView view) {
         _view = view;
-        _deckInfo = deck;
 
         _hand = new List<CardView>();
         _shuffledDeck = ScriptableObject.CreateInstance<PlayerCardsInfo>();
@@ -154,7 +161,7 @@ public class PlayerController : IPlayerController {
     }
 
     public void ShuffleDeck(bool firstTime) {
-        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _deckInfo.playerCards.ToList();
+        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
 
         int n = temporalDeck.Count;
         while (n > 1) {
@@ -165,9 +172,9 @@ public class PlayerController : IPlayerController {
 
         _shuffledDeck.playerCards = temporalDeck;
 
-        foreach (CardInfoSerialized.CardInfoStruct shuffledDeckPlayerCard in _deckInfo.playerCards) {
-            Debug.Log($"{shuffledDeckPlayerCard.CardName} \n");
-        }
+        // foreach (CardInfoSerialized.CardInfoStruct shuffledDeckPlayerCard in _deckInfo.playerCards) {
+        //     Debug.Log($"{shuffledDeckPlayerCard.CardName} \n");
+        // }
 
         if (firstTime && _view.GetPv().IsMine) {
             SetPilotCard();
@@ -181,11 +188,11 @@ public class PlayerController : IPlayerController {
     }
 
     public void SelectMovement() {
-        Movement movement;
+        if (!_view.GetPv().IsMine) return;
 
-        if (_legs == null) {
-            movement = _pilot.PilotCardController.GetDefaultMovement();
-            GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view);
+        if (_legs == null && _pilot != null) {
+            Movement movement = _pilot.PilotCardController.GetDefaultMovement();
+            if (movement != null) GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view);
         }
         else {
             GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
@@ -194,8 +201,20 @@ public class PlayerController : IPlayerController {
     }
 
     public void OnMovementSelected(int movementId) {
-        GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[movementId], (PlayerView)_view);
+        SetMovementSelected(true);
+        _currentMovementId = movementId;
+        GameManager.Instance.OnAllMovementSelectedEvent += OnAllMovementSelected;
+    }
+
+    public void OnAllMovementSelected() {
         GameManager.Instance.OnSelectionConfirmedEvent -= OnMovementSelected;
+        GameManager.Instance.OnAllMovementSelectedEvent -= OnAllMovementSelected;
+    }
+
+    public void DoMovement() {
+        Debug.Log($"player id {GetPlayerId()} turn {GameManager.Instance.movementTurn}");
+        GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
+            (PlayerView)_view);
     }
 
     public void SelectDefense() {
@@ -280,8 +299,20 @@ public class PlayerController : IPlayerController {
         _legs = legsCardView;
     }
 
-    public void SetDeckInfo(PlayerCardsInfo deckInfo) {
-        _deckInfo = deckInfo;
+    public bool GetMovementSelected() {
+        return _movementSelected;
+    }
+
+    public void SetMovementSelected(bool movementSelected) {
+        _movementSelected = movementSelected;
+    }
+
+    public bool GetMovementDone() {
+        return _movementDone;
+    }
+
+    public void SetMovementDone(bool movementDone) {
+        _movementDone = movementDone;
     }
 
     private void CellSelected(Vector2 index, bool select) {

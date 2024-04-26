@@ -53,6 +53,7 @@ public class Downloader : MonoBehaviourSingleton<Downloader> {
         foreach (CardInfoSerialized.CardInfoStruct card in playerCardsInfo.cardDataBase.Sheet1) {
             card.SetType();
             card.SetMovements();
+            card.SetAttackType();
         }
     }
 }

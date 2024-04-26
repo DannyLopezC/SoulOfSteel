@@ -154,8 +154,6 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public void SetCardsInfo() {
         if (pv.IsMine) {
-            // Debug.Log($"actor number: {pv.Owner.ActorNumber}");
-
             int actorNumber = GameManager.Instance.testing ? 0 : pv.Owner.ActorNumber;
             int count = GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Count;
             int halfCount = count / 2;
@@ -171,11 +169,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 //     .ToList());
 
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32 });
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32, 18 });
             }
             else {
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32 });
+                _deckInfo.SetPlayerCards(new List<int> { 0, 0, 0, 0, 0, 0, 0, 33, 32, 18 });
             }
         }
     }
@@ -197,6 +195,10 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public void SelectMovement() {
         PlayerController.SelectMovement();
+    }
+
+    public void SelectAttack() {
+        PlayerController.SelectAttack();
     }
 
     public void ReceivePriority(int priority) {

@@ -5,7 +5,6 @@ using UnityEngine;
 public class MovementPhase : Phase {
     private bool _allMovementsSelected;
     private bool _allMovementDone;
-    private int turn;
 
     public MovementPhase(IMatchView matchView) : base(matchView) {
         GameManager.Instance.OnMovementFinishedEvent += MovementFinished;

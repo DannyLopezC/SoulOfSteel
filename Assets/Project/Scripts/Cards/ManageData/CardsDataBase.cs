@@ -7,6 +7,14 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WebSocketSharp;
 
+[Flags]
+public enum AttackType {
+    None,
+    StraightLine,
+    Square,
+    Cone
+}
+
 [Serializable]
 public class CardInfoSerialized {
     public List<CardInfoStruct> Sheet1;
@@ -18,10 +26,17 @@ public class CardInfoSerialized {
             { "Campo", CardType.CampEffect },
             { "hackeo", CardType.Hacking },
             { "Generador", CardType.Generator },
+            { "Fabrica", CardType.Generator },
             { "Arma", CardType.Weapon },
             { "Brazo", CardType.Arm },
             { "Pecho", CardType.Chest },
             { "Piernas", CardType.Legs },
+        };
+
+        Dictionary<string, AttackType> attackTypeMapping = new() {
+            { "Linearecta", global::AttackType.StraightLine },
+            { "Cuadrado", global::AttackType.Square },
+            { "Cono", global::AttackType.Cone },
         };
 
         [FoldoutGroup("Card")] public int Id;
@@ -44,14 +59,17 @@ public class CardInfoSerialized {
         [FoldoutGroup("Card")] public Sprite ImageSource;
         [FoldoutGroup("Card")] public int Health;
         [FoldoutGroup("Card")] public List<Movement> SerializedMovements;
+        [FoldoutGroup("Card")] public AttackType AttackTypeEnum;
 
-        [OnValueChanged("SetType"), HideInInspector]
+        [OnValueChanged("SetMovements"), HideInInspector]
         public string Movements;
+
+        [OnValueChanged("SetAttackType"), HideInInspector]
+        public string AttackType;
 
         public void SetType() {
             Type = Type.Replace(" ", "");
             if (Type == "Brazo/Arma") Type = "Arma";
-            // Debug.Log($"{Type}");
             if (typeMapping.TryGetValue(Type, out CardType enumValue)) {
                 TypeEnum = enumValue;
             }
@@ -63,6 +81,22 @@ public class CardInfoSerialized {
         public void SetMovements() {
             if (Movements.IsNullOrEmpty() || Movements == "0") return;
             SerializedMovements = Movement.FromString(Movements);
+        }
+
+        public void SetAttackType() {
+            if (AttackType.IsNullOrEmpty() || AttackType == "0") {
+                AttackTypeEnum = global::AttackType.None;
+                return;
+            }
+
+            AttackType = AttackType.Replace(" ", "");
+
+            if (attackTypeMapping.TryGetValue(AttackType, out AttackType enumValue)) {
+                AttackTypeEnum = enumValue;
+            }
+            else {
+                throw new ArgumentException($"Invalid Attack Type: {AttackType}");
+            }
         }
     }
 }

@@ -52,8 +52,8 @@ public class PlayerController : IPlayerController {
     private List<CardView> _factory;
     private PilotCardView _pilot;
     private LegsCardView _legs;
-    private EquipmentCardView _leftArm;
-    private EquipmentCardView _rightArm;
+    private EquipmentCardView _arm;
+    private EquipmentCardView _weapon;
     private EquipmentCardView _bodyArmor;
 
     private bool _movementSelected;
@@ -185,6 +185,10 @@ public class PlayerController : IPlayerController {
     }
 
     public void SelectAttack() {
+        if (!_view.GetPv().IsMine) return;
+
+        if (_weapon == null && _arm != null) {
+        }
     }
 
     public void SelectMovement() {

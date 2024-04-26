@@ -45,7 +45,6 @@ public class Movement {
         if (movementString.Length > 2) {
             movementString = movementString.Substring(3);
             fullStrings = movementString.Replace("⮂", "");
-            Debug.Log($"{fullStrings}");
             List<string> parts = movementString.Split(',').ToList();
             foreach (string part in parts) {
                 string localPart = part.Replace(" ", "");

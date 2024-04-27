@@ -6,6 +6,8 @@ public interface IPilotCardController : ICardController {
         int health, Movement defaultMovement, CardType type, int defaultDamage = 0);
 
     Movement GetDefaultMovement();
+    int GetDefaultDamage();
+    int GetHealth();
 }
 
 public class PilotCardController : CardController, IPilotCardController {
@@ -22,7 +24,7 @@ public class PilotCardController : CardController, IPilotCardController {
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         Sprite imageSource, int health, Movement defaultMovement, CardType type,
-        int defaultDamage = 0) {
+        int defaultDamage = 1) {
         _health = health;
         _defaultMovement = defaultMovement;
         _defaultDamage = defaultDamage;
@@ -34,6 +36,14 @@ public class PilotCardController : CardController, IPilotCardController {
 
     public Movement GetDefaultMovement() {
         return _defaultMovement;
+    }
+
+    public int GetDefaultDamage() {
+        return _defaultDamage;
+    }
+
+    public int GetHealth() {
+        return _health;
     }
 
     protected override void SetCardUI() {

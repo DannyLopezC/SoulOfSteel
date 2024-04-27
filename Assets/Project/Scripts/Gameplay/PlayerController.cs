@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,7 +17,7 @@ public interface IPlayerController {
     void SelectMovement();
     void SelectDefense();
     void SelectCards(CardType type, int amount, bool setIsSelecting = true);
-    void GetDamage(int damage);
+    void ReceivedDamage(int damage, int localPlayerId);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
     bool GetCardsSelected();
@@ -33,11 +34,15 @@ public interface IPlayerController {
     void SetCurrentDegrees(int currentDegrees);
     int GetCurrentDegrees();
     void SetLegsCard(LegsCardView legsCardView);
+    void SetArmCard(ArmCardView armCardView);
     bool GetMovementSelected();
     void SetMovementSelected(bool movementSelected);
     bool GetMovementDone();
     void SetMovementDone(bool movementDone);
     void DoMovement();
+    PilotCardView GetPilotCard();
+    void DoAttack(Vector2 index);
+    int GetCurrenHealth();
 }
 
 public class PlayerController : IPlayerController {
@@ -52,8 +57,8 @@ public class PlayerController : IPlayerController {
     private List<CardView> _factory;
     private PilotCardView _pilot;
     private LegsCardView _legs;
-    private EquipmentCardView _arm;
-    private EquipmentCardView _weapon;
+    private ArmCardView _arm;
+    private ArmCardView _weapon;
     private EquipmentCardView _bodyArmor;
 
     private bool _movementSelected;
@@ -71,6 +76,7 @@ public class PlayerController : IPlayerController {
 
     private Vector2 _currentCell;
     private int _currentDegrees;
+    private int _currentDamage;
 
     public PlayerController(IPlayerView view) {
         _view = view;
@@ -103,7 +109,8 @@ public class PlayerController : IPlayerController {
 
             CardView card = null;
 
-            if (cardInfoStruct.TypeEnum != CardType.Pilot && cardInfoStruct.TypeEnum != CardType.Legs) {
+            if (cardInfoStruct.TypeEnum != CardType.Pilot && cardInfoStruct.TypeEnum != CardType.Legs &&
+                cardInfoStruct.TypeEnum != CardType.Arm && cardInfoStruct.TypeEnum != CardType.Weapon) {
                 card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
             }
 
@@ -179,6 +186,7 @@ public class PlayerController : IPlayerController {
         if (firstTime && _view.GetPv().IsMine) {
             SetPilotCard();
             SetLegsCard();
+            SetArmCard();
         }
 
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
@@ -188,7 +196,35 @@ public class PlayerController : IPlayerController {
         if (!_view.GetPv().IsMine) return;
 
         if (_weapon == null && _arm != null) {
+            _currentDamage = _arm.ArmCardController.GetDamage();
+            _arm.SelectAttack();
         }
+        else if (_weapon != null) {
+            _currentDamage = _arm.ArmCardController.GetDamage();
+            _weapon.SelectAttack();
+        }
+    }
+
+    public void DoAttack(Vector2 index) {
+        PlayerView otherPlayer =
+            GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() != _playerId);
+
+        if (GameManager.Instance.testing)
+            otherPlayer = GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() == _playerId);
+
+        if (otherPlayer.PlayerController.GetCurrentCell() == index) {
+            if (!GameManager.Instance.testing) {
+                otherPlayer.photonView.RPC("ReceivedDamage", RpcTarget.AllBuffered, 2,
+                    otherPlayer.PlayerController.GetPlayerId());
+            }
+        }
+
+        GameManager.Instance.OnLocalAttackDone();
+        _view.SetAttackDone(true);
+    }
+
+    public int GetCurrenHealth() {
+        return _health;
     }
 
     public void SelectMovement() {
@@ -221,11 +257,17 @@ public class PlayerController : IPlayerController {
             (PlayerView)_view);
     }
 
+    public PilotCardView GetPilotCard() {
+        return _pilot;
+    }
+
     public void SelectDefense() {
     }
 
-    public void GetDamage(int damage) {
-        _health -= damage;
+    public void ReceivedDamage(int damage, int localPlayerId) {
+        if (localPlayerId == _playerId) {
+            _health -= damage;
+        }
     }
 
     public void SetPlayerId(int id) {
@@ -303,6 +345,10 @@ public class PlayerController : IPlayerController {
         _legs = legsCardView;
     }
 
+    public void SetArmCard(ArmCardView armCardView) {
+        _arm = armCardView;
+    }
+
     public bool GetMovementSelected() {
         return _movementSelected;
     }
@@ -324,10 +370,23 @@ public class PlayerController : IPlayerController {
         else cellsSelected.Remove(index);
     }
 
-    public void SetLegsCard() {
-        // _view.ClearPanel(GameManager.Instance.myEquipmentPanel.transform);
-        // _view.ClearPanel(GameManager.Instance.enemyEquipmentPanel.transform);
+    private void SetArmCard() {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct =
+            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c =>
+                (c.TypeEnum == CardType.Arm || c.TypeEnum == CardType.Weapon));
 
+        ArmCardView card = (ArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
+            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage, cardInfoStruct.AttackTypeEnum,
+            cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
+            cardInfoStruct.TypeEnum);
+
+        if (card.GetCardType() == CardType.Arm) _arm = card;
+        else if (card.GetCardType() == CardType.Weapon) _weapon = card;
+    }
+
+    private void SetLegsCard() {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Legs);
 
@@ -350,7 +409,8 @@ public class PlayerController : IPlayerController {
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
             cardInfoStruct.ImageSource, cardInfoStruct.Health, cardInfoStruct.TypeEnum,
-            cardInfoStruct.SerializedMovements[0]);
+            cardInfoStruct.SerializedMovements[0], cardInfoStruct.Damage);
         _pilot = card;
+        _health = _pilot.PilotCardController.GetHealth();
     }
 }

@@ -51,12 +51,10 @@ public class PhotonGame : MonoBehaviourPunCallbacks {
 
         PhotonNetwork.NickName = GameManager.Instance.LocalPlayerName;
 
-
         PhotonNetwork.Instantiate(PLAYER_PREFAB_PATH, transform.position, Quaternion.identity, 0).transform
             .GetChild(0)
             .TryGetComponent(out PlayerView currentPlayer);
 
-        Debug.Log($"setting player id {PhotonNetwork.LocalPlayer.ActorNumber}");
         currentPlayer.PlayerController.SetPlayerId(PhotonNetwork.LocalPlayer.ActorNumber);
     }
 

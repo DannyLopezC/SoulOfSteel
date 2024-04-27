@@ -37,9 +37,9 @@ public class PilotCardView : CardView, IPilotCardView {
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        Sprite imageSource, int health, CardType type, Movement defaultMovement) {
+        Sprite imageSource, int health, CardType type, Movement defaultMovement, int defaultDamage) {
         PilotCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, health,
-            defaultMovement, type);
+            defaultMovement, type, defaultDamage);
     }
 
     public void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int _health) {

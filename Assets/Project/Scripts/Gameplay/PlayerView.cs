@@ -18,6 +18,8 @@ public interface IPlayerView {
     void SelectCards(CardType type, int amount, bool setSelecting = true);
     void ClearPanel(Transform panel);
     PlayerCardsInfo GetDeckInfo();
+    bool GetAttackDone();
+    void SetAttackDone(bool attackDone);
 }
 
 [Serializable]
@@ -33,6 +35,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     private bool _myEffectTurn;
     private bool _effectTurnDone;
     private bool _movementTurnDone;
+    private bool _attackDone;
 
     public GameObject HandCardsPanel {
         get { return _handCardsPanel ??= GameManager.Instance.handPanel.gameObject; }
@@ -42,6 +45,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [SerializeField] private GameObject pilotCardPrefab;
     [SerializeField] private GameObject effectCardPrefab;
     [SerializeField] private GameObject legsCardPrefab;
+    [SerializeField] private GameObject armCardPrefab;
 
     [SerializeField] private TMP_Text playerName;
 
@@ -97,8 +101,13 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 prefab = pilotCardPrefab;
                 break;
             case CardType.Weapon:
-            case CardType.Armor:
             case CardType.Arm:
+                prefab = armCardPrefab;
+                parent = pv.IsMine
+                    ? GameManager.Instance.myEquipmentPanel.transform
+                    : GameManager.Instance.enemyEquipmentPanel.transform;
+                break;
+            case CardType.Armor:
             case CardType.Chest:
             case CardType.Generator:
                 prefab = equipmentCardPrefab;
@@ -127,7 +136,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
         GO.TryGetComponent(out RectTransform rt);
         rt.sizeDelta = new Vector2(250, 350);
-        if (cardType != CardType.Legs) rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        if (cardType != CardType.Legs && cardType != CardType.Arm && cardType != CardType.Weapon)
+            rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
         GO.TryGetComponent(out CardView card);
         GO.SetActive(pv.IsMine);
@@ -150,6 +160,14 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public PlayerCardsInfo GetDeckInfo() {
         return _deckInfo;
+    }
+
+    public bool GetAttackDone() {
+        return _attackDone;
+    }
+
+    public void SetAttackDone(bool attackDone) {
+        _attackDone = attackDone;
     }
 
     public void SetCardsInfo() {
@@ -205,6 +223,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         _receivePriority = true;
     }
 
+    // players communication
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting && pv.IsMine) {
             // selecting cards
@@ -221,6 +240,12 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             //movement
             stream.SendNext(PlayerController.GetMovementSelected());
             stream.SendNext(PlayerController.GetMovementDone());
+
+            //attack
+            stream.SendNext(_attackDone);
+            stream.SendNext(GameManager.Instance.playerList
+                .Find(p => p.PlayerController.GetPlayerId() != PlayerController.GetPlayerId()).PlayerController
+                .GetCurrenHealth());
         }
         else if (stream.IsReading) {
             bool receivedSelection = (bool)stream.ReceiveNext();
@@ -234,27 +259,16 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             bool receivedMovementSelected = (bool)stream.ReceiveNext();
             bool receivedMovementDone = (bool)stream.ReceiveNext();
 
+            bool receivedAttackDone = (bool)stream.ReceiveNext();
+            int receivedEnemyHealth = (int)stream.ReceiveNext();
+
             foreach (PlayerView player in GameManager.Instance.playerList) {
                 if (receivedPlayerId == player.pv.Owner.ActorNumber) {
                     player.PlayerController.SetCardsSelected(receivedSelection);
-                }
-            }
-
-            foreach (PlayerView player in GameManager.Instance.playerList) {
-                if (receivedPlayerId == player.PlayerController.GetPlayerId()) {
                     player.PlayerController.SetAllEffectsDone(receivedAllEffectsDone);
-                }
-            }
-
-            foreach (PlayerView player in GameManager.Instance.playerList) {
-                if (receivedPlayerId == player.pv.Owner.ActorNumber) {
                     player.PlayerController.SetMovementSelected(receivedMovementSelected);
-                }
-            }
-
-            foreach (PlayerView player in GameManager.Instance.playerList) {
-                if (receivedPlayerId == player.pv.Owner.ActorNumber) {
                     player.PlayerController.SetMovementDone(receivedMovementDone);
+                    player.SetAttackDone(receivedAttackDone);
                 }
             }
 
@@ -306,7 +320,13 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     }
 
     [PunRPC]
-    public void RpcUpdateTurn(int newTurn) {
-        GameManager.Instance.movementTurn = newTurn;
+    public void RpcSetAttackTurn() {
+        GameManager.Instance.attackTurn =
+            (GameManager.Instance.attackTurn % GameManager.Instance.playerList.Count) + 1;
+    }
+
+    [PunRPC]
+    public void RpcReceivedDamage(int damage, int localPlayerId) {
+        PlayerController.ReceivedDamage(damage, localPlayerId);
     }
 }

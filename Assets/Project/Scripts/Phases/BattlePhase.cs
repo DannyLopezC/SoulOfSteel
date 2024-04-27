@@ -1,36 +1,60 @@
 ﻿using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
 public class BattlePhase : Phase {
-    private bool _allAttacksSelected;
+    private bool _allAttacksDone;
 
     public BattlePhase(IMatchView matchView) : base(matchView) {
+        GameManager.Instance.OnAllAttacksSelectedEvent += BattleFinished;
     }
 
     public override IEnumerator Start() {
         matchView.SetCurrentPhaseText("battle phase");
 
-        GameManager.Instance.playerList.ForEach(p => p.SelectMovement());
+        yield return new WaitForSeconds(1);
 
-        while (!_allAttacksSelected) {
-            bool localAllMovementSelected = true;
-            foreach (PlayerView player in GameManager.Instance.playerList) {
-                if (!player.PlayerController.GetMovementSelected()) {
-                    localAllMovementSelected = false;
-                    break;
-                }
-            }
+        GameManager.Instance.attackTurn = GameManager.Instance.currentPriority;
 
-            _allAttacksSelected = localAllMovementSelected;
-
-            yield return null;
+        foreach (PlayerView p in GameManager.Instance.playerList) {
+            p.SetAttackDone(false);
         }
 
-        GameManager.Instance.OnAllMovementSelected();
-        GameManager.Instance.movementTurn = GameManager.Instance.currentPriority;
+        while (!_allAttacksDone) {
+            if (GameManager.Instance.LocalPlayerInstance.GetAttackDone() ||
+                GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId() !=
+                GameManager.Instance.attackTurn) {
+                bool localAttackDoneSelected = true;
+                foreach (PlayerView player in GameManager.Instance.playerList) {
+                    if (!player.GetAttackDone()) {
+                        localAttackDoneSelected = false;
+                        break;
+                    }
+                }
+
+                _allAttacksDone = localAttackDoneSelected;
+
+                yield return null;
+            }
+            else {
+                GameManager.Instance.LocalPlayerInstance.SelectAttack();
+
+                while (!GameManager.Instance.LocalPlayerInstance.GetAttackDone()) {
+                    yield return null;
+                }
+
+                GameManager.Instance.ValidateHealthStatus();
+
+                if (!GameManager.Instance.testing)
+                    GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcSetAttackTurn", RpcTarget.AllBuffered);
+            }
+        }
+
+        GameManager.Instance.OnAllAttackSelected();
     }
 
     public void BattleFinished() {
         GameManager.Instance.ChangePhase(new FinalPhase(matchView));
+        GameManager.Instance.OnAllAttacksSelectedEvent -= BattleFinished;
     }
 }

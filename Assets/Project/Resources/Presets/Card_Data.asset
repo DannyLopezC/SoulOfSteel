@@ -32,7 +32,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 1
       CardName: Campos Gravitacionales Racksianos
       Type: Campo
@@ -49,7 +53,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 2
       CardName: 'Worm port '
       Type: Campo
@@ -66,7 +74,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 3
       CardName: Tuneles de Topos
       Type: Campo
@@ -83,7 +95,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 4
       CardName: 'Lagunas Acidas '
       Type: Campo
@@ -99,7 +115,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 5
       CardName: Plataformas aereas
       Type: Campo
@@ -118,7 +138,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 6
       CardName: Circuito De Carreras de Formula R
       Type: Campo
@@ -133,7 +157,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 7
       CardName: Ciber Camuflaje
       Type: hackeo
@@ -150,7 +178,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 0
+      AttackType: 0
     - Id: 8
       CardName: Balisa Cuantica
       Type: hackeo
@@ -166,7 +198,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 0
+      AttackType: 0
     - Id: 9
       CardName: Maniobras Evasivas
       Type: hackeo
@@ -181,7 +217,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 10
       CardName: Rematerializacion Atomica
       Type: hackeo
@@ -197,7 +237,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 11
       CardName: Piezas Defectuosas
       Type: hackeo
@@ -213,7 +257,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 12
       CardName: Ingenieria Inversa
       Type: hackeo
@@ -229,7 +277,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 13
       CardName: Propulsores de emergencia
       Type: hackeo
@@ -244,7 +296,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 14
       CardName: Sabotaje Empresarial
       Type: hackeo
@@ -260,10 +316,14 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 15
       CardName: Fabrica de Moldes
-      Type: Generador
+      Type: Fabrica
       TypeEnum: 5
       Description: Una vez por turno puedes reducir el costo de una carta en uno
       Cost: 3
@@ -275,10 +335,14 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 16
       CardName: Motores de alta eficiencia
-      Type: Generador
+      Type: Fabrica
       TypeEnum: 5
       Description: "Descartando una carta de tu mano puedes mover un cuadro adicional
         en linea recta de tu maniobra \nseleccionada"
@@ -291,10 +355,14 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 17
       CardName: Almacen de reciclaje
-      Type: Generador
+      Type: Fabrica
       TypeEnum: 5
       Description: "Cuando una de tus piezas es destruida pon un contador sobre esta
         carta, destruyendo esta carta \npuedes jugar una carta con el coste igual
@@ -308,7 +376,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 18
       CardName: Rifle de Francotirador Electromagnetico
       Type: Arma
@@ -323,7 +395,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 1
+      AttackDistance: 4
+      AttackArea: 5
       Movements: 0
+      AttackType: Linearecta
     - Id: 19
       CardName: Inmobilizador Araknate
       Type: Arma
@@ -339,7 +415,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 2
+      AttackDistance: 5
+      AttackArea: 3
       Movements: 
+      AttackType: Cuadrado
     - Id: 20
       CardName: Espada de Plasma
       Type: Arma
@@ -354,7 +434,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 3
+      AttackDistance: 0
+      AttackArea: 2
       Movements: 0
+      AttackType: Cono
     - Id: 21
       CardName: Saboteadora Crick
       Type: Arma
@@ -370,7 +454,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 1
+      AttackDistance: 0
+      AttackArea: 5
       Movements: 0
+      AttackType: Linearecta
     - Id: 22
       CardName: Brazo escudo
       Type: Brazo
@@ -385,7 +473,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 23
       CardName: 'Potenciador G.F.A '
       Type: Brazo
@@ -401,7 +493,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 24
       CardName: Brazo fortificado
       Type: Brazo
@@ -416,7 +512,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 25
       CardName: Pinza de Alta Presion
       Type: Arma
@@ -431,7 +531,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 3
+      AttackDistance: 0
+      AttackArea: 2
       Movements: 0
+      AttackType: Cono
     - Id: 26
       CardName: Impulsor Gravitacional
       Type: Pecho
@@ -447,7 +551,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 27
       CardName: Coraza Pesada
       Type: Pecho
@@ -462,7 +570,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 28
       CardName: Blindaje en Aerosol
       Type: Pecho
@@ -477,7 +589,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 29
       CardName: Placas Seramicas
       Type: Pecho
@@ -492,7 +608,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: 
+      AttackType: 
     - Id: 30
       CardName: 'Piernas de Crustaceo '
       Type: Piernas
@@ -528,8 +648,12 @@ MonoBehaviour:
           Direction: 
         fullStrings: "0, 90\xBA  o 180\xBA "
         degrees: 5a000000b4000000
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: "1) 2 \u2191, 0\xBA\n2) 3 \u2192, 0\xBA\n3) 3 \u2190, 0\xBA \n4)
         0, 90\xBA \u2B82 o 180\xBA \u2B82"
+      AttackType: 
     - Id: 31
       CardName: Impulsores Vectoriales
       Type: Piernas
@@ -568,8 +692,12 @@ MonoBehaviour:
           Direction: "\u2191"
         fullStrings: "3 \u2191, 180\xBA"
         degrees: b4000000
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: "1) 3 \u2191 \n2) 2 \u2191, 2\u2192, 90\xBA\n3) 2 \u2191, 2\u2192,
         90\xBA\n4) 3 \u2191, 180\xBA\u2B82"
+      AttackType: 
     - Id: 32
       CardName: Propulsores Turbo Cargados
       Type: Piernas
@@ -608,8 +736,12 @@ MonoBehaviour:
           Direction: "\u2191"
         fullStrings: "4 \u2191, 180\xBA"
         degrees: b4000000
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
       Movements: "1) 4 \u2191 \n2) 3 \u2191, 2\u2192, 90\xBA\n3) 3 \u2191, 2\u2192,
         90\xBA\n4) 4 \u2191, 180\xBA\u2B82"
+      AttackType: 
     - Id: 33
       CardName: pilotjeje
       Type: 
@@ -622,11 +754,15 @@ MonoBehaviour:
       Recovery: 5
       IsCampEffect: 0
       ImageSource: {fileID: 0}
-      Health: 1
+      Health: 10
       SerializedMovements:
       - steps:
         - Steps: 2
           Direction: "\u2191"
         fullStrings: 
         degrees: 5a000000
+      AttackTypeEnum: 1
+      AttackDistance: 1
+      AttackArea: 0
       Movements: 
+      AttackType: 

@@ -60,6 +60,8 @@ public class CardInfoSerialized {
         [FoldoutGroup("Card")] public int Health;
         [FoldoutGroup("Card")] public List<Movement> SerializedMovements;
         [FoldoutGroup("Card")] public AttackType AttackTypeEnum;
+        [FoldoutGroup("Card")] public int AttackDistance;
+        [FoldoutGroup("Card")] public int AttackArea;
 
         [OnValueChanged("SetMovements"), HideInInspector]
         public string Movements;

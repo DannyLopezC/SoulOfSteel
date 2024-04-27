@@ -80,7 +80,14 @@ public class PlayerMovement : MonoBehaviour {
 
             if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
                     .GetCellType() == CellType.Blocked) {
-                player.PlayerController.GetDamage(2);
+                if (!GameManager.Instance.testing) {
+                    player.photonView.RPC("ReceivedDamage", RpcTarget.AllBuffered, 2,
+                        player.PlayerController.GetPlayerId());
+                }
+                else {
+                    player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
+                }
+
                 nextCell = new Vector2(nextCell.x + 1, nextCell.y);
                 MoveToCell(nextCell);
                 player.PlayerController.SetCurrentCell(nextCell);
@@ -99,7 +106,15 @@ public class PlayerMovement : MonoBehaviour {
             CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
             if (currentCell.CellController.GetCellType() == CellType.Mined) {
-                GetComponent<PlayerView>().PlayerController.GetDamage(3);
+                PlayerView currentPlayer = GetComponent<PlayerView>();
+                if (!GameManager.Instance.testing) {
+                    currentPlayer.photonView.RPC("ReceivedDamage", RpcTarget.AllBuffered, 3,
+                        currentPlayer.PlayerController.GetPlayerId());
+                }
+                else {
+                    currentPlayer.PlayerController.ReceivedDamage(3, currentPlayer.PlayerController.GetPlayerId());
+                }
+
                 currentCell.CellController.SetType(CellType.Normal);
             }
         }

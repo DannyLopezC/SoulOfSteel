@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public bool testing;
 
     public int movementTurn;
+    public int attackTurn;
 
     public HandPanel handPanel;
     public HandPanel middlePanel;
@@ -38,15 +39,29 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public event Action<CardView, bool> OnCardSelectedEvent; // card has been selected or deselected
     public event Action OnCardSelectingFinishedEvent; // all cards has been selected
     public event Action<int> OnPrioritySetEvent;
+
+    //movement events
     public event Action<Movement, PlayerView> OnMovementSelectedEvent;
     public event Action OnMovementFinishedEvent;
     public event Action<int> OnSelectionConfirmedEvent;
     public event Action OnAllMovementSelectedEvent;
     public event Action OnMovementTurnDoneEvent;
 
+    // battle events
+    public event Action OnAllAttacksSelectedEvent;
+    public event Action OnLocalAttackDoneEvent;
+
     #endregion
 
     #region EventsInvokes
+
+    public void OnLocalAttackDone() {
+        OnLocalAttackDoneEvent?.Invoke();
+    }
+
+    public void OnAllAttackSelected() {
+        OnAllAttacksSelectedEvent?.Invoke();
+    }
 
     public void OnMovementTurnDone() {
         OnMovementTurnDoneEvent?.Invoke();
@@ -112,10 +127,12 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     #endregion
 
-    public void ApplyDamage(int playerId) {
-    }
-
     public void ValidateHealthStatus() {
+        foreach (PlayerView playerView in playerList) {
+            if (playerView.PlayerController.GetCurrenHealth() <= 0) {
+                Debug.Log($"JUEGO TERMINADO");
+            }
+        }
     }
 
     public void PrepareForMatch(IMatchView matchView) {

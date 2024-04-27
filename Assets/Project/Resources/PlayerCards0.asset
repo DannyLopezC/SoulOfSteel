@@ -31,7 +31,11 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -50,7 +54,11 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -69,7 +77,11 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -88,7 +100,11 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -107,7 +123,11 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -126,7 +146,11 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 0
     CardName: Franja Minada de Tulik
     Type: Campo
@@ -145,12 +169,16 @@ MonoBehaviour:
     ImageSource: {fileID: 0}
     Health: 0
     SerializedMovements: []
+    AttackTypeEnum: 0
+    AttackDistance: 0
+    AttackArea: 0
     Movements: 
+    AttackType: 
   - Id: 33
-    CardName: PilotoGenerica
+    CardName: pilotjeje
     Type: 
     TypeEnum: 0
-    Description: eoeoeoeo
+    Description: afasdkjfaksdlf
     Cost: 1
     Energy: 2
     Damage: 3
@@ -158,10 +186,34 @@ MonoBehaviour:
     Recovery: 5
     IsCampEffect: 0
     ImageSource: {fileID: 0}
-    Health: 10
+    Health: 1
     SerializedMovements:
     - steps:
-      - Steps: 4
+      - Steps: 2
         Direction: "\u2191"
+      fullStrings: 
       degrees: 5a000000
+    AttackTypeEnum: 1
+    AttackDistance: 1
+    AttackArea: 0
     Movements: 
+    AttackType: 
+  - Id: 18
+    CardName: Rifle de Francotirador Electromagnetico
+    Type: Arma
+    TypeEnum: 1
+    Description: 
+    Cost: 3
+    Energy: 1
+    Damage: 6
+    Shield: 0
+    Recovery: 0
+    IsCampEffect: 0
+    ImageSource: {fileID: 0}
+    Health: 0
+    SerializedMovements: []
+    AttackTypeEnum: 1
+    AttackDistance: 4
+    AttackArea: 5
+    Movements: 0
+    AttackType: Linearecta

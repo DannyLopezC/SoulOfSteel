@@ -36,6 +36,8 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
 
     public void InitCard(int id, string cardName, string cardDescription,
         int scrapCost, int scrapRecovery, Sprite imageSource, CardType type) {
+        // Debug.Log($"for children is recommended to not use this method");
+
         EquipmentCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
 

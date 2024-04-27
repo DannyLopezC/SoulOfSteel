@@ -68,7 +68,7 @@ public class MovementPhase : Phase {
                     yield return null;
                 } while (player.PlayerController.GetMoving());
 
-                player.photonView.RPC("RpcSetTurn", RpcTarget.AllBuffered);
+                if (!GameManager.Instance.testing) player.photonView.RPC("RpcSetTurn", RpcTarget.AllBuffered);
                 player.SetMovementTurnDone(true);
             }
 

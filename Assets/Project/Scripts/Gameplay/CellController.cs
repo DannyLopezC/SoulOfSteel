@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 public enum CellType {
     Normal,
     Mined,
-    Blocked
+    Blocked,
+    Shady
 }
 
 public interface ICellController {
@@ -31,6 +32,9 @@ public class CellController : ICellController {
                 break;
             case CellType.Mined:
                 _view.SetCellColor(Color.red);
+                break;
+            case CellType.Shady:
+                _view.SetCellColor(new Color(0.49019607843137253f, 0.19607843137254902f, 0.6235294117647059f));
                 break;
             default:
                 _view.SetCellColor(_view.GetOriginalColor());

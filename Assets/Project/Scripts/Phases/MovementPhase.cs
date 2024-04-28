@@ -14,6 +14,13 @@ public class MovementPhase : Phase {
     public override IEnumerator Start() {
         matchView.SetCurrentPhaseText("movement phase");
 
+        foreach (PlayerView p in GameManager.Instance.playerList) {
+            p.PlayerController.SetMovementDone(false);
+            p.SetMovementTurnDone(false);
+            p.SetMyMovementTurn(false);
+            p.PlayerController.SetMovementSelected(false);
+        }
+
         GameManager.Instance.playerList.ForEach(p => p.SelectMovement());
 
         while (!_allMovementsSelected) {
@@ -33,11 +40,6 @@ public class MovementPhase : Phase {
         GameManager.Instance.OnAllMovementSelected();
         GameManager.Instance.movementTurn = GameManager.Instance.currentPriority;
 
-        foreach (PlayerView p in GameManager.Instance.playerList) {
-            p.PlayerController.SetMovementDone(false);
-            p.SetMovementTurnDone(false);
-            p.SetMyMovementTurn(false);
-        }
 
         while (!_allMovementDone) {
             if (GameManager.Instance.LocalPlayerInstance.GetMovementTurnDone() ||

@@ -183,13 +183,16 @@ public class PlayerController : IPlayerController {
         //     Debug.Log($"{shuffledDeckPlayerCard.CardName} \n");
         // }
 
-        if (firstTime && _view.GetPv().IsMine) {
+        if (firstTime) {
             SetPilotCard();
             SetLegsCard();
             SetArmCard();
         }
 
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
+        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Legs));
+        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Arm));
+        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Weapon));
     }
 
     public void SelectAttack() {
@@ -206,6 +209,9 @@ public class PlayerController : IPlayerController {
     }
 
     public void DoAttack(Vector2 index) {
+        if (GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
+            CellType.Shady) return;
+
         PlayerView otherPlayer =
             GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() != _playerId);
 
@@ -221,6 +227,7 @@ public class PlayerController : IPlayerController {
 
         GameManager.Instance.OnLocalAttackDone();
         _view.SetAttackDone(true);
+        GameManager.Instance.OnCellClickedEvent -= DoAttack;
     }
 
     public int GetCurrenHealth() {
@@ -252,7 +259,6 @@ public class PlayerController : IPlayerController {
     }
 
     public void DoMovement() {
-        Debug.Log($"player id {GetPlayerId()} turn {GameManager.Instance.movementTurn}");
         GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
             (PlayerView)_view);
     }
@@ -266,7 +272,9 @@ public class PlayerController : IPlayerController {
 
     public void ReceivedDamage(int damage, int localPlayerId) {
         if (localPlayerId == _playerId) {
+            Debug.Log($"my health antes {_health}");
             _health -= damage;
+            Debug.Log($"my health despues {_health}");
         }
     }
 
@@ -402,7 +410,6 @@ public class PlayerController : IPlayerController {
     private void SetPilotCard() {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
-
 
         PilotCardView card = (PilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 

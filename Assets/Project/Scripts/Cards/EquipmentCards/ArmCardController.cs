@@ -77,9 +77,9 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
 
                     currentCellsShaded.Add(index);
                     GameManager.Instance.boardView.SetBoardStatusCellType(index, CellType.Shady);
-
-                    GameManager.Instance.OnCellClickedEvent += currentPlayer.PlayerController.DoAttack;
                 }
+
+                GameManager.Instance.OnCellClickedEvent += currentPlayer.PlayerController.DoAttack;
 
                 break;
             default:

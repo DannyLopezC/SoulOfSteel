@@ -67,6 +67,10 @@ public class PlayerMovement : MonoBehaviour {
                         break;
                 }
 
+                nextCell = new Vector2(
+                    Mathf.Clamp(nextCell.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
+                    Mathf.Clamp(nextCell.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
+
                 MoveToCell(nextCell, adjustedDirection);
                 currentSteps--;
                 yield return null;
@@ -97,9 +101,6 @@ public class PlayerMovement : MonoBehaviour {
 
     public void MoveToCell(Vector2 index, int adjustedDirection = -1) {
         if (pv.IsMine) {
-            index = new Vector2(
-                Mathf.Clamp(index.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
-                Mathf.Clamp(index.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
             // if (adjustedDirection != -1) transform.rotation = Quaternion.Euler(0, 0, adjustedDirection);
 

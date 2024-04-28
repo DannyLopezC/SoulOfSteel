@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviourSingleton<UIManager> {
@@ -17,7 +18,7 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     [SerializeField] private CardPanel _currentCardPanel;
 
     [SerializeField] private GameObject waitingForOpponentPanel;
-    [SerializeField] private Canvas _currentWaitingForOpponentPanel;
+    [SerializeField] private WaitingForOpponentPanel currentWaitingForOpponentPanel;
 
     [SerializeField] private GameObject selectionPanel;
     [SerializeField] private SelectionPanel _currentSelectionPanel;
@@ -33,9 +34,9 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
     }
 
     public void ShowWaitingForOpponentPanel(bool activate = true) {
-        FindOrInstantiatePanel(ref _currentWaitingForOpponentPanel, waitingForOpponentPanel);
+        FindOrInstantiatePanel(ref currentWaitingForOpponentPanel, waitingForOpponentPanel);
 
-        _currentWaitingForOpponentPanel.gameObject.SetActive(activate);
+        currentWaitingForOpponentPanel.gameObject.SetActive(activate);
     }
 
     public void ShowGamePanel(bool activate = true) {

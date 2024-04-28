@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
     public void ValidateHealthStatus() {
         foreach (PlayerView playerView in playerList) {
             if (playerView.PlayerController.GetCurrenHealth() <= 0) {
-                Debug.Log($"JUEGO TERMINADO");
+                Debug.Log($"JUEGO TERMINADO, player {playerView.PlayerController.GetPlayerId()} has lost");
             }
         }
     }

@@ -48,6 +48,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [SerializeField] private GameObject armCardPrefab;
 
     [SerializeField] private TMP_Text playerName;
+    [SerializeField] private Image playerDirection;
 
     private IPlayerController _playerController;
     private IPlayerView _playerViewImplementation;
@@ -77,6 +78,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         TryGetComponent(out Image image);
         image.enabled = true;
         playerName.gameObject.SetActive(true);
+        playerDirection.gameObject.SetActive(true);
         if (!GameManager.Instance.testing) playerName.text = pv.Owner.NickName;
 
         SetCardsInfo();
@@ -180,6 +182,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             Debug.Log($" actor number {actorNumber}");
             _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
+            _deckInfo.playerCards.Clear();
 
             if (!GameManager.Instance.testing) {
                 // _deckInfo.SetPlayerCards(Enumerable
@@ -243,9 +246,6 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             //attack
             stream.SendNext(_attackDone);
-            stream.SendNext(GameManager.Instance.playerList
-                .Find(p => p.PlayerController.GetPlayerId() != PlayerController.GetPlayerId()).PlayerController
-                .GetCurrenHealth());
         }
         else if (stream.IsReading) {
             bool receivedSelection = (bool)stream.ReceiveNext();
@@ -260,7 +260,6 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             bool receivedMovementDone = (bool)stream.ReceiveNext();
 
             bool receivedAttackDone = (bool)stream.ReceiveNext();
-            int receivedEnemyHealth = (int)stream.ReceiveNext();
 
             foreach (PlayerView player in GameManager.Instance.playerList) {
                 if (receivedPlayerId == player.pv.Owner.ActorNumber) {

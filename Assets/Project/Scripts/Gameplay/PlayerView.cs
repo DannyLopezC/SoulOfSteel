@@ -328,4 +328,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     public void RpcReceivedDamage(int damage, int localPlayerId) {
         PlayerController.ReceivedDamage(damage, localPlayerId);
     }
+
+    [PunRPC]
+    public void RpcPutMines(int x, int y) {
+        GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController.SetType(CellType.Mined);
+    }
 }

@@ -220,7 +220,7 @@ public class PlayerController : IPlayerController {
 
         if (otherPlayer.PlayerController.GetCurrentCell() == index) {
             if (!GameManager.Instance.testing) {
-                otherPlayer.photonView.RPC("ReceivedDamage", RpcTarget.AllBuffered, 2,
+                otherPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
                     otherPlayer.PlayerController.GetPlayerId());
             }
         }

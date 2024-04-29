@@ -45,6 +45,8 @@ MonoBehaviour:
   - RpcUpdateTurn
   - RpcSetAttackTurn
   - RpcReceivedDamage
+  - RpcUpdateBoard
+  - RpcPutMines
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

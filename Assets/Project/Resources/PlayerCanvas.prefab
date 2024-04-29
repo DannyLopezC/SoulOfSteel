@@ -304,6 +304,38 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.869
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.15200001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 20.620098
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.1434021
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10.099998
+      objectReference: {fileID: 0}
+    - target: {fileID: 2040437526973626160, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 2468453596436003278, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: sceneViewId
       value: 0
@@ -335,6 +367,10 @@ PrefabInstance:
     - target: {fileID: 8823648603394773729, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: m_Name
       value: Player (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823648603394773729, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8932866488176145909, guid: 23c85d79f642d554bb15446092d38fbf, type: 3}
       propertyPath: m_IsActive

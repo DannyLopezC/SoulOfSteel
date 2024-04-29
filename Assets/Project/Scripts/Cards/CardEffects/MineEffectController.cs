@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public interface IMineEffectController : IEffectController {
@@ -23,7 +24,14 @@ public class MineEffectController : EffectController, IMineEffectController {
     }
 
     private void SetMines(Vector2 index, bool select) {
+        if (CellType.Normal != GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x]
+                .CellController.GetCellType()) return;
         GameManager.Instance.boardView.SetBoardStatusCellType(index, select ? CellType.Mined : CellType.Normal);
+
+        if (!GameManager.Instance.testing) {
+            GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
+                RpcTarget.AllBuffered, (int)index.y, (int)index.x);
+        }
     }
 
     private void StopSettingMines(List<Vector2> cellsSelected) {

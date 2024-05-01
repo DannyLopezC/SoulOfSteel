@@ -330,7 +330,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     }
 
     [PunRPC]
-    public void RpcPutMines(int x, int y) {
-        GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController.SetType(CellType.Mined);
+    public void RpcPutMines(int x, int y, bool mined) {
+        GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController
+            .SetType(mined ? CellType.Mined : CellType.Normal);
     }
 }

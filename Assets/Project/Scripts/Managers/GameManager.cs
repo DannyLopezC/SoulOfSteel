@@ -127,12 +127,16 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     #endregion
 
-    public void ValidateHealthStatus() {
+    public bool ValidateHealthStatus() {
         foreach (PlayerView playerView in playerList) {
             if (playerView.PlayerController.GetCurrenHealth() <= 0) {
-                Debug.Log($"JUEGO TERMINADO, player {playerView.PlayerController.GetPlayerId()} has lost");
+                UIManager.Instance.SetText(
+                    $"JUEGO TERMINADO, player {playerView.PlayerController.GetPlayerId()} has lost");
+                return false;
             }
         }
+
+        return true;
     }
 
     public void PrepareForMatch(IMatchView matchView) {

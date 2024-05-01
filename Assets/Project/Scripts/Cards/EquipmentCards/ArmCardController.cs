@@ -96,7 +96,13 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
 
     public void UnShadeCells() {
         foreach (Vector2 cellIndex in currentCellsShaded) {
-            GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Normal);
+            if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+                .GetIsMined()) {
+                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Mined);
+            }
+            else {
+                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Normal);
+            }
         }
 
         GameManager.Instance.OnLocalAttackDoneEvent -= UnShadeCells;

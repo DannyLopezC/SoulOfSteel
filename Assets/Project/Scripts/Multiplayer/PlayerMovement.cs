@@ -117,6 +117,10 @@ public class PlayerMovement : MonoBehaviour {
                 }
 
                 currentCell.CellController.SetType(CellType.Normal);
+
+                GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
+                    RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
+                Debug.Log($"turn off mine");
             }
         }
     }

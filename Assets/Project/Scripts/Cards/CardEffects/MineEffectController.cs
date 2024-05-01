@@ -30,7 +30,7 @@ public class MineEffectController : EffectController, IMineEffectController {
 
         if (!GameManager.Instance.testing) {
             GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
-                RpcTarget.AllBuffered, (int)index.y, (int)index.x);
+                RpcTarget.AllBuffered, (int)index.y, (int)index.x, true);
         }
     }
 

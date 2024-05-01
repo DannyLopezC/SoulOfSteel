@@ -13,6 +13,8 @@ public class MovementPhase : Phase {
 
     public override IEnumerator Start() {
         matchView.SetCurrentPhaseText("movement phase");
+        _allMovementDone = false;
+        _allMovementsSelected = false;
 
         foreach (PlayerView p in GameManager.Instance.playerList) {
             p.PlayerController.SetMovementDone(false);

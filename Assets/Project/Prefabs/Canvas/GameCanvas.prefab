@@ -24410,7 +24410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.78000003
+      value: 0.8243284
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_AnchorMax.y
@@ -24418,7 +24418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.2146568
+      value: 0.1726568
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_AnchorMin.y
@@ -24426,7 +24426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1.1580963
+      value: 2.6873016
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_SizeDelta.y
@@ -24462,7 +24462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.47999573
+      value: -0.49996948
       objectReference: {fileID: 0}
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -24479,6 +24479,10 @@ PrefabInstance:
     - target: {fileID: 600574227547398571, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165919456011789391, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
+      propertyPath: isPanelPilot
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2165919456011789391, guid: 5e99b0c0a44d17047933f93ec587ea79, type: 3}
       propertyPath: scrapCostTMP

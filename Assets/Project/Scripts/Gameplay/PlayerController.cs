@@ -8,7 +8,8 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public interface IPlayerController {
+public interface IPlayerController
+{
     void SetPlayerId(int id);
     void DrawCards(int amount, bool fullDraw);
     void EquipCard(int indexHandList);
@@ -45,11 +46,12 @@ public interface IPlayerController {
     int GetCurrenHealth();
 }
 
-public class PlayerController : IPlayerController {
+public class PlayerController : IPlayerController
+{
     private readonly IPlayerView _view;
 
     private int _playerId;
-    [ShowInInspector] private int _health;
+    private int _health;
     private int _scrapPoints;
     private PlayerCardsInfo _shuffledDeck;
     private List<CardView> _hand;
@@ -78,7 +80,8 @@ public class PlayerController : IPlayerController {
     private int _currentDegrees;
     private int _currentDamage;
 
-    public PlayerController(IPlayerView view) {
+    public PlayerController(IPlayerView view)
+    {
         _view = view;
 
         _hand = new List<CardView>();
@@ -88,7 +91,8 @@ public class PlayerController : IPlayerController {
         _currentCell = new Vector2(5, 5);
     }
 
-    public void DrawCards(int amount, bool fullDraw) {
+    public void DrawCards(int amount, bool fullDraw)
+    {
         if (fullDraw) {
             // not destroying the select animatino reference
             GameManager.Instance.handPanel.animationReference.SetParent(
@@ -100,7 +104,8 @@ public class PlayerController : IPlayerController {
         _view.InitAddCards(amount);
     }
 
-    public IEnumerator AddCards(int amount) {
+    public IEnumerator AddCards(int amount)
+    {
         while (amount > 0) {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
@@ -152,22 +157,27 @@ public class PlayerController : IPlayerController {
         GameManager.Instance.OnDrawFinished();
     }
 
-    public int GetPlayerId() {
+    public int GetPlayerId()
+    {
         return _playerId;
     }
 
-    public bool GetCardsSelected() {
+    public bool GetCardsSelected()
+    {
         return _cardsSelected;
     }
 
-    public void SetCardsSelected(bool cardsSelected) {
+    public void SetCardsSelected(bool cardsSelected)
+    {
         _cardsSelected = cardsSelected;
     }
 
-    public void EquipCard(int indexHandList) {
+    public void EquipCard(int indexHandList)
+    {
     }
 
-    public void ShuffleDeck(bool firstTime) {
+    public void ShuffleDeck(bool firstTime)
+    {
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
 
         int n = temporalDeck.Count;
@@ -195,7 +205,8 @@ public class PlayerController : IPlayerController {
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Weapon));
     }
 
-    public void SelectAttack() {
+    public void SelectAttack()
+    {
         if (!_view.GetPv().IsMine) return;
 
         if (_weapon == null && _arm != null) {
@@ -208,7 +219,8 @@ public class PlayerController : IPlayerController {
         }
     }
 
-    public void DoAttack(Vector2 index) {
+    public void DoAttack(Vector2 index)
+    {
         if (GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
             CellType.Shady) return;
 
@@ -230,11 +242,13 @@ public class PlayerController : IPlayerController {
         GameManager.Instance.OnCellClickedEvent -= DoAttack;
     }
 
-    public int GetCurrenHealth() {
+    public int GetCurrenHealth()
+    {
         return _health;
     }
 
-    public void SelectMovement() {
+    public void SelectMovement()
+    {
         if (!_view.GetPv().IsMine) return;
 
         if (_legs == null && _pilot != null) {
@@ -247,42 +261,49 @@ public class PlayerController : IPlayerController {
         }
     }
 
-    public void OnMovementSelected(int movementId) {
+    public void OnMovementSelected(int movementId)
+    {
         SetMovementSelected(true);
         _currentMovementId = movementId;
         GameManager.Instance.OnAllMovementSelectedEvent += OnAllMovementSelected;
     }
 
-    public void OnAllMovementSelected() {
+    public void OnAllMovementSelected()
+    {
         GameManager.Instance.OnSelectionConfirmedEvent -= OnMovementSelected;
         GameManager.Instance.OnAllMovementSelectedEvent -= OnAllMovementSelected;
     }
 
-    public void DoMovement() {
+    public void DoMovement()
+    {
         GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
             (PlayerView)_view);
     }
 
-    public PilotCardView GetPilotCard() {
+    public PilotCardView GetPilotCard()
+    {
         return _pilot;
     }
 
-    public void SelectDefense() {
+    public void SelectDefense()
+    {
     }
 
-    public void ReceivedDamage(int damage, int localPlayerId) {
+    public void ReceivedDamage(int damage, int localPlayerId)
+    {
         if (localPlayerId == _playerId) {
-            Debug.Log($"my health antes {_health}");
             _health -= damage;
-            Debug.Log($"my health despues {_health}");
+            _pilot.SetHealthTMP(_health);
         }
     }
 
-    public void SetPlayerId(int id) {
+    public void SetPlayerId(int id)
+    {
         _playerId = id;
     }
 
-    public void SelectCards(CardType type, int amount, bool setSelecting = true) {
+    public void SelectCards(CardType type, int amount, bool setSelecting = true)
+    {
         foreach (CardView card in _hand) {
             if (card.GetCardType() == type) {
                 card.SetIsSelecting(setSelecting);
@@ -290,7 +311,8 @@ public class PlayerController : IPlayerController {
         }
     }
 
-    public IEnumerator SelectCells(int amount) {
+    public IEnumerator SelectCells(int amount)
+    {
         int currentAmount = amount;
         cellsSelected = new List<Vector2>();
         cellsSelected.Clear();
@@ -309,76 +331,94 @@ public class PlayerController : IPlayerController {
         EffectManager.Instance.CellsSelected(cellsSelected);
     }
 
-    public bool GetMoving() {
+    public bool GetMoving()
+    {
         return _moving;
     }
 
-    public void SetMoving(bool moving) {
+    public void SetMoving(bool moving)
+    {
         _moving = moving;
     }
 
-    public bool GetDoingEffect() {
+    public bool GetDoingEffect()
+    {
         return _doingEffect;
     }
 
-    public void SetDoingEffect(bool doingEffect) {
+    public void SetDoingEffect(bool doingEffect)
+    {
         _doingEffect = doingEffect;
     }
 
-    public bool GetAllEffectsDone() {
+    public bool GetAllEffectsDone()
+    {
         return _allEffectsDone;
     }
 
-    public void SetAllEffectsDone(bool allEffectsDone) {
+    public void SetAllEffectsDone(bool allEffectsDone)
+    {
         _allEffectsDone = allEffectsDone;
     }
 
-    public void SetCurrentCell(Vector2 currentCell) {
+    public void SetCurrentCell(Vector2 currentCell)
+    {
         _currentCell = currentCell;
     }
 
-    public Vector2 GetCurrentCell() {
+    public Vector2 GetCurrentCell()
+    {
         return _currentCell;
     }
 
-    public void SetCurrentDegrees(int currentDegrees) {
+    public void SetCurrentDegrees(int currentDegrees)
+    {
         _currentDegrees = currentDegrees;
     }
 
-    public int GetCurrentDegrees() {
+    public int GetCurrentDegrees()
+    {
         return _currentDegrees;
     }
 
-    public void SetLegsCard(LegsCardView legsCardView) {
+    public void SetLegsCard(LegsCardView legsCardView)
+    {
         _legs = legsCardView;
     }
 
-    public void SetArmCard(ArmCardView armCardView) {
+    public void SetArmCard(ArmCardView armCardView)
+    {
         _arm = armCardView;
     }
 
-    public bool GetMovementSelected() {
+    public bool GetMovementSelected()
+    {
         return _movementSelected;
     }
 
-    public void SetMovementSelected(bool movementSelected) {
+    public void SetMovementSelected(bool movementSelected)
+    {
         _movementSelected = movementSelected;
     }
 
-    public bool GetMovementDone() {
+    public bool GetMovementDone()
+    {
         return _movementDone;
     }
 
-    public void SetMovementDone(bool movementDone) {
+    public void SetMovementDone(bool movementDone)
+    {
         _movementDone = movementDone;
     }
 
-    private void CellSelected(Vector2 index, bool select) {
+    private void CellSelected(Vector2 index, bool select)
+    {
         if (select) cellsSelected.Add(index);
         else cellsSelected.Remove(index);
     }
 
-    private void SetArmCard() {
+    private void SetArmCard()
+    {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c =>
                 (c.TypeEnum == CardType.Arm || c.TypeEnum == CardType.Weapon));
@@ -394,7 +434,8 @@ public class PlayerController : IPlayerController {
         else if (card.GetCardType() == CardType.Weapon) _weapon = card;
     }
 
-    private void SetLegsCard() {
+    private void SetLegsCard()
+    {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Legs);
 
@@ -407,7 +448,8 @@ public class PlayerController : IPlayerController {
         _legs = card;
     }
 
-    private void SetPilotCard() {
+    private void SetPilotCard()
+    {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
 
@@ -419,5 +461,6 @@ public class PlayerController : IPlayerController {
             cardInfoStruct.SerializedMovements[0], cardInfoStruct.Damage);
         _pilot = card;
         _health = _pilot.PilotCardController.GetHealth();
+        _pilot.SetHealthTMP(_health);
     }
 }

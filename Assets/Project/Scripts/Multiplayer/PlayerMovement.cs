@@ -5,23 +5,27 @@ using Photon.Pun;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviour
+{
     public PhotonView pv;
     public Movement currentMovement;
 
-    private void Start() {
+    private void Start()
+    {
         pv = GetComponent<PhotonView>();
         GameManager.Instance.OnMovementSelectedEvent += DoMove;
     }
 
-    private void DoMove(Movement movement, PlayerView player) {
+    private void DoMove(Movement movement, PlayerView player)
+    {
         if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
         player.PlayerController.SetMoving(true);
         currentMovement = movement;
         StartCoroutine(StartMoving(movement, player));
     }
 
-    private IEnumerator StartMoving(Movement movement, PlayerView player) {
+    private IEnumerator StartMoving(Movement movement, PlayerView player)
+    {
         int currentDegrees = player.PlayerController.GetCurrentDegrees();
         Vector2 currentCell = player.PlayerController.GetCurrentCell();
 
@@ -99,7 +103,8 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    public void MoveToCell(Vector2 index, int adjustedDirection = -1) {
+    public void MoveToCell(Vector2 index, int adjustedDirection = -1)
+    {
         if (pv.IsMine) {
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
             // if (adjustedDirection != -1) transform.rotation = Quaternion.Euler(0, 0, adjustedDirection);
@@ -111,21 +116,21 @@ public class PlayerMovement : MonoBehaviour {
                 if (!GameManager.Instance.testing) {
                     currentPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 3,
                         currentPlayer.PlayerController.GetPlayerId());
+                    GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
+                        RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
                 }
                 else {
                     currentPlayer.PlayerController.ReceivedDamage(3, currentPlayer.PlayerController.GetPlayerId());
                 }
 
                 currentCell.CellController.SetType(CellType.Normal);
-
-                GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
-                    RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
                 Debug.Log($"turn off mine");
             }
         }
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         if (GameManager.HasInstance()) GameManager.Instance.OnMovementSelectedEvent -= DoMove;
     }
 }

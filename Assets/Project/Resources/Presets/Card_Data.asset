@@ -743,10 +743,10 @@ MonoBehaviour:
         90\xBA\n4) 4 \u2191, 180\xBA\u2B82"
       AttackType: 
     - Id: 33
-      CardName: pilotjeje
+      CardName: DefaultPilot
       Type: 
       TypeEnum: 0
-      Description: afasdkjfaksdlf
+      Description: Default pilot
       Cost: 1
       Energy: 2
       Damage: 3

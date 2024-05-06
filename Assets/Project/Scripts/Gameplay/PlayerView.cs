@@ -9,7 +9,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public interface IPlayerView {
+public interface IPlayerView
+{
     GameObject GetHandCardsPanel();
     void CleanHandsPanel();
     CardView AddCardToPanel(CardType cardType);
@@ -23,7 +24,8 @@ public interface IPlayerView {
 }
 
 [Serializable]
-public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable {
+public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
+{
     [SerializeField] private PhotonView pv;
     [ShowInInspector] public PlayerCardsInfo _deckInfo;
     private PlayerMovement _playerMovement;
@@ -57,7 +59,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         get { return _playerController ??= new PlayerController(this); }
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         GameManager.Instance.OnGameStartedEvent += TurnOnSprite;
         pv = GetComponent<PhotonView>();
         _playerMovement = GetComponent<PlayerMovement>();
@@ -69,12 +72,14 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         PlayerController.SetPlayerId(GameManager.Instance.testing ? 0 : pv.Owner.ActorNumber);
     }
 
-    private void Start() {
+    private void Start()
+    {
         if (GameManager.Instance.testing) TurnOnSprite();
         GameManager.Instance.OnPrioritySetEvent += ReceivePriority;
     }
 
-    public void TurnOnSprite() {
+    public void TurnOnSprite()
+    {
         TryGetComponent(out Image image);
         image.enabled = true;
         playerName.gameObject.SetActive(true);
@@ -84,22 +89,29 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         SetCardsInfo();
     }
 
-    public GameObject GetHandCardsPanel() {
+    public GameObject GetHandCardsPanel()
+    {
         return HandCardsPanel;
     }
 
-    public void CleanHandsPanel() {
+    public void CleanHandsPanel()
+    {
         foreach (Transform t in HandCardsPanel.transform) {
             Destroy(t.gameObject);
         }
     }
 
-    public CardView AddCardToPanel(CardType cardType) {
+    public CardView AddCardToPanel(CardType cardType)
+    {
         GameObject prefab = null;
         Transform parent = null;
 
         switch (cardType) {
             case CardType.Pilot:
+                if (pv.IsMine) {
+                    return GameManager.Instance.LocalPilotCardView;
+                }
+
                 prefab = pilotCardPrefab;
                 break;
             case CardType.Weapon:
@@ -146,33 +158,40 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         return card;
     }
 
-    public void InitAddCards(int amount) {
+    public void InitAddCards(int amount)
+    {
         StartCoroutine(PlayerController.AddCards(amount));
     }
 
-    public PhotonView GetPv() {
+    public PhotonView GetPv()
+    {
         return pv;
     }
 
-    public void ClearPanel(Transform panel) {
+    public void ClearPanel(Transform panel)
+    {
         foreach (Transform t in panel) {
             Destroy(t.gameObject);
         }
     }
 
-    public PlayerCardsInfo GetDeckInfo() {
+    public PlayerCardsInfo GetDeckInfo()
+    {
         return _deckInfo;
     }
 
-    public bool GetAttackDone() {
+    public bool GetAttackDone()
+    {
         return _attackDone;
     }
 
-    public void SetAttackDone(bool attackDone) {
+    public void SetAttackDone(bool attackDone)
+    {
         _attackDone = attackDone;
     }
 
-    public void SetCardsInfo() {
+    public void SetCardsInfo()
+    {
         if (pv.IsMine) {
             int actorNumber = GameManager.Instance.testing ? 0 : pv.Owner.ActorNumber;
             int count = GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Count;
@@ -199,35 +218,42 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         if (GameManager.HasInstance()) {
             GameManager.Instance.OnPrioritySetEvent -= ReceivePriority;
             GameManager.Instance.OnGameStartedEvent -= TurnOnSprite;
         }
     }
 
-    public void DrawCards(int amount, bool fullDraw) {
+    public void DrawCards(int amount, bool fullDraw)
+    {
         PlayerController.DrawCards(amount, fullDraw);
     }
 
-    public void SelectCards(CardType type, int amount, bool setSelecting = true) {
+    public void SelectCards(CardType type, int amount, bool setSelecting = true)
+    {
         PlayerController.SelectCards(type, amount, setSelecting);
     }
 
-    public void SelectMovement() {
+    public void SelectMovement()
+    {
         PlayerController.SelectMovement();
     }
 
-    public void SelectAttack() {
+    public void SelectAttack()
+    {
         PlayerController.SelectAttack();
     }
 
-    public void ReceivePriority(int priority) {
+    public void ReceivePriority(int priority)
+    {
         _receivePriority = true;
     }
 
     // players communication
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
         if (stream.IsWriting && pv.IsMine) {
             // selecting cards
             stream.SendNext(PlayerController.GetCardsSelected());
@@ -280,57 +306,69 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
-    public void SelectCells(int amount) {
+    public void SelectCells(int amount)
+    {
         StartCoroutine(PlayerController.SelectCells(amount));
     }
 
-    public void SetMyEffectTurn(bool myEffectTurn) {
+    public void SetMyEffectTurn(bool myEffectTurn)
+    {
         _myEffectTurn = myEffectTurn;
     }
 
-    public void SetMyMovementTurn(bool myMovementTurn) {
+    public void SetMyMovementTurn(bool myMovementTurn)
+    {
         _myMovementTurn = myMovementTurn;
     }
 
-    public void SetEffectTurnDone(bool effectTurnDone) {
+    public void SetEffectTurnDone(bool effectTurnDone)
+    {
         _effectTurnDone = effectTurnDone;
     }
 
-    public bool GetEffectTurnDone() {
+    public bool GetEffectTurnDone()
+    {
         return _effectTurnDone;
     }
 
-    public void SetMovementTurnDone(bool movementTurnDone) {
+    public void SetMovementTurnDone(bool movementTurnDone)
+    {
         _movementTurnDone = movementTurnDone;
     }
 
-    public bool GetMovementTurnDone() {
+    public bool GetMovementTurnDone()
+    {
         return _movementTurnDone;
     }
 
-    public void DoMove() {
+    public void DoMove()
+    {
         PlayerController.DoMovement();
     }
 
     [PunRPC]
-    public void RpcSetTurn() {
+    public void RpcSetTurn()
+    {
         GameManager.Instance.movementTurn =
             (GameManager.Instance.movementTurn % GameManager.Instance.playerList.Count) + 1;
     }
 
     [PunRPC]
-    public void RpcSetAttackTurn() {
+    public void RpcSetAttackTurn()
+    {
         GameManager.Instance.attackTurn =
             (GameManager.Instance.attackTurn % GameManager.Instance.playerList.Count) + 1;
     }
 
     [PunRPC]
-    public void RpcReceivedDamage(int damage, int localPlayerId) {
+    public void RpcReceivedDamage(int damage, int localPlayerId)
+    {
         PlayerController.ReceivedDamage(damage, localPlayerId);
     }
 
     [PunRPC]
-    public void RpcPutMines(int x, int y, bool mined) {
+    public void RpcPutMines(int x, int y, bool mined)
+    {
         GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController
             .SetType(mined ? CellType.Mined : CellType.Normal);
     }

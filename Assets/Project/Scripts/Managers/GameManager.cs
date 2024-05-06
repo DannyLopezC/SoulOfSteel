@@ -6,7 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class GameManager : MonoBehaviourSingleton<GameManager> {
+public class GameManager : MonoBehaviourSingleton<GameManager>
+{
     public CardsDataBase cardDataBase;
 
     public bool testing;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     public Phase CurrentPhase { get; private set; }
     public PlayerView LocalPlayerInstance { get; set; }
+    public PilotCardView LocalPilotCardView;
     public string LocalPlayerName;
 
     public int currentPriority; // player Id
@@ -55,56 +57,69 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
 
     #region EventsInvokes
 
-    public void OnLocalAttackDone() {
+    public void OnLocalAttackDone()
+    {
         OnLocalAttackDoneEvent?.Invoke();
     }
 
-    public void OnAllAttackSelected() {
+    public void OnAllAttackSelected()
+    {
         OnAllAttacksSelectedEvent?.Invoke();
     }
 
-    public void OnMovementTurnDone() {
+    public void OnMovementTurnDone()
+    {
         OnMovementTurnDoneEvent?.Invoke();
     }
 
-    public void OnAllMovementSelected() {
+    public void OnAllMovementSelected()
+    {
         OnAllMovementSelectedEvent?.Invoke();
     }
 
-    public void OnSelectionConfirmed(int id) {
+    public void OnSelectionConfirmed(int id)
+    {
         OnSelectionConfirmedEvent?.Invoke(id);
     }
 
-    public void OnMovementFinished() {
+    public void OnMovementFinished()
+    {
         OnMovementFinishedEvent?.Invoke();
     }
 
-    public void OnMovementSelected(Movement movement, PlayerView player) {
+    public void OnMovementSelected(Movement movement, PlayerView player)
+    {
         OnMovementSelectedEvent?.Invoke(movement, player);
     }
 
-    public void OnPrioritySet(int priority) {
+    public void OnPrioritySet(int priority)
+    {
         OnPrioritySetEvent?.Invoke(priority);
     }
 
 
-    public void OnCardSelected(CardView card, bool selected) {
+    public void OnCardSelected(CardView card, bool selected)
+    {
         OnCardSelectedEvent?.Invoke(card, selected);
     }
 
-    public void OnSelectingFinished() {
+    public void OnSelectingFinished()
+    {
         OnCardSelectingFinishedEvent?.Invoke();
     }
 
-    public void OnCellClicked(Vector2 index) {
+    public void OnCellClicked(Vector2 index)
+    {
         OnCellClickedEvent?.Invoke(index);
     }
 
-    public void OnGameStarted() {
+    public void OnGameStarted()
+    {
         StartCoroutine(OnGameStartedCoroutine());
     }
 
-    public IEnumerator OnGameStartedCoroutine() {
+    public IEnumerator OnGameStartedCoroutine()
+    {
         while (playerList.Count < 2 && !testing) {
             yield return null;
         }
@@ -112,22 +127,26 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         OnGameStartedEvent?.Invoke();
     }
 
-    public void OnDrawFinished() {
+    public void OnDrawFinished()
+    {
         OnDrawFinishedEvent?.Invoke();
     }
 
-    public void OnConnectedToServer() {
+    public void OnConnectedToServer()
+    {
         OnMasterServerConnected?.Invoke();
     }
 
-    public void ChangePhase(Phase phase) {
+    public void ChangePhase(Phase phase)
+    {
         CurrentPhase = phase;
         ExecutePhases?.Invoke(CurrentPhase);
     }
 
     #endregion
 
-    public bool ValidateHealthStatus() {
+    public bool ValidateHealthStatus()
+    {
         foreach (PlayerView playerView in playerList) {
             if (playerView.PlayerController.GetCurrenHealth() <= 0) {
                 UIManager.Instance.SetText(
@@ -139,12 +158,14 @@ public class GameManager : MonoBehaviourSingleton<GameManager> {
         return true;
     }
 
-    public void PrepareForMatch(IMatchView matchView) {
+    public void PrepareForMatch(IMatchView matchView)
+    {
         playerList.ForEach(player => player.PlayerController.ShuffleDeck(true));
         ChangePhase(new DrawPhase(matchView));
     }
 
-    protected override void OnDestroy() {
+    protected override void OnDestroy()
+    {
         Instance = null;
     }
 }

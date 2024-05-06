@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public interface ICardView {
+public interface ICardView
+{
     void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource);
 
     GameObject GetGameObject();
@@ -16,7 +17,8 @@ public interface ICardView {
 }
 
 [Serializable]
-public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler {
+public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler
+{
     [SerializeField, BoxGroup("Card UI Components")]
     private TMP_Text nameTMP;
 
@@ -29,18 +31,21 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     [SerializeField, BoxGroup("Card UI Components")]
     private Image imageSourceIMG;
 
-    public virtual void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource) {
+    public virtual void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource)
+    {
         nameTMP.text = cardName;
         descriptionTMP.text = cardDescription;
-        scrapCostTMP.text = $"{scrapCost}";
+        if (scrapCostTMP != null) scrapCostTMP.text = $"{scrapCost}";
         imageSourceIMG.sprite = imageSource;
     }
 
-    public GameObject GetGameObject() {
+    public GameObject GetGameObject()
+    {
         return gameObject;
     }
 
-    public void OnPointerClick(PointerEventData eventData) {
+    public void OnPointerClick(PointerEventData eventData)
+    {
         if (eventData.button == PointerEventData.InputButton.Right) {
             ManageRightClick();
         }
@@ -58,7 +63,8 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     public abstract void Select(bool deselect = false);
     public abstract void Dismiss();
 
-    public void SetDismissTextSizes() {
+    public void SetDismissTextSizes()
+    {
         nameTMP.fontSize = 10;
         descriptionTMP.fontSize = 5;
         scrapCostTMP.fontSize = 12;
@@ -68,6 +74,7 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
     // public abstract void SelectAnimation();
 
     protected virtual void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        Sprite imageSource, CardType type) {
+        Sprite imageSource, CardType type)
+    {
     }
 }

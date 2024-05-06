@@ -253,7 +253,7 @@ public class PlayerController : IPlayerController
 
         if (_legs == null && _pilot != null) {
             Movement movement = _pilot.PilotCardController.GetDefaultMovement();
-            if (movement != null) GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view);
+            if (movement != null) GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view, GetMovementIterations());
         }
         else {
             GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
@@ -277,7 +277,18 @@ public class PlayerController : IPlayerController
     public void DoMovement()
     {
         GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
-            (PlayerView)_view);
+            (PlayerView)_view, GetMovementIterations());
+    }
+
+    private int GetMovementIterations()
+    {
+        if (EffectManager.Instance.doubleMovementEffectActive)
+        {
+            EffectManager.Instance.SetDoubleMovementEffectActive(false);
+            return 2;
+        }
+
+        return 1;
     }
 
     public PilotCardView GetPilotCard()

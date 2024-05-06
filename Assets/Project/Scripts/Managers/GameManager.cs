@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public event Action<int> OnPrioritySetEvent;
 
     //movement events
-    public event Action<Movement, PlayerView> OnMovementSelectedEvent;
+    public event Action<Movement, PlayerView, int> OnMovementSelectedEvent;
     public event Action OnMovementFinishedEvent;
     public event Action<int> OnSelectionConfirmedEvent;
     public event Action OnAllMovementSelectedEvent;
@@ -87,9 +87,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         OnMovementFinishedEvent?.Invoke();
     }
 
-    public void OnMovementSelected(Movement movement, PlayerView player)
+    public void OnMovementSelected(Movement movement, PlayerView player, int iterations)
     {
-        OnMovementSelectedEvent?.Invoke(movement, player);
+        OnMovementSelectedEvent?.Invoke(movement, player, iterations);
     }
 
     public void OnPrioritySet(int priority)

@@ -59,6 +59,5 @@ public class MatchController : IMatchController
         SelectQuadrant();
         yield return new WaitForSeconds(2);
         GameManager.Instance.PrepareForMatch(_view);
-        _view.SetCurrentPhaseText("shuffling decks");
     }
 }

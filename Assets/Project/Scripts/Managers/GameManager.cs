@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     public void PrepareForMatch(IMatchView matchView)
     {
-        playerList.ForEach(player => player.PlayerController.ShuffleDeck(true));
+        playerList.ForEach(player => player.PlayerController.ShuffleDeck(true, false));
         ChangePhase(new DrawPhase(matchView));
     }
 

@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectManager : MonoBehaviourSingleton<EffectManager> {
+public class EffectManager : MonoBehaviourSingleton<EffectManager>
+{
     public int effectTurn;
     private MineEffectController _mineEffectController;
 
@@ -24,7 +25,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager> {
 
     private IEnumerator WaitForSecondsCoroutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
         OnAllEffectsFinished();
     }
@@ -35,7 +36,8 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager> {
     public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
     public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
 
-    public void PutMines(int originId, int amount) {
+    public void PutMines(int originId, int amount)
+    {
         _mineEffectController = new MineEffectController(amount);
         _mineEffectController.Activate(originId);
     }
@@ -46,15 +48,18 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager> {
         _doubleMovementEffectController.Activate(originId);
     }
 
-    public void CellsSelected(List<Vector2> cellsSelected) {
+    public void CellsSelected(List<Vector2> cellsSelected)
+    {
         OnCellsSelectedEvent?.Invoke(cellsSelected);
     }
 
-    public void CellSelected(Vector2 index, bool select) {
+    public void CellSelected(Vector2 index, bool select)
+    {
         OnSelectedCellEvent?.Invoke(index, select);
     }
 
-    public void OnAllEffectsFinished() {
+    public void OnAllEffectsFinished()
+    {
         OnAllEffectsFinishedEvent?.Invoke();
     }
 }

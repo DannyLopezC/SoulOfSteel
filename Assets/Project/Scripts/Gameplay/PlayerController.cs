@@ -13,7 +13,7 @@ public interface IPlayerController
     void SetPlayerId(int id);
     void DrawCards(int amount, bool fullDraw);
     void EquipCard(int indexHandList);
-    void ShuffleDeck(bool firstTime);
+    void ShuffleDeck(bool firstTime, bool shuffle);
     void SelectAttack();
     void SelectMovement();
     void SelectDefense();
@@ -109,8 +109,8 @@ public class PlayerController : IPlayerController
         while (amount > 0) {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
-            int random = Random.Range(0, _shuffledDeck.playerCards.Count - 1);
-            CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[random];
+            int index = 0;
+            CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[index];
 
             CardView card = null;
 
@@ -149,8 +149,8 @@ public class PlayerController : IPlayerController
 
 
             _hand.Add(card);
-            _shuffledDeck.playerCards.RemoveAt(random);
-            if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck(false);
+            _shuffledDeck.playerCards.RemoveAt(index);
+            if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck(false, false);
             amount--;
         }
 
@@ -176,15 +176,16 @@ public class PlayerController : IPlayerController
     {
     }
 
-    public void ShuffleDeck(bool firstTime)
+    public void ShuffleDeck(bool firstTime, bool shuffle)
     {
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
-
-        int n = temporalDeck.Count;
-        while (n > 1) {
-            n--;
-            int k = Random.Range(0, n + 1);
-            (temporalDeck[k], temporalDeck[n]) = (temporalDeck[n], temporalDeck[k]);
+        if (shuffle) {
+            int n = temporalDeck.Count;
+            while (n > 1) {
+                n--;
+                int k = Random.Range(0, n + 1);
+                (temporalDeck[k], temporalDeck[n]) = (temporalDeck[n], temporalDeck[k]);
+            }
         }
 
         _shuffledDeck.playerCards = temporalDeck;
@@ -253,7 +254,8 @@ public class PlayerController : IPlayerController
 
         if (_legs == null && _pilot != null) {
             Movement movement = _pilot.PilotCardController.GetDefaultMovement();
-            if (movement != null) GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view, GetMovementIterations());
+            if (movement != null)
+                GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view, GetMovementIterations());
         }
         else {
             GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
@@ -282,8 +284,7 @@ public class PlayerController : IPlayerController
 
     private int GetMovementIterations()
     {
-        if (EffectManager.Instance.doubleMovementEffectActive)
-        {
+        if (EffectManager.Instance.doubleMovementEffectActive) {
             EffectManager.Instance.SetDoubleMovementEffectActive(false);
             return 2;
         }

@@ -209,11 +209,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 //     .ToList());
 
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 6, 6, 6, 6, 0, 0, 0, 33, 32, 18 });
+                _deckInfo.SetPlayerCards(new List<int> { 31, 6, 6, 6, 6, 0, 0, 0, 33, 31, 18 });
             }
             else {
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 6, 6, 6, 6, 0, 0, 0, 33, 32, 18 });
+                _deckInfo.SetPlayerCards(new List<int> { 31, 6, 6, 6, 6, 0, 0, 0, 33, 31, 18 });
             }
         }
     }

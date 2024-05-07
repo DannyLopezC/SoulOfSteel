@@ -6,32 +6,34 @@ using System.Linq;
 using Photon.Pun;
 using Random = UnityEngine.Random;
 
-public interface IMatchController {
+public interface IMatchController
+{
     IEnumerator PrepareMatch();
 }
 
-public class MatchController : IMatchController {
+public class MatchController : IMatchController
+{
     private int _matchId;
     private List<string> _matchLog;
 
     private readonly IMatchView _view;
 
-    public MatchController(IMatchView view) {
+    public MatchController(IMatchView view)
+    {
         _view = view;
     }
 
-    private void ThrowPriorityDice() {
-        if (PhotonNetwork.IsMasterClient) {
-            GameManager.Instance.currentPriority = Random.Range(1, 3);
-            // Debug.Log($"master priority {GameManager.Instance.currentPriority}");
-        }
+    private void SetPriority()
+    {
+        GameManager.Instance.currentPriority = 1;
 
         GameManager.Instance.OnPrioritySet(GameManager.Instance.currentPriority);
 
-        _view.SetCurrentPhaseText($"Throwing priority dice, result = {GameManager.Instance.currentPriority}");
+        _view.SetCurrentPhaseText($"priority = {GameManager.Instance.currentPriority}");
     }
 
-    private void SelectQuadrant() {
+    private void SelectQuadrant()
+    {
         _view.SetCurrentPhaseText("Selecting quadrant");
 
         foreach (PlayerView p in GameManager.Instance.playerList) {
@@ -44,13 +46,15 @@ public class MatchController : IMatchController {
 
             p.PlayerController.SetCurrentCell(nextCell);
             p.PlayerController.SetCurrentDegrees(currentDegrees);
-            p.GetComponent<PlayerMovement>().MoveToCell(nextCell, currentDegrees);
+            p.GetComponent<PlayerMovement>().MoveToCell(nextCell);
+            p.GetComponent<PlayerMovement>().Rotate(p.transform, currentDegrees);
         }
     }
 
-    public IEnumerator PrepareMatch() {
+    public IEnumerator PrepareMatch()
+    {
         yield return new WaitForSeconds(2);
-        ThrowPriorityDice();
+        SetPriority();
         yield return new WaitForSeconds(2);
         SelectQuadrant();
         yield return new WaitForSeconds(2);

@@ -6,11 +6,13 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
-public interface IMatchView {
+public interface IMatchView
+{
     void SetCurrentPhaseText(string text);
 }
 
-public class MatchView : MonoBehaviour, IMatchView {
+public class MatchView : MonoBehaviour, IMatchView
+{
     [SerializeField] private TMP_Text currentPhaseText;
 
     private IMatchController _matchController;
@@ -19,30 +21,37 @@ public class MatchView : MonoBehaviour, IMatchView {
         get { return _matchController ??= new MatchController(this); }
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         UIManager.Instance.matchView = this;
         UIManager.Instance._currentGamePanel = this;
         GameManager.Instance.ExecutePhases += ExecutePhases;
     }
 
-    private void Start() {
+    private void Start()
+    {
         if (GameManager.Instance.testing) PrepareMatch();
+        GameManager.Instance.isFirstRound = true;
     }
 
     [Button]
-    public void PrepareMatch() {
+    public void PrepareMatch()
+    {
         StartCoroutine(MatchController.PrepareMatch());
     }
 
-    public void SetCurrentPhaseText(string text) {
+    public void SetCurrentPhaseText(string text)
+    {
         currentPhaseText.text = text;
     }
 
-    private void ExecutePhases(Phase phase) {
+    private void ExecutePhases(Phase phase)
+    {
         StartCoroutine(phase.Start());
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         if (GameManager.HasInstance()) GameManager.Instance.ExecutePhases -= ExecutePhases;
     }
 }

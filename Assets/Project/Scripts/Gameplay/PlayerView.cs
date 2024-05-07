@@ -69,7 +69,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             GameManager.Instance.LocalPlayerInstance = this;
         }
 
-        PlayerController.SetPlayerId(GameManager.Instance.testing ? 0 : pv.Owner.ActorNumber);
+        PlayerController.SetPlayerId(GameManager.Instance.testing ? 1 : pv.Owner.ActorNumber);
     }
 
     private void Start()

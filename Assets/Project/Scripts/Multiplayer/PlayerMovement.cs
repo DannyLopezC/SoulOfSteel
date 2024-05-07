@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public PhotonView pv;
     public Movement currentMovement;
+    public Nickname nickname;
 
     private void Start()
     {
@@ -27,27 +28,23 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator StartMoving(Movement movement, PlayerView player, int movementIterations)
     {
-        for (int i = 0; i < movementIterations; i++)
-        {
+        for (int i = 0; i < movementIterations; i++) {
             int currentDegrees = player.PlayerController.GetCurrentDegrees();
             Vector2 currentCell = player.PlayerController.GetCurrentCell();
 
             List<Movement.MovementInfo> steps = movement.steps;
             int nextDegrees = movement.degrees[0];
 
-            foreach (Movement.MovementInfo step in steps)
-            {
+            foreach (Movement.MovementInfo step in steps) {
                 int currentSteps = step.Steps;
                 Vector2 nextCell = currentCell;
 
-                while (currentSteps > 0)
-                {
+                while (currentSteps > 0) {
                     yield return new WaitForSeconds(0.5f);
 
                     int adjustedDirection;
 
-                    switch (step.Direction)
-                    {
+                    switch (step.Direction) {
                         case "↑":
                             adjustedDirection = currentDegrees;
                             break;
@@ -62,8 +59,7 @@ public class PlayerMovement : MonoBehaviour
                             yield break;
                     }
 
-                    switch (adjustedDirection)
-                    {
+                    switch (adjustedDirection) {
                         case 180:
                             nextCell.x -= 1;
                             break;
@@ -82,31 +78,27 @@ public class PlayerMovement : MonoBehaviour
                         Mathf.Clamp(nextCell.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
                         Mathf.Clamp(nextCell.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
 
-                    MoveToCell(nextCell, adjustedDirection);
+                    MoveToCell(nextCell);
                     currentSteps--;
                     yield return null;
                 }
 
                 player.PlayerController.SetCurrentCell(nextCell);
                 player.PlayerController.SetCurrentDegrees(nextDegrees);
-                player.transform.rotation = Quaternion.Euler(0, 0, nextDegrees);
+                Rotate(player.transform, nextDegrees);
 
-                if (i == movementIterations-1)
-                {
+                if (i == movementIterations - 1) {
                     player.PlayerController.SetMoving(false);
                     GameManager.Instance.OnMovementTurnDone();
                 }
 
                 if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
-                        .GetCellType() == CellType.Blocked)
-                {
-                    if (!GameManager.Instance.testing)
-                    {
+                        .GetCellType() == CellType.Blocked) {
+                    if (!GameManager.Instance.testing) {
                         player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
                             player.PlayerController.GetPlayerId());
                     }
-                    else
-                    {
+                    else {
                         player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
                     }
 
@@ -118,11 +110,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void MoveToCell(Vector2 index, int adjustedDirection = -1)
+    public void MoveToCell(Vector2 index)
     {
         if (pv.IsMine) {
             transform.position = GameManager.Instance.boardView.GetCellPos(index);
-            // if (adjustedDirection != -1) transform.rotation = Quaternion.Euler(0, 0, adjustedDirection);
 
             CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
@@ -142,6 +133,13 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log($"turn off mine");
             }
         }
+    }
+
+    public void Rotate(Transform t, int direction)
+    {
+        nickname.transform.SetParent(transform.parent);
+        t.rotation = Quaternion.Euler(0, 0, direction);
+        nickname.transform.SetParent(transform);
     }
 
     private void OnDestroy()

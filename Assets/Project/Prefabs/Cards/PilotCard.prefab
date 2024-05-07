@@ -61,6 +61,7 @@ MonoBehaviour:
   scrapCostTMP: {fileID: 1290692172313814120}
   imageSourceIMG: {fileID: 4097226722880119601}
   healthTMP: {fileID: 7889013284138847713}
+  isPanelPilot: 0
 --- !u!222 &5011223320368261421
 CanvasRenderer:
   m_ObjectHideFlags: 0

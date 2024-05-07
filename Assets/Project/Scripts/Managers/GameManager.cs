@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public CardsDataBase cardDataBase;
 
     public bool testing;
+    public bool isFirstRound;
 
     public int movementTurn;
     public int attackTurn;

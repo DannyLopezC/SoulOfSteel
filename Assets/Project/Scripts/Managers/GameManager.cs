@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public event Action OnDrawFinishedEvent;
     public event Action<Vector2> OnCellClickedEvent;
     public event Action OnGameStartedEvent;
-    public event Action<CardView, bool> OnCardSelectedEvent; // card has been selected or deselected
+    public event Action<PlayerView, CardView, bool> OnCardSelectedEvent; // card has been selected or deselected
     public event Action OnCardSelectingFinishedEvent; // all cards has been selected
     public event Action<int> OnPrioritySetEvent;
 
@@ -99,9 +99,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     }
 
 
-    public void OnCardSelected(CardView card, bool selected)
+    public void OnCardSelected(PlayerView playerView, CardView card, bool selected)
     {
-        OnCardSelectedEvent?.Invoke(card, selected);
+        OnCardSelectedEvent?.Invoke(playerView, card, selected);
     }
 
     public void OnSelectingFinished()

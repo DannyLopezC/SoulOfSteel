@@ -17,7 +17,7 @@ public interface IPlayerController
     void SelectAttack();
     void SelectMovement();
     void SelectDefense();
-    void SelectCards(CardType type, int amount, bool setIsSelecting = true);
+    void SelectCards(List<CardType> types, int amount, bool setIsSelecting = true);
     void ReceivedDamage(int damage, int localPlayerId);
     IEnumerator AddCards(int amount);
     int GetPlayerId();
@@ -114,9 +114,8 @@ public class PlayerController : IPlayerController
 
             CardView card = null;
 
-            if (cardInfoStruct.TypeEnum != CardType.Pilot && cardInfoStruct.TypeEnum != CardType.Legs &&
-                cardInfoStruct.TypeEnum != CardType.Arm && cardInfoStruct.TypeEnum != CardType.Weapon) {
-                card = _view.AddCardToPanel(cardInfoStruct.TypeEnum);
+            if (cardInfoStruct.TypeEnum != CardType.Pilot) {
+                card = _view.AddCardToPanel(cardInfoStruct.TypeEnum, true);
             }
 
             switch (cardInfoStruct.TypeEnum) {
@@ -130,14 +129,19 @@ public class PlayerController : IPlayerController
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
-                case CardType.Weapon:
-                case CardType.Armor:
-                case CardType.Arm:
                 case CardType.Legs:
-                    // ((LegsCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
-                    //     cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-                    //     cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
-                    continue;
+                    ((LegsCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                        cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+                        cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                    break;
+                case CardType.Weapon:
+                case CardType.Arm:
+                    ((ArmCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                        cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage,
+                        cardInfoStruct.AttackTypeEnum, cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea,
+                        cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                    break;
+                case CardType.Armor:
                 case CardType.Chest:
                     ((EquipmentCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
@@ -174,7 +178,23 @@ public class PlayerController : IPlayerController
 
     public void EquipCard(int indexHandList)
     {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct =
+            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.Id == indexHandList);
+
+        switch (cardInfoStruct.TypeEnum) {
+            case CardType.Arm:
+            case CardType.Weapon:
+                SetArmCard(cardInfoStruct);
+                break;
+            case CardType.Legs:
+                SetLegsCard(cardInfoStruct);
+                break;
+            case CardType.Armor:
+                SetArmorCard(cardInfoStruct);
+                break;
+        }
     }
+
 
     public void ShuffleDeck(bool firstTime, bool shuffle)
     {
@@ -190,20 +210,14 @@ public class PlayerController : IPlayerController
 
         _shuffledDeck.playerCards = temporalDeck;
 
-        // foreach (CardInfoSerialized.CardInfoStruct shuffledDeckPlayerCard in _deckInfo.playerCards) {
-        //     Debug.Log($"{shuffledDeckPlayerCard.CardName} \n");
-        // }
-
         if (firstTime) {
             SetPilotCard();
-            SetLegsCard();
-            SetArmCard();
         }
 
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
-        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Legs));
-        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Arm));
-        _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Weapon));
+        // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Legs));
+        // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Arm));
+        // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Weapon));
     }
 
     public void SelectAttack()
@@ -314,10 +328,10 @@ public class PlayerController : IPlayerController
         _playerId = id;
     }
 
-    public void SelectCards(CardType type, int amount, bool setSelecting = true)
+    public void SelectCards(List<CardType> type, int amount, bool setSelecting = true)
     {
         foreach (CardView card in _hand) {
-            if (card.GetCardType() == type) {
+            if (type.Contains(card.GetCardType())) {
                 card.SetIsSelecting(setSelecting);
             }
         }
@@ -429,12 +443,8 @@ public class PlayerController : IPlayerController
         else cellsSelected.Remove(index);
     }
 
-    private void SetArmCard()
+    private void SetArmCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c =>
-                (c.TypeEnum == CardType.Arm || c.TypeEnum == CardType.Weapon));
-
         ArmCardView card = (ArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
@@ -446,18 +456,19 @@ public class PlayerController : IPlayerController
         else if (card.GetCardType() == CardType.Weapon) _weapon = card;
     }
 
-    private void SetLegsCard()
+    private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Legs);
-
-
         LegsCardView card = (LegsCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
             cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
         _legs = card;
+    }
+
+    private void SetArmorCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    {
+        Debug.Log($"NOT IMPLEMENTED YET");
     }
 
     private void SetPilotCard()

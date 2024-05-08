@@ -2,17 +2,20 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public interface ILegsCardView : IEquipmentCardView {
+public interface ILegsCardView : IEquipmentCardView
+{
 }
 
-public class LegsCardView : EquipmentCardView, ILegsCardView {
+public class LegsCardView : EquipmentCardView, ILegsCardView
+{
     private ILegsCardController _legsCardController;
 
     public ILegsCardController LegsCardController {
         get { return _legsCardController ??= new LegsCardController(this); }
     }
 
-    protected override void Start() {
+    protected override void Start()
+    {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.TypeEnum == CardType.Legs);
 
@@ -24,44 +27,59 @@ public class LegsCardView : EquipmentCardView, ILegsCardView {
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        List<Movement> movements, Sprite imageSource, CardType type) {
+        List<Movement> movements, Sprite imageSource, CardType type)
+    {
         LegsCardController.InitCard(id, cardName, cardDescription, scrapCost,
             scrapRecovery, movements, imageSource, type);
     }
 
-    public override void ManageLeftClick() {
+    public override void ManageLeftClick()
+    {
         LegsCardController.Select(false);
     }
 
-    public override void ManageRightClick() {
+    public override void ManageRightClick()
+    {
         LegsCardController.ManageRightClick();
     }
 
-    public override void SetIsSelecting(bool isSelecting) {
+    public override void SetIsSelecting(bool isSelecting)
+    {
         LegsCardController.IsSelecting(isSelecting);
     }
 
-    public override CardType GetCardType() {
+    public override CardType GetCardType()
+    {
         return LegsCardController.GetCardType();
     }
 
-    public override bool GetSelected() {
+    public override bool GetSelected()
+    {
         return LegsCardController.GetSelected();
     }
 
-    public override void Select(bool deselect = false) {
+    public override void Select(bool deselect = false)
+    {
         LegsCardController.Select(deselect);
     }
 
-    public override void DoEffect(int originId) {
+    public override void DoEffect(int originId)
+    {
         LegsCardController.DoEffect(originId);
     }
 
-    public override void Dismiss() {
+    public override void Dismiss()
+    {
         LegsCardController.DismissCard();
     }
 
-    public void SelectMovement() {
+    public void SelectMovement()
+    {
         LegsCardController.SelectMovement();
+    }
+
+    public override int GetId()
+    {
+        return LegsCardController.GetId();
     }
 }

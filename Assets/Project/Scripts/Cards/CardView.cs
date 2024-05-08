@@ -62,6 +62,7 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler
     public abstract bool GetSelected();
     public abstract void Select(bool deselect = false);
     public abstract void Dismiss();
+    public abstract int GetId();
 
     public void SetDismissTextSizes()
     {

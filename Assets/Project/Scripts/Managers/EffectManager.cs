@@ -25,7 +25,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
 
     private IEnumerator WaitForSecondsCoroutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
         OnAllEffectsFinished();
     }

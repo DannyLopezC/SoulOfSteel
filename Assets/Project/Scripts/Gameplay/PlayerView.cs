@@ -13,10 +13,10 @@ public interface IPlayerView
 {
     GameObject GetHandCardsPanel();
     void CleanHandsPanel();
-    CardView AddCardToPanel(CardType cardType);
+    CardView AddCardToPanel(CardType cardType, bool inHand = false);
     void InitAddCards(int amount);
     PhotonView GetPv();
-    void SelectCards(CardType type, int amount, bool setSelecting = true);
+    void SelectCards(List<CardType> type, int amount, bool setSelecting = true);
     void ClearPanel(Transform panel);
     PlayerCardsInfo GetDeckInfo();
     bool GetAttackDone();
@@ -101,7 +101,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
-    public CardView AddCardToPanel(CardType cardType)
+    public CardView AddCardToPanel(CardType cardType, bool inHand = false)
     {
         GameObject prefab = null;
         Transform parent = null;
@@ -117,23 +117,41 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             case CardType.Weapon:
             case CardType.Arm:
                 prefab = armCardPrefab;
-                parent = pv.IsMine
-                    ? GameManager.Instance.myEquipmentPanel.transform
-                    : GameManager.Instance.enemyEquipmentPanel.transform;
+                if (inHand) {
+                    parent = HandCardsPanel.transform;
+                }
+                else {
+                    parent = pv.IsMine
+                        ? GameManager.Instance.myEquipmentPanel.transform
+                        : GameManager.Instance.enemyEquipmentPanel.transform;
+                }
+
                 break;
             case CardType.Armor:
             case CardType.Chest:
             case CardType.Generator:
                 prefab = equipmentCardPrefab;
-                parent = pv.IsMine
-                    ? GameManager.Instance.myEquipmentPanel.transform
-                    : GameManager.Instance.enemyEquipmentPanel.transform;
+                if (inHand) {
+                    parent = HandCardsPanel.transform;
+                }
+                else {
+                    parent = pv.IsMine
+                        ? GameManager.Instance.myEquipmentPanel.transform
+                        : GameManager.Instance.enemyEquipmentPanel.transform;
+                }
+
                 break;
             case CardType.Legs:
                 prefab = legsCardPrefab;
-                parent = pv.IsMine
-                    ? GameManager.Instance.myEquipmentPanel.transform
-                    : GameManager.Instance.enemyEquipmentPanel.transform;
+                if (inHand) {
+                    parent = HandCardsPanel.transform;
+                }
+                else {
+                    parent = pv.IsMine
+                        ? GameManager.Instance.myEquipmentPanel.transform
+                        : GameManager.Instance.enemyEquipmentPanel.transform;
+                }
+
                 break;
             case CardType.CampEffect:
             case CardType.Hacking:
@@ -150,8 +168,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
         GO.TryGetComponent(out RectTransform rt);
         rt.sizeDelta = new Vector2(250, 350);
-        if (cardType != CardType.Legs && cardType != CardType.Arm && cardType != CardType.Weapon)
+        if (inHand) {
             rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        }
 
         GO.TryGetComponent(out CardView card);
         GO.SetActive(pv.IsMine);
@@ -231,7 +250,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         PlayerController.DrawCards(amount, fullDraw);
     }
 
-    public void SelectCards(CardType type, int amount, bool setSelecting = true)
+    public void SelectCards(List<CardType> type, int amount, bool setSelecting = true)
     {
         PlayerController.SelectCards(type, amount, setSelecting);
     }

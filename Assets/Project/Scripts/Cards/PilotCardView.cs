@@ -44,6 +44,11 @@ public class PilotCardView : CardView, IPilotCardView
         PilotCardController.DismissCard();
     }
 
+    public override int GetId()
+    {
+        return PilotCardController.GetId();
+    }
+
     public override void DoEffect(int originId)
     {
         PilotCardController.DoEffect(originId);

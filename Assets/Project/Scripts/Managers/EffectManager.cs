@@ -8,6 +8,10 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     public int effectTurn;
     private MineEffectController _mineEffectController;
 
+    public event Action OnAllEffectsFinishedEvent;
+    public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
+    public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
+
     #region DoubleMovementAttributes
 
     private DoubleMovementEffectController _doubleMovementEffectController;
@@ -32,9 +36,17 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
 
     #endregion
 
-    public event Action OnAllEffectsFinishedEvent;
-    public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
-    public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
+    #region GravitationalImpulseEffectController
+
+    private GravitationalImpulseEffectController _gravitationalImpulseEffectController;
+    public bool gravitationalImpulseEffectActive { get; set; }
+
+    public void SetGravitationalImpulseEffectActive(bool isActive)
+    {
+        gravitationalImpulseEffectActive = isActive;
+    }
+
+    #endregion
 
     public void PutMines(int originId, int amount)
     {
@@ -46,6 +58,18 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     {
         _doubleMovementEffectController = new DoubleMovementEffectController();
         _doubleMovementEffectController.Activate(originId);
+    }
+
+    public void ActivateGravitationalImpulse(int originId)
+    {
+        _gravitationalImpulseEffectController = new GravitationalImpulseEffectController();
+        _gravitationalImpulseEffectController.Activate(originId);
+    }
+
+    public void DeactivateGravitationalImpulse(int originId)
+    {
+        _gravitationalImpulseEffectController ??= new GravitationalImpulseEffectController();
+        _gravitationalImpulseEffectController.Activate(originId);
     }
 
     public void CellsSelected(List<Vector2> cellsSelected)

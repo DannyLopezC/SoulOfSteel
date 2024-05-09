@@ -24,7 +24,8 @@ public class PrincipalPhase : Phase
             CardType.Legs,
             CardType.Arm,
             CardType.Armor,
-            CardType.Weapon
+            CardType.Weapon,
+            CardType.Chest
         };
 
         // selecting cards

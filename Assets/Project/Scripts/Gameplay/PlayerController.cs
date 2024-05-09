@@ -61,7 +61,7 @@ public class PlayerController : IPlayerController
     private LegsCardView _legs;
     private ArmCardView _arm;
     private ArmCardView _weapon;
-    private EquipmentCardView _bodyArmor;
+    private ChestCardView _bodyArmor;
 
     private bool _movementSelected;
     private bool _movementDone;
@@ -143,7 +143,7 @@ public class PlayerController : IPlayerController
                     break;
                 case CardType.Armor:
                 case CardType.Chest:
-                    ((EquipmentCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((ChestCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
@@ -190,6 +190,7 @@ public class PlayerController : IPlayerController
                 SetLegsCard(cardInfoStruct);
                 break;
             case CardType.Armor:
+            case CardType.Chest:
                 SetArmorCard(cardInfoStruct);
                 break;
         }
@@ -468,7 +469,21 @@ public class PlayerController : IPlayerController
 
     private void SetArmorCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
-        Debug.Log($"NOT IMPLEMENTED YET");
+        ChestCardView card = (ChestCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+
+        //Remove previous effect
+        if(_bodyArmor != null)
+        {
+            _bodyArmor.RemoveEffect();
+        }
+
+        _bodyArmor = card;
+
+        _bodyArmor.GetEffect();
     }
 
     private void SetPilotCard()

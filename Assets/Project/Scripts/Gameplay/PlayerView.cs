@@ -48,6 +48,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [SerializeField] private GameObject effectCardPrefab;
     [SerializeField] private GameObject legsCardPrefab;
     [SerializeField] private GameObject armCardPrefab;
+    [SerializeField] private GameObject chestCardPrefab;
 
     [SerializeField] private TMP_Text playerName;
     [SerializeField] private Image playerDirection;
@@ -129,6 +130,19 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 break;
             case CardType.Armor:
             case CardType.Chest:
+                prefab = chestCardPrefab;
+                if (inHand)
+                {
+                    parent = HandCardsPanel.transform;
+                }
+                else
+                {
+                    parent = pv.IsMine
+                        ? GameManager.Instance.myEquipmentPanel.transform
+                        : GameManager.Instance.enemyEquipmentPanel.transform;
+                }
+
+                break;
             case CardType.Generator:
                 prefab = equipmentCardPrefab;
                 if (inHand) {
@@ -228,11 +242,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                 //     .ToList());
 
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 31, 6, 6, 6, 6, 0, 0, 0, 33, 31, 18 });
+                _deckInfo.SetPlayerCards(new List<int> { 31, 0, 26, 6, 6, 0, 0, 0, 33, 31, 18 });
             }
             else {
                 // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 31, 6, 6, 6, 6, 0, 0, 0, 33, 31, 18 });
+                _deckInfo.SetPlayerCards(new List<int> { 31, 26, 0, 26, 6, 0, 0, 0, 33, 31, 18 });
             }
         }
     }

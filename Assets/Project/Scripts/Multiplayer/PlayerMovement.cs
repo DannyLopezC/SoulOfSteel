@@ -98,8 +98,13 @@ public class PlayerMovement : MonoBehaviour
                         player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
                             player.PlayerController.GetPlayerId());
                     }
-                    else {
-                        player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
+                    else 
+                    {
+                        //receive damage when hitting walls
+                        if(!EffectManager.Instance.gravitationalImpulseEffectActive)
+                        {
+                            player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
+                        }
                     }
 
                     nextCell = new Vector2(nextCell.x + 1, nextCell.y);
@@ -117,7 +122,9 @@ public class PlayerMovement : MonoBehaviour
 
             CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
-            if (currentCell.CellController.GetCellType() == CellType.Mined) {
+            Debug.Log("ImpulseEffectValue " + EffectManager.Instance.gravitationalImpulseEffectActive);
+            if (currentCell.CellController.GetCellType() == CellType.Mined && !EffectManager.Instance.gravitationalImpulseEffectActive) {
+                
                 PlayerView currentPlayer = GetComponent<PlayerView>();
                 if (!GameManager.Instance.testing) {
                     currentPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 3,

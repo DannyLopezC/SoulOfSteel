@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 public interface IPilotCardView : ICardView
 {
     void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int health);
+    void SelectAttack();
 }
 
 [Serializable]
@@ -66,6 +67,11 @@ public class PilotCardView : CardView, IPilotCardView
         base.SetCardUI(cardName, cardDescription, scrapCost, imageSource);
 
         if (healthTMP != null) healthTMP.text = $"Vida: {_health}";
+    }
+
+    public void SelectAttack()
+    {
+        PilotCardController.SelectAttack();
     }
 
     public override void ManageLeftClick()

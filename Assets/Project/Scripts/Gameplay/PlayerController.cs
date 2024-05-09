@@ -229,8 +229,12 @@ public class PlayerController : IPlayerController
             _currentDamage = _arm.ArmCardController.GetDamage();
             _arm.SelectAttack();
         }
+        else if (_weapon == null && _arm == null) {
+            _currentDamage = _pilot.PilotCardController.GetDefaultDamage();
+            _pilot.SelectAttack();
+        }
         else if (_weapon != null) {
-            _currentDamage = _arm.ArmCardController.GetDamage();
+            _currentDamage = _weapon.ArmCardController.GetDamage();
             _weapon.SelectAttack();
         }
     }
@@ -476,8 +480,7 @@ public class PlayerController : IPlayerController
             cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
 
         //Remove previous effect
-        if(_bodyArmor != null)
-        {
+        if (_bodyArmor != null) {
             _bodyArmor.RemoveEffect();
         }
 

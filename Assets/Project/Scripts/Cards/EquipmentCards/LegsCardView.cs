@@ -22,8 +22,6 @@ public class LegsCardView : EquipmentCardView, ILegsCardView
         InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
             cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.SerializedMovements,
             cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
-
-        GameManager.Instance.LocalPlayerInstance.PlayerController.SetLegsCard(this);
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,

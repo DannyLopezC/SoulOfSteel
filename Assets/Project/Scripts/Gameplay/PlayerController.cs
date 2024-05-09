@@ -271,13 +271,11 @@ public class PlayerController : IPlayerController
     {
         if (!_view.GetPv().IsMine) return;
 
+        GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
         if (_legs == null && _pilot != null) {
-            Movement movement = _pilot.PilotCardController.GetDefaultMovement();
-            if (movement != null)
-                GameManager.Instance.OnMovementSelected(movement, (PlayerView)_view, GetMovementIterations());
+            GameManager.Instance.OnSelectionConfirmed(0);
         }
         else {
-            GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
             _legs.SelectMovement();
         }
     }
@@ -297,8 +295,14 @@ public class PlayerController : IPlayerController
 
     public void DoMovement()
     {
-        GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
-            (PlayerView)_view, GetMovementIterations());
+        if (_legs == null && _pilot != null) {
+            GameManager.Instance.OnMovementSelected(_pilot.PilotCardController.GetDefaultMovement(),
+                (PlayerView)_view, GetMovementIterations());
+        }
+        else {
+            GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
+                (PlayerView)_view, GetMovementIterations());
+        }
     }
 
     private int GetMovementIterations()

@@ -65,4 +65,9 @@ public class EffectCardView : CardView, IEffectCardView
         EffectCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, isCampEffect,
             imageSource, type);
     }
+
+    public override int GetScrapCost()
+    {
+        return EffectCardController.GetScrapCost();
+    }
 }

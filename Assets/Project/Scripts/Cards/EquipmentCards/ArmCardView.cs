@@ -89,9 +89,14 @@ public class ArmCardView : EquipmentCardView, IArmCardView
     {
         ArmCardController.SelectAttack();
     }
+    public override int GetScrapCost()
+    {
+        return ArmCardController.GetScrapCost();
+    }
 
     public override int GetId()
     {
         return ArmCardController.GetId();
     }
+
 }

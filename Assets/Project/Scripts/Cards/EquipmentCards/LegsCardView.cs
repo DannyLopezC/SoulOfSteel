@@ -16,12 +16,12 @@ public class LegsCardView : EquipmentCardView, ILegsCardView
 
     protected override void Start()
     {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.TypeEnum == CardType.Legs);
+        //CardInfoSerialized.CardInfoStruct cardInfoStruct =
+        //    GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.TypeEnum == CardType.Legs);
 
-        InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
-            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.SerializedMovements,
-            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+        //InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
+        //    cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.SerializedMovements,
+        //    cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
@@ -76,8 +76,14 @@ public class LegsCardView : EquipmentCardView, ILegsCardView
         LegsCardController.SelectMovement();
     }
 
+    public override int GetScrapCost()
+    {
+       return LegsCardController.GetScrapCost();
+    }
+
     public override int GetId()
     {
         return LegsCardController.GetId();
     }
+
 }

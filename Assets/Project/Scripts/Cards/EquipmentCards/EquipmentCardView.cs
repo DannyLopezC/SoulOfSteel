@@ -83,4 +83,9 @@ public class EquipmentCardView : CardView, IEquipmentCardView
     {
         Destroy(go);
     }
+
+    public override int GetScrapCost()
+    {
+        return EquipmentCardController.GetScrapCost();
+    }
 }

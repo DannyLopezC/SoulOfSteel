@@ -17,11 +17,11 @@ public class ChestCardView : EquipmentCardView, IChestCardView
 
     protected override void Start()
     {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.TypeEnum == CardType.Chest);
+        //CardInfoSerialized.CardInfoStruct cardInfoStruct =
+        //    GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.TypeEnum == CardType.Chest);
 
-        InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
-            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+        //InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
+        //    cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
     }
 
     public void InitCard(int id, string cardName, string cardDescription,
@@ -79,9 +79,14 @@ public class ChestCardView : EquipmentCardView, IChestCardView
     {
         ChestCardController.DismissCard();
     }
+    public override int GetScrapCost()
+    {
+        return ChestCardController.GetScrapCost();
+    }
 
     public override int GetId()
     {
         return ChestCardController.GetId();
     }
+
 }

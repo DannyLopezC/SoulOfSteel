@@ -28,6 +28,8 @@ public interface ICardController
     void DoEffect(int originId);
     void DismissCard();
     int GetId();
+
+    int GetScrapCost();
 }
 
 public abstract class CardController : ICardController
@@ -96,7 +98,6 @@ public abstract class CardController : ICardController
     {
         if (GameManager.Instance.LocalPlayerInstance._inAnimation) return;
         if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetCardsSelected() && !_selected) return;
-        if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(ScrapCost)) return;
 
         if (_isSelecting) {
             _selected = !deselect && !_selected;
@@ -201,5 +202,10 @@ public abstract class CardController : ICardController
     public virtual void DoEffect(int originId)
     {
         // Debug.Log($"doing effect from {CardName}");
+    }
+
+    public int GetScrapCost()
+    {
+        return ScrapCost;
     }
 }

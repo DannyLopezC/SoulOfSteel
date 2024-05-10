@@ -57,12 +57,15 @@ public class PrincipalPhase : Phase
         yield return new WaitForSeconds(0.5f);
 
         foreach (PlayerView playerView in GameManager.Instance.playerList) {
+
+            if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(_localEquipmentCard.GetScrapCost())) continue;
+
             if (playerView.PlayerController.GetPlayerId() ==
                 GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) {
                 playerView.PlayerController.EquipCard(_localId);
             }
             else {
-                playerView.PlayerController.EquipCard(_enemyId);
+                //playerView.PlayerController.EquipCard(_enemyId);
             }
         }
 

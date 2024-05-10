@@ -12,6 +12,8 @@ public interface ICardView
 
     GameObject GetGameObject();
 
+    int GetScrapCost();
+
     // void SelectAnimation();
     void SetDismissTextSizes();
 }
@@ -78,4 +80,6 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler
         Sprite imageSource, CardType type)
     {
     }
+
+    public abstract int GetScrapCost();
 }

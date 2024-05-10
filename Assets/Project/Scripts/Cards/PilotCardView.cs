@@ -98,4 +98,9 @@ public class PilotCardView : CardView, IPilotCardView
     {
         healthTMP.text = $"Vida: {value}";
     }
+
+    public override int GetScrapCost()
+    {
+        return PilotCardController.GetScrapCost();
+    }
 }

@@ -7,6 +7,9 @@ public interface IEquipmentCardController : ICardController
         int scrapCost, int scrapRecovery, Sprite imageSource, CardType type);
 
     void EquipCardAnimation(bool isMine);
+
+    void GetEffect();
+    void RemoveEffect();
 }
 
 public class EquipmentCardController : CardController, IEquipmentCardController
@@ -27,6 +30,7 @@ public class EquipmentCardController : CardController, IEquipmentCardController
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
     int shieldValue, Sprite imageSource, CardType type)
     {
+        Debug.Log($"Equipment card {cardName} with id {id}");
         _shieldValue = shieldValue;
         base.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
@@ -45,5 +49,15 @@ public class EquipmentCardController : CardController, IEquipmentCardController
 
             _view.DestroyGo(t.gameObject);
         });
+    }
+
+    public void GetEffect()
+    {
+        EffectManager.Instance.GetEffect(Id, GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
+    }
+
+    public void RemoveEffect()
+    {
+        EffectManager.Instance.RemoveEffect(Id, GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
     }
 }

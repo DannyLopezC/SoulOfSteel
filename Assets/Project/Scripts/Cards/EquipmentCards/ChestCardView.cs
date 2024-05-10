@@ -52,9 +52,7 @@ public class ChestCardView : EquipmentCardView, IChestCardView
 
     public override bool GetSelected()
     {
-
         return ChestCardController.GetSelected();
-
     }
 
     public override void Select(bool deselect = false)

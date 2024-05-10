@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class EffectManager : MonoBehaviourSingleton<EffectManager>
 {
@@ -12,7 +13,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
     public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
 
-    #region DoubleMovementAttributes
+    #region DoubleMovementEffectController
 
     private DoubleMovementEffectController _doubleMovementEffectController;
     public bool doubleMovementEffectActive { get; set; }
@@ -33,6 +34,11 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
         OnAllEffectsFinished();
     }
+    private void ActivateDoubleMovement(int originId)
+    {
+        _doubleMovementEffectController = new DoubleMovementEffectController();
+        _doubleMovementEffectController.Activate(originId);
+    }
 
     #endregion
 
@@ -46,30 +52,42 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
         gravitationalImpulseEffectActive = isActive;
     }
 
+    private void ActivateGravitationalImpulse(int originId)
+    {
+        _gravitationalImpulseEffectController = new GravitationalImpulseEffectController();
+        _gravitationalImpulseEffectController.Activate(originId);
+    }
+
+    private void DeactivateGravitationalImpulse(int originId)
+    {
+        _gravitationalImpulseEffectController ??= new GravitationalImpulseEffectController();
+        _gravitationalImpulseEffectController.Activate(originId);
+    }
+
+    #endregion
+
+    #region GFABoosterCardController
+
+    private GFABoosterEffectController _GFABoosterEffectController;
+
+    private void ActivateGFABoosterEffectController(int originId)
+    {
+        _GFABoosterEffectController = new GFABoosterEffectController();
+        _GFABoosterEffectController.Activate(originId);
+    }
+
+    private void DeactivateGFABoosterEffectController(int originId)
+    {
+        _GFABoosterEffectController = new GFABoosterEffectController();
+        _GFABoosterEffectController.Deactivate();
+    }
+
     #endregion
 
     public void PutMines(int originId, int amount)
     {
         _mineEffectController = new MineEffectController(amount);
         _mineEffectController.Activate(originId);
-    }
-
-    public void ActivateDoubleMovement(int originId)
-    {
-        _doubleMovementEffectController = new DoubleMovementEffectController();
-        _doubleMovementEffectController.Activate(originId);
-    }
-
-    public void ActivateGravitationalImpulse(int originId)
-    {
-        _gravitationalImpulseEffectController = new GravitationalImpulseEffectController();
-        _gravitationalImpulseEffectController.Activate(originId);
-    }
-
-    public void DeactivateGravitationalImpulse(int originId)
-    {
-        _gravitationalImpulseEffectController ??= new GravitationalImpulseEffectController();
-        _gravitationalImpulseEffectController.Activate(originId);
     }
 
     public void CellsSelected(List<Vector2> cellsSelected)
@@ -85,5 +103,37 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     public void OnAllEffectsFinished()
     {
         OnAllEffectsFinishedEvent?.Invoke();
+    }
+
+    public void GetEffect(int effectId, int originId)
+    {
+        switch (effectId)
+        {
+            case 0:
+                PutMines(originId, 3);
+                break;
+            case 6:
+                ActivateDoubleMovement(originId);
+                break;
+            case 26:
+                ActivateGravitationalImpulse(originId);
+                break;
+            case 23:
+                ActivateGFABoosterEffectController(originId);
+                break;
+        }
+    }
+
+    public void RemoveEffect(int effectId, int originId)
+    {
+        switch (effectId)
+        {
+            case 26:
+                DeactivateGravitationalImpulse(originId);
+                break;
+            case 23:
+                DeactivateGFABoosterEffectController(originId);
+                break;
+        }
     }
 }

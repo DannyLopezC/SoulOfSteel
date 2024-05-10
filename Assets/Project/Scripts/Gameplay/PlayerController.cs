@@ -32,6 +32,7 @@ public interface IPlayerController
     void SetAllEffectsDone(bool allEffectsDone);
     void SetCurrentCell(Vector2 currentCell);
     Vector2 GetCurrentCell();
+    void SetExtraDamage(int extraDamage);
     void SetCurrentDegrees(int currentDegrees);
     int GetCurrentDegrees();
     void SetLegsCard(LegsCardView legsCardView);
@@ -71,7 +72,7 @@ public class PlayerController : IPlayerController
     private bool _moving;
     private bool _doingEffect;
     private bool _allEffectsDone;
-
+    private int _extraDamage = 0;
     private int _currentMovementId;
 
     private List<Vector2> cellsSelected;
@@ -221,20 +222,29 @@ public class PlayerController : IPlayerController
         // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Weapon));
     }
 
+    public void SetExtraDamage(int extraDamage)
+    {
+        _extraDamage = extraDamage;
+        Debug.Log($"Extra Damage Set To: {_extraDamage}");
+    }
+
     public void SelectAttack()
     {
+
+        _currentDamage = _extraDamage;
+
         if (!_view.GetPv().IsMine) return;
 
         if (_weapon == null && _arm != null) {
-            _currentDamage = _arm.ArmCardController.GetDamage();
+            _currentDamage += _arm.ArmCardController.GetDamage();
             _arm.SelectAttack();
         }
         else if (_weapon == null && _arm == null) {
-            _currentDamage = _pilot.PilotCardController.GetDefaultDamage();
+            _currentDamage += _pilot.PilotCardController.GetDefaultDamage();
             _pilot.SelectAttack();
         }
         else if (_weapon != null) {
-            _currentDamage = _weapon.ArmCardController.GetDamage();
+            _currentDamage += _weapon.ArmCardController.GetDamage();
             _weapon.SelectAttack();
         }
     }
@@ -463,6 +473,8 @@ public class PlayerController : IPlayerController
 
         if (card.GetCardType() == CardType.Arm) _arm = card;
         else if (card.GetCardType() == CardType.Weapon) _weapon = card;
+
+        _arm.GetEffect();
     }
 
     private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)

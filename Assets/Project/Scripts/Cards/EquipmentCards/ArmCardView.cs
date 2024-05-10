@@ -15,20 +15,22 @@ public class ArmCardView : EquipmentCardView, IArmCardView
 
     protected override void Start()
     {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c =>
-                (c.TypeEnum == CardType.Arm || c.TypeEnum == CardType.Weapon));
+        //CardInfoSerialized.CardInfoStruct cardInfoStruct =
+        //    GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c =>
+        //        (c.TypeEnum == CardType.Arm || c.TypeEnum == CardType.Weapon));
 
-        InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
-            cardInfoStruct.Cost, cardInfoStruct.Recovery,
-            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+        //this.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
+        //    cardInfoStruct.Cost, cardInfoStruct.Recovery,
+        //    cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
 
-        GameManager.Instance.LocalPlayerInstance.PlayerController.SetArmCard(this);
+        //Debug.Log($"ArmCardView start {cardInfoStruct.CardName} with id {cardInfoStruct.Id}");
+        //GameManager.Instance.LocalPlayerInstance.PlayerController.SetArmCard(this);
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         int damage, AttackType attackType, int attackDistance, int attackArea, Sprite imageSource, CardType type)
     {
+        //Debug.Log($"Initializing cards {cardName} with id {id}");
         ArmCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, damage, attackType,
             attackDistance, attackArea, imageSource, type);
     }
@@ -56,6 +58,16 @@ public class ArmCardView : EquipmentCardView, IArmCardView
     public override bool GetSelected()
     {
         return ArmCardController.GetSelected();
+    }
+
+    public void GetEffect()
+    {
+        _armCardController.GetEffect();
+    }
+
+    public void RemoveEffect()
+    {
+        _armCardController.RemoveEffect();
     }
 
     public override void Select(bool deselect = false)

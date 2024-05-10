@@ -54,6 +54,7 @@ public abstract class CardController : ICardController
     public virtual void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         Sprite imageSource, CardType type)
     {
+        //Debug.Log($"Card controller init card {cardName} with id {id}");
         Id = id;
         CardName = cardName;
         CardDescription = cardDescription;

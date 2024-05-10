@@ -40,7 +40,7 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
             _attackArea = 1;
             _attackType = AttackType.StraightLine;
         }
-
+        //Debug.Log($"ArmCardController {cardName} with id {id}");
         base.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
 

@@ -96,6 +96,7 @@ public abstract class CardController : ICardController
     {
         if (GameManager.Instance.LocalPlayerInstance._inAnimation) return;
         if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetCardsSelected() && !_selected) return;
+        if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(ScrapCost)) return;
 
         if (_isSelecting) {
             _selected = !deselect && !_selected;

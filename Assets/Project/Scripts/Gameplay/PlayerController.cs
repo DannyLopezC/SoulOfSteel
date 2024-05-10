@@ -45,6 +45,11 @@ public interface IPlayerController
     PilotCardView GetPilotCard();
     void DoAttack(Vector2 index);
     int GetCurrenHealth();
+
+    bool TryPayingForCard(int cardCost);
+
+    void AddToScrapValue(int value);
+    void SubtractFromScrapValue(int value);
 }
 
 public class PlayerController : IPlayerController
@@ -90,6 +95,7 @@ public class PlayerController : IPlayerController
         _moving = false;
         _currentDegrees = 270;
         _currentCell = new Vector2(5, 5);
+        _scrapPoints = 15;
     }
 
     public void DrawCards(int amount, bool fullDraw)
@@ -519,5 +525,29 @@ public class PlayerController : IPlayerController
         _pilot = card;
         _health = _pilot.PilotCardController.GetHealth();
         _pilot.SetHealthTMP(_health);
+    }
+
+    public bool TryPayingForCard(int cardCost)
+    {
+        int finalScrapAmount = _scrapPoints - cardCost;
+
+        Debug.Log($"current scrap: {_scrapPoints} card cost: {cardCost}");
+
+        if (finalScrapAmount >= 0)
+        {
+            _scrapPoints = finalScrapAmount;
+            return true;
+        }
+        return false;
+    }
+
+    public void AddToScrapValue(int valueToAdd)
+    {
+        _scrapPoints += valueToAdd;
+    }
+
+    public void SubtractFromScrapValue(int valueToSubtract)
+    {
+        _scrapPoints -= valueToSubtract;
     }
 }

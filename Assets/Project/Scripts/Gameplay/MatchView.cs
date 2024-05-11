@@ -9,6 +9,7 @@ using UnityEngine;
 public interface IMatchView
 {
     void SetCurrentPhaseText(string text);
+    void StopPhase(Phase phase);
 }
 
 public class MatchView : MonoBehaviour, IMatchView
@@ -50,8 +51,18 @@ public class MatchView : MonoBehaviour, IMatchView
         StartCoroutine(phase.Start());
     }
 
+    public void StopPhase(Phase phase)
+    {
+        StopCoroutine(phase.Start());
+    }
+
     private void OnDestroy()
     {
         if (GameManager.HasInstance()) GameManager.Instance.ExecutePhases -= ExecutePhases;
+    }
+
+    public void DisconnectPlayer()
+    {
+        GameManager.Instance.PhotonGame.DisconnectPlayer();
     }
 }

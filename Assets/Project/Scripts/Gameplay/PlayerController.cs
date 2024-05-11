@@ -236,7 +236,6 @@ public class PlayerController : IPlayerController
 
     public void SelectAttack()
     {
-
         _currentDamage = _extraDamage;
 
         if (!_view.GetPv().IsMine) return;
@@ -358,6 +357,7 @@ public class PlayerController : IPlayerController
         foreach (CardView card in _hand) {
             if (type.Contains(card.GetCardType())) {
                 card.SetIsSelecting(setSelecting);
+                GameManager.Instance.ValidateHealthStatus();
             }
         }
     }
@@ -533,11 +533,11 @@ public class PlayerController : IPlayerController
 
         Debug.Log($"current scrap: {_scrapPoints} card cost: {cardCost}");
 
-        if (finalScrapAmount >= 0)
-        {
+        if (finalScrapAmount >= 0) {
             _scrapPoints = finalScrapAmount;
             return true;
         }
+
         return false;
     }
 

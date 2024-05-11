@@ -25,12 +25,17 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     public Phase CurrentPhase { get; private set; }
     public PlayerView LocalPlayerInstance { get; set; }
+    public PhotonGame PhotonGame { get; set; }
+
     public PilotCardView LocalPilotCardView;
     public string LocalPlayerName;
 
     public int currentPriority; // player Id
     public BoardView boardView;
     public List<PlayerView> playerList;
+
+    public Phase CurrenPhase;
+    public bool gameOver;
 
     #region Events
 
@@ -140,6 +145,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     public void ChangePhase(Phase phase)
     {
+        if (gameOver) return;
         CurrentPhase = phase;
         ExecutePhases?.Invoke(CurrentPhase);
     }
@@ -150,8 +156,13 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         foreach (PlayerView playerView in playerList) {
             if (playerView.PlayerController.GetCurrenHealth() <= 0) {
+                Debug.Log($"current phase {CurrenPhase}");
+                Debug.Log($"player view id {playerView.PlayerController.GetPlayerId()}");
+                Debug.Log($"player health {playerView.PlayerController.GetCurrenHealth()}");
+                gameOver = true;
                 UIManager.Instance.SetText(
-                    $"JUEGO TERMINADO, player {playerView.PlayerController.GetPlayerId()} has lost");
+                    $"JUEGO TERMINADO, jugador {playerView.PlayerController.GetPlayerId()} perdio");
+                CurrenPhase.End();
                 return false;
             }
         }

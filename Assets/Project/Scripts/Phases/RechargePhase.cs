@@ -79,7 +79,8 @@ public class RechargePhase : Phase
 
 
                 foreach (CardView card in _effectCards) {
-                    if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(card.GetScrapCost())) continue;
+                    if (!GameManager.Instance.LocalPlayerInstance.PlayerController
+                            .TryPayingForCard(card.GetScrapCost())) continue;
                     card.DoEffect(GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
 
                     do {
@@ -123,11 +124,6 @@ public class RechargePhase : Phase
     private void AllCardsSelected()
     {
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetCardsSelected(_effectCards.Count >= 1);
-    }
-
-    public override IEnumerator End()
-    {
-        yield break;
     }
 
     private void SetEffectTurn()

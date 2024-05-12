@@ -24,7 +24,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void JoinRoom()
     {
         if (PhotonNetwork.CountOfRooms > 0) {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 100; i++) {
                 foreach (RoomInfo room in _roomList) {
                     if (room.PlayerCount < 2) {
                         PhotonNetwork.JoinRoom(room.Name);

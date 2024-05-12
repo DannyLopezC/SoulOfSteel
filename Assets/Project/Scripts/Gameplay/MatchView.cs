@@ -63,6 +63,11 @@ public class MatchView : MonoBehaviour, IMatchView
 
     public void DisconnectPlayer()
     {
-        GameManager.Instance.PhotonGame.DisconnectPlayer();
+        if (!GameManager.Instance.testing) GameManager.Instance.PhotonGame.DisconnectPlayer();
+    }
+
+    public void OpenMenuPanel()
+    {
+        UIManager.Instance.ShowMenuPanel();
     }
 }

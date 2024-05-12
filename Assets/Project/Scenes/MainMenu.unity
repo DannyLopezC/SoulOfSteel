@@ -483,9 +483,9 @@ RectTransform:
   - {fileID: 296252958}
   m_Father: {fileID: 1524730923}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 341.07104, y: -319.52454}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &142789776
@@ -1770,6 +1770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee1f8509008bec49abef6c2f9c1be16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  joiningAttempts: 0
 --- !u!1 &316404731
 GameObject:
   m_ObjectHideFlags: 0
@@ -3903,9 +3904,9 @@ RectTransform:
   - {fileID: 436464627}
   m_Father: {fileID: 1524730923}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 341.07104, y: -156.50818}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &560176411
@@ -4568,13 +4569,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nickname: {fileID: 353698916}
   gamePanel: {fileID: 7614370142274010205, guid: 094270ca319b9404d9bae0c845c74cf3, type: 3}
-  _currentGamePanel: {fileID: 0}
   cardPanel: {fileID: 3517374056019304298, guid: fd9dae27f69530e418d1dd66ea842720, type: 3}
-  _currentCardPanel: {fileID: 0}
   waitingForOpponentPanel: {fileID: 5654679314067792678, guid: 6468278e1decb8b4fae2f27c4358573d, type: 3}
-  currentWaitingForOpponentPanel: {fileID: 0}
   selectionPanel: {fileID: 2429499447493062318, guid: a60659162a4d1f94f8c5dc0434c486a5, type: 3}
-  _currentSelectionPanel: {fileID: 0}
+  menuPanel: {fileID: 2798748030013176032, guid: 83436839baff6a1498630692e987fd73, type: 3}
   matchView: {fileID: 0}
 --- !u!1 &765311759
 GameObject:
@@ -7615,9 +7613,9 @@ RectTransform:
   - {fileID: 2038267354}
   m_Father: {fileID: 1524730923}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 341.07104, y: -482.5409}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1743488519
@@ -10182,6 +10180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDataBase: {fileID: 11400000, guid: f0b786accc3d4e544a33ad53dddf1901, type: 2}
   testing: 0
+  isFirstRound: 0
   movementTurn: 0
   attackTurn: 0
   handPanel: {fileID: 0}
@@ -10189,10 +10188,12 @@ MonoBehaviour:
   scrapPanel: {fileID: 0}
   myEquipmentPanel: {fileID: 0}
   enemyEquipmentPanel: {fileID: 0}
+  LocalPilotCardView: {fileID: 0}
   LocalPlayerName: 
   currentPriority: 0
   boardView: {fileID: 0}
   playerList: []
+  gameOver: 0
 --- !u!1 &2090003453
 GameObject:
   m_ObjectHideFlags: 0

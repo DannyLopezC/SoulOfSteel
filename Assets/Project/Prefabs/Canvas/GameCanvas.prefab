@@ -7192,7 +7192,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 725438173318798255}
         m_TargetAssemblyTypeName: MatchView, Assembly-CSharp
-        m_MethodName: DisconnectPlayer
+        m_MethodName: OpenMenuPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

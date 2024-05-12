@@ -770,7 +770,7 @@ MonoBehaviour:
       CardName: Teletransportador de Dimetria
       Type: 
       TypeEnum: 3
-      Description: Permite al ususario seleccionar una casilla para teletransportarse
+      Description: Permite al usuario seleccionar una casilla para teletransportarse
         antes de ejecutar los movimientos
       Cost: 3
       Energy: 2

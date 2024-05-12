@@ -766,3 +766,23 @@ MonoBehaviour:
       AttackArea: 0
       Movements: 
       AttackType: 
+    - Id: 34
+      CardName: Teletransportador de Dimetria
+      Type: 
+      TypeEnum: 3
+      Description: Permite al ususario seleccionar una casilla para teletransportarse
+        antes de ejecutar los movimientos
+      Cost: 3
+      Energy: 2
+      Damage: 0
+      Shield: 0
+      Recovery: 0
+      IsCampEffect: 1
+      ImageSource: {fileID: 0}
+      Health: 0
+      SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
+      Movements: 
+      AttackType: 

@@ -84,6 +84,18 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
 
     #endregion
 
+    #region Teleport
+
+    private TeleportEffectController _teleportEffectController;
+
+    private void ActivateTeleportEffectController(int originId)
+    {
+        _teleportEffectController = new TeleportEffectController();
+        _teleportEffectController.Activate(originId);
+    }
+
+    #endregion
+
     public void PutMines(int originId, int amount)
     {
         _mineEffectController = new MineEffectController(amount);
@@ -120,6 +132,9 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
                 break;
             case 23:
                 ActivateGFABoosterEffectController(originId);
+                break;
+            case 34:
+                ActivateTeleportEffectController(originId);
                 break;
         }
     }

@@ -364,11 +364,17 @@ public class PlayerController : IPlayerController
 
     public void SelectCards(List<CardType> type, int amount, bool setSelecting = true)
     {
+        bool has = false;
         foreach (CardView card in _hand) {
             if (type.Contains(card.GetCardType())) {
+                has = true;
                 card.SetIsSelecting(setSelecting);
                 GameManager.Instance.ValidateHealthStatus();
             }
+        }
+
+        if (!has) {
+            SetCardsSelected(true);
         }
     }
 
@@ -487,16 +493,14 @@ public class PlayerController : IPlayerController
             cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
             cardInfoStruct.TypeEnum);
 
-        if (card.GetCardType() == CardType.Arm)
-        {
+        if (card.GetCardType() == CardType.Arm) {
             _arm = card;
             _arm.GetEffect();
-        } 
-        else if (card.GetCardType() == CardType.Weapon)
-        {
+        }
+        else if (card.GetCardType() == CardType.Weapon) {
             _weapon = card;
             _weapon.GetEffect();
-        } 
+        }
     }
 
     private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)

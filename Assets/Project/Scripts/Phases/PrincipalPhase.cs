@@ -56,10 +56,8 @@ public class PrincipalPhase : Phase
 
         yield return new WaitForSeconds(0.5f);
 
+
         foreach (PlayerView playerView in GameManager.Instance.playerList) {
-
-            if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(_localEquipmentCard.GetScrapCost())) continue;
-
             if (playerView.PlayerController.GetPlayerId() ==
                 GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) {
                 playerView.PlayerController.EquipCard(_localId);
@@ -79,7 +77,7 @@ public class PrincipalPhase : Phase
     private void CardSelected(PlayerView view, CardView card, bool selected)
     {
         if (view.PlayerController.GetPlayerId() ==
-            GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) {
+            GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId() || GameManager.Instance.testing) {
             _localId = card.GetId();
             _localEquipmentCard = (EquipmentCardView)card;
         }

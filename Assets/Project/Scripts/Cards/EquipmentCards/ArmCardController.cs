@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IArmCardController : IEquipmentCardController {
+public interface IArmCardController : IEquipmentCardController
+{
     void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         int damage, AttackType attackType, int attackDistance, int attackArea, Sprite imageSource, CardType type);
 
@@ -10,7 +11,8 @@ public interface IArmCardController : IEquipmentCardController {
     int GetDamage();
 }
 
-public class ArmCardController : EquipmentCardController, IArmCardController {
+public class ArmCardController : EquipmentCardController, IArmCardController
+{
     private readonly IArmCardView _view;
 
     private int _damage;
@@ -20,12 +22,14 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
 
     private List<Vector2> currentCellsShaded;
 
-    public ArmCardController(IArmCardView view) : base(view) {
+    public ArmCardController(IArmCardView view) : base(view)
+    {
         _view = view;
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
-        int damage, AttackType attackType, int attackDistance, int attackArea, Sprite imageSource, CardType type) {
+        int damage, AttackType attackType, int attackDistance, int attackArea, Sprite imageSource, CardType type)
+    {
         _damage = damage;
         _attackType = attackType;
         _attackDistance = attackDistance;
@@ -40,11 +44,13 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
             _attackArea = 1;
             _attackType = AttackType.StraightLine;
         }
+
         //Debug.Log($"ArmCardController {cardName} with id {id}");
         base.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
 
-    public void SelectAttack() {
+    public void SelectAttack()
+    {
         currentCellsShaded = new List<Vector2>();
         currentCellsShaded.Clear();
         PlayerView currentPlayer = GameManager.Instance.LocalPlayerInstance;
@@ -90,15 +96,25 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
         GameManager.Instance.OnLocalAttackDoneEvent += UnShadeCells;
     }
 
-    public int GetDamage() {
+    public int GetDamage()
+    {
         return _damage;
     }
 
-    public void UnShadeCells() {
+    public void UnShadeCells()
+    {
         foreach (Vector2 cellIndex in currentCellsShaded) {
             if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
                 .GetIsMined()) {
                 GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Mined);
+            }
+            else if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+                     .GetIsBarrier()) {
+                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Barrier);
+            }
+            else if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+                     .GetIsTower()) {
+                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Tower);
             }
             else {
                 GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Normal);

@@ -113,6 +113,14 @@ public class PilotCardController : CardController, IPilotCardController
                 .GetIsMined()) {
                 GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Mined);
             }
+            else if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+                     .GetIsBarrier()) {
+                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Barrier);
+            }
+            else if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+                     .GetIsTower()) {
+                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Tower);
+            }
             else {
                 GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Normal);
             }

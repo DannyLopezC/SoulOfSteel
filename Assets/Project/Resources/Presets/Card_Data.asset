@@ -805,3 +805,22 @@ MonoBehaviour:
       AttackArea: 0
       Movements: 
       AttackType: 
+    - Id: 36
+      CardName: Bloqueo Tactico Work Port
+      Type: 
+      TypeEnum: 3
+      Description: 
+      Cost: 2
+      Energy: 0
+      Damage: 0
+      Shield: 0
+      Recovery: 0
+      IsCampEffect: 0
+      ImageSource: {fileID: 0}
+      Health: 0
+      SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
+      Movements: 
+      AttackType: 

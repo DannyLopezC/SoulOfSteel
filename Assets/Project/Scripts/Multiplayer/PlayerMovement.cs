@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
                 Vector2 nextCell = currentCell;
 
                 while (currentSteps > 0) {
+                    Vector2 previousCell = nextCell;
                     yield return new WaitForSeconds(0.5f);
 
                     int adjustedDirection;
@@ -74,16 +75,27 @@ public class PlayerMovement : MonoBehaviour
                             break;
                     }
 
+                    CellView cellView =
+                        GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x];
+
                     nextCell = new Vector2(
                         Mathf.Clamp(nextCell.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
                         Mathf.Clamp(nextCell.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
+
+                    if (cellView.CellController.GetCellType() == CellType.Barrier ||
+                        cellView.CellController.GetCellType() == CellType.Tower) {
+                        nextCell = previousCell;
+                    }
 
                     MoveToCell(nextCell);
                     currentSteps--;
                     yield return null;
                 }
 
+
                 player.PlayerController.SetCurrentCell(nextCell);
+
+
                 player.PlayerController.SetCurrentDegrees(nextDegrees);
                 Rotate(player.transform, nextDegrees);
 
@@ -95,15 +107,12 @@ public class PlayerMovement : MonoBehaviour
                 if (!EffectManager.Instance.gravitationalImpulseEffectActive) {
                     if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
                             .GetCellType() == CellType.Blocked) {
-                        if (!GameManager.Instance.testing) 
-                        {
-                            if (!EffectManager.Instance.oakShieldEffectActive)
-                            { 
+                        if (!EffectManager.Instance.oakShieldEffectActive) {
+                            if (!GameManager.Instance.testing) {
                                 player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
-                                player.PlayerController.GetPlayerId());
+                                    player.PlayerController.GetPlayerId());
                             }
-                            else
-                            {
+                            else {
                                 EffectManager.Instance.SetOakShieldEffectActive(false);
                             }
                         }
@@ -124,24 +133,27 @@ public class PlayerMovement : MonoBehaviour
     public void MoveToCell(Vector2 index)
     {
         if (pv.IsMine) {
-            transform.position = GameManager.Instance.boardView.GetCellPos(index);
+            CellView nextCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
+            if (nextCell.CellController.GetCellType() == CellType.Barrier ||
+                nextCell.CellController.GetCellType() == CellType.Tower) {
+                return;
+            }
 
+
+            transform.position = GameManager.Instance.boardView.GetCellPos(index);
             CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
             if (currentCell.CellController.GetCellType() == CellType.Mined &&
                 !EffectManager.Instance.gravitationalImpulseEffectActive) {
                 PlayerView currentPlayer = GetComponent<PlayerView>();
-                if (!GameManager.Instance.testing)
-                {
-                    if (!EffectManager.Instance.oakShieldEffectActive)
-                    {
+                if (!GameManager.Instance.testing) {
+                    if (!EffectManager.Instance.oakShieldEffectActive) {
                         currentPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 3,
                             currentPlayer.PlayerController.GetPlayerId());
                         GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
                             RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
                     }
-                    else
-                    {
+                    else {
                         EffectManager.Instance.SetOakShieldEffectActive(false);
                     }
                 }
@@ -150,7 +162,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
             currentCell.CellController.SetType(CellType.Normal);
-            Debug.Log($"turn off mine");
         }
     }
 

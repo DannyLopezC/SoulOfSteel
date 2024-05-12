@@ -234,16 +234,10 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             _deckInfo.playerCards.Clear();
 
             if (!GameManager.Instance.testing) {
-                // _deckInfo.SetPlayerCards(Enumerable
-                //     .Range(startIndex, actorNumber == 1 ? halfCount : count - startIndex)
-                //     .ToList());
-
-                // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 34, 35, 23, 6, 0, 35, 0, 35, 23, 35, 33 });
+                _deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 0, 35, 23, 35, 33 });
             }
             else {
-                // _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards0");
-                _deckInfo.SetPlayerCards(new List<int> { 34, 35, 23, 6, 0, 0, 35, 0, 23, 35, 33 });
+                _deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 0, 35, 0, 23, 35, 33 });
             }
         }
     }
@@ -404,5 +398,12 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     {
         GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController
             .SetType(mined ? CellType.Mined : CellType.Normal);
+    }
+
+    [PunRPC]
+    public void RpcPutBarrier(int x, int y, bool barrier)
+    {
+        GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController
+            .SetType(barrier ? CellType.Barrier : CellType.Normal);
     }
 }

@@ -79,8 +79,6 @@ public class RechargePhase : Phase
 
 
                 foreach (CardView card in _effectCards) {
-                    if (!GameManager.Instance.LocalPlayerInstance.PlayerController
-                            .TryPayingForCard(card.GetScrapCost())) continue;
                     card.DoEffect(GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
 
                     do {

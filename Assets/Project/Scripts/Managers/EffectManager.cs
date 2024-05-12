@@ -9,6 +9,8 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     public int effectTurn;
     private MineEffectController _mineEffectController;
 
+    private BarrierEffectController _barrierEffectController;
+
     public event Action OnAllEffectsFinishedEvent;
     public event Action<Vector2, bool> OnSelectedCellEvent; //when selecting a single cell
     public event Action<List<Vector2>> OnCellsSelectedEvent; //when all cells have been selected
@@ -22,6 +24,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     {
         doubleMovementEffectActive = isActive;
     }
+
     private void ActivateDoubleMovement(int originId)
     {
         _doubleMovementEffectController = new DoubleMovementEffectController();
@@ -120,6 +123,12 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
         _mineEffectController.Activate(originId);
     }
 
+    public void PutBarrier(int originId, int amount)
+    {
+        _barrierEffectController = new BarrierEffectController(amount);
+        _barrierEffectController.Activate(originId);
+    }
+
     public void CellsSelected(List<Vector2> cellsSelected)
     {
         OnCellsSelectedEvent?.Invoke(cellsSelected);
@@ -137,8 +146,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
 
     public void GetEffect(int effectId, int originId)
     {
-        switch (effectId)
-        {
+        switch (effectId) {
             case 0:
                 PutMines(originId, 3);
                 break;
@@ -157,13 +165,15 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
             case 35:
                 ActivateOakShield(originId);
                 break;
+            case 36:
+                PutBarrier(originId, 1);
+                break;
         }
     }
 
     public void RemoveEffect(int effectId, int originId)
     {
-        switch (effectId)
-        {
+        switch (effectId) {
             case 26:
                 DeactivateGravitationalImpulse(originId);
                 break;

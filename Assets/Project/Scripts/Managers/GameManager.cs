@@ -163,11 +163,19 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
                 UIManager.Instance.SetText(
                     $"JUEGO TERMINADO, jugador {playerView.PlayerController.GetPlayerId()} perdio");
                 CurrenPhase.End();
+                StartCoroutine(BackToMenuFinishingGame());
                 return false;
             }
         }
 
         return true;
+    }
+
+    IEnumerator BackToMenuFinishingGame()
+    {
+        yield return new WaitForSeconds(3);
+
+        PhotonGame.DisconnectPlayer();
     }
 
     public void PrepareForMatch(IMatchView matchView)

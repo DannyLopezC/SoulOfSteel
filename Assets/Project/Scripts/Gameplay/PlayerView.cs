@@ -131,12 +131,10 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             case CardType.Armor:
             case CardType.Chest:
                 prefab = chestCardPrefab;
-                if (inHand)
-                {
+                if (inHand) {
                     parent = HandCardsPanel.transform;
                 }
-                else
-                {
+                else {
                     parent = pv.IsMine
                         ? GameManager.Instance.myEquipmentPanel.transform
                         : GameManager.Instance.enemyEquipmentPanel.transform;
@@ -232,7 +230,6 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             int startIndex = actorNumber == 1 ? 0 : halfCount;
 
-            Debug.Log($" actor number {actorNumber}");
             _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
             _deckInfo.playerCards.Clear();
 
@@ -305,6 +302,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             //attack
             stream.SendNext(_attackDone);
+            stream.SendNext(PlayerController.GetCurrenHealth());
         }
         else if (stream.IsReading) {
             bool receivedSelection = (bool)stream.ReceiveNext();
@@ -319,6 +317,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             bool receivedMovementDone = (bool)stream.ReceiveNext();
 
             bool receivedAttackDone = (bool)stream.ReceiveNext();
+            int receivedHealth = (int)stream.ReceiveNext();
 
             foreach (PlayerView player in GameManager.Instance.playerList) {
                 if (receivedPlayerId == player.pv.Owner.ActorNumber) {
@@ -327,6 +326,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                     player.PlayerController.SetMovementSelected(receivedMovementSelected);
                     player.PlayerController.SetMovementDone(receivedMovementDone);
                     player.SetAttackDone(receivedAttackDone);
+                    player.PlayerController.SetHealth(receivedHealth);
                 }
             }
 

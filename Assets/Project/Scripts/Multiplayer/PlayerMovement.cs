@@ -120,7 +120,6 @@ public class PlayerMovement : MonoBehaviour
 
             CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
-            Debug.Log("ImpulseEffectValue " + EffectManager.Instance.gravitationalImpulseEffectActive);
             if (currentCell.CellController.GetCellType() == CellType.Mined &&
                 !EffectManager.Instance.gravitationalImpulseEffectActive) {
                 PlayerView currentPlayer = GetComponent<PlayerView>();

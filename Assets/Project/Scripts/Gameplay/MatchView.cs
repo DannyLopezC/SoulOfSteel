@@ -15,6 +15,7 @@ public interface IMatchView
 public class MatchView : MonoBehaviour, IMatchView
 {
     [SerializeField] private TMP_Text currentPhaseText;
+    [SerializeField] private TMP_Text enemyLifeText;
 
     private IMatchController _matchController;
 
@@ -69,5 +70,11 @@ public class MatchView : MonoBehaviour, IMatchView
     public void OpenMenuPanel()
     {
         UIManager.Instance.ShowMenuPanel();
+    }
+
+    public void UpdateEnemyLifeTMP(int amount)
+    {
+        if (GameManager.Instance.testing) return;
+        enemyLifeText.text = $"Vida enemiga: {amount}";
     }
 }

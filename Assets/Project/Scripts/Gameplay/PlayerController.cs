@@ -45,7 +45,7 @@ public interface IPlayerController
     PilotCardView GetPilotCard();
     void DoAttack(Vector2 index);
     int GetCurrenHealth();
-
+    void SetHealth(int amount);
     bool TryPayingForCard(int cardCost);
 
     void AddToScrapValue(int value);
@@ -206,6 +206,8 @@ public class PlayerController : IPlayerController
 
     public void ShuffleDeck(bool firstTime, bool shuffle)
     {
+        Debug.Log($"chufleo");
+
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
         if (shuffle) {
             int n = temporalDeck.Count;
@@ -280,6 +282,14 @@ public class PlayerController : IPlayerController
     public int GetCurrenHealth()
     {
         return _health;
+    }
+
+    public void SetHealth(int amount)
+    {
+        _health = amount;
+        if (_playerId != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) {
+            UIManager.Instance.matchView.UpdateEnemyLifeTMP(_health);
+        }
     }
 
     public void SelectMovement()
@@ -524,7 +534,8 @@ public class PlayerController : IPlayerController
             cardInfoStruct.SerializedMovements[0], cardInfoStruct.Damage);
         _pilot = card;
         _health = _pilot.PilotCardController.GetHealth();
-        _pilot.SetHealthTMP(_health);
+        if (_view.GetPv().IsMine) _pilot.SetHealthTMP(_health);
+        else UIManager.Instance.matchView.UpdateEnemyLifeTMP(_health);
     }
 
     public bool TryPayingForCard(int cardCost)

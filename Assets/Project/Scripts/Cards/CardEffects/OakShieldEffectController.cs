@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDoubleMovementEffectController : IEffectController
+public interface IOakShieldEffectController : IEffectController
 {
 }
 
-public class DoubleMovementEffectController : EffectController, IDoubleMovementEffectController
+public class OakShieldEffectController : EffectController, IOakShieldEffectController
 {
     public override void Activate(int originId)
     {
-        EffectManager.Instance.SetDoubleMovementEffectActive(true);
+        EffectManager.Instance.SetOakShieldEffectActive(true);
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(true);
         EffectManager.Instance.WaitForEffectCardAnimation();
     }

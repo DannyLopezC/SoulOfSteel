@@ -22,18 +22,6 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     {
         doubleMovementEffectActive = isActive;
     }
-
-    public void WaitForDoubleMovementCardAnimation()
-    {
-        StartCoroutine(WaitForSecondsCoroutine());
-    }
-
-    private IEnumerator WaitForSecondsCoroutine()
-    {
-        yield return new WaitForSeconds(1f);
-        GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
-        OnAllEffectsFinished();
-    }
     private void ActivateDoubleMovement(int originId)
     {
         _doubleMovementEffectController = new DoubleMovementEffectController();
@@ -84,6 +72,24 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
 
     #endregion
 
+    #region OakShieldController
+
+    private OakShieldEffectController _oakShieldEffectController;
+    public bool oakShieldEffectActive { get; set; }
+
+    public void SetOakShieldEffectActive(bool isActive)
+    {
+        oakShieldEffectActive = isActive;
+    }
+
+    private void ActivateOakShield(int originId)
+    {
+        _oakShieldEffectController = new OakShieldEffectController();
+        _oakShieldEffectController.Activate(originId);
+    }
+
+    #endregion
+
     #region Teleport
 
     private TeleportEffectController _teleportEffectController;
@@ -95,6 +101,18 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     }
 
     #endregion
+
+    public void WaitForEffectCardAnimation()
+    {
+        StartCoroutine(WaitForSecondsCoroutine());
+    }
+
+    private IEnumerator WaitForSecondsCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(false);
+        OnAllEffectsFinished();
+    }
 
     public void PutMines(int originId, int amount)
     {
@@ -135,6 +153,9 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
                 break;
             case 34:
                 ActivateTeleportEffectController(originId);
+                break;
+            case 35:
+                ActivateOakShield(originId);
                 break;
         }
     }

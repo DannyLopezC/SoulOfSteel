@@ -786,3 +786,22 @@ MonoBehaviour:
       AttackArea: 0
       Movements: 
       AttackType: 
+    - Id: 35
+      CardName: Escudo de roble
+      Type: 
+      TypeEnum: 3
+      Description: "Permite al usuario resistir el da\xF1o de las minas por un turno"
+      Cost: 2
+      Energy: 2
+      Damage: 0
+      Shield: 0
+      Recovery: 0
+      IsCampEffect: 1
+      ImageSource: {fileID: 0}
+      Health: 0
+      SerializedMovements: []
+      AttackTypeEnum: 0
+      AttackDistance: 0
+      AttackArea: 0
+      Movements: 
+      AttackType: 

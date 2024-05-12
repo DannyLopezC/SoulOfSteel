@@ -95,9 +95,17 @@ public class PlayerMovement : MonoBehaviour
                 if (!EffectManager.Instance.gravitationalImpulseEffectActive) {
                     if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
                             .GetCellType() == CellType.Blocked) {
-                        if (!GameManager.Instance.testing) {
-                            player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
+                        if (!GameManager.Instance.testing) 
+                        {
+                            if (!EffectManager.Instance.oakShieldEffectActive)
+                            { 
+                                player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
                                 player.PlayerController.GetPlayerId());
+                            }
+                            else
+                            {
+                                EffectManager.Instance.SetOakShieldEffectActive(false);
+                            }
                         }
                         else {
                             //receive damage when hitting walls
@@ -123,19 +131,26 @@ public class PlayerMovement : MonoBehaviour
             if (currentCell.CellController.GetCellType() == CellType.Mined &&
                 !EffectManager.Instance.gravitationalImpulseEffectActive) {
                 PlayerView currentPlayer = GetComponent<PlayerView>();
-                if (!GameManager.Instance.testing) {
-                    currentPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 3,
-                        currentPlayer.PlayerController.GetPlayerId());
-                    GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
-                        RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
+                if (!GameManager.Instance.testing)
+                {
+                    if (!EffectManager.Instance.oakShieldEffectActive)
+                    {
+                        currentPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 3,
+                            currentPlayer.PlayerController.GetPlayerId());
+                        GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
+                            RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
+                    }
+                    else
+                    {
+                        EffectManager.Instance.SetOakShieldEffectActive(false);
+                    }
                 }
-                else {
+                else
                     currentPlayer.PlayerController.ReceivedDamage(3, currentPlayer.PlayerController.GetPlayerId());
-                }
-
-                currentCell.CellController.SetType(CellType.Normal);
-                Debug.Log($"turn off mine");
             }
+
+            currentCell.CellController.SetType(CellType.Normal);
+            Debug.Log($"turn off mine");
         }
     }
 

@@ -487,10 +487,16 @@ public class PlayerController : IPlayerController
             cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
             cardInfoStruct.TypeEnum);
 
-        if (card.GetCardType() == CardType.Arm) _arm = card;
-        else if (card.GetCardType() == CardType.Weapon) _weapon = card;
-
-        _arm.GetEffect();
+        if (card.GetCardType() == CardType.Arm)
+        {
+            _arm = card;
+            _arm.GetEffect();
+        } 
+        else if (card.GetCardType() == CardType.Weapon)
+        {
+            _weapon = card;
+            _weapon.GetEffect();
+        } 
     }
 
     private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)

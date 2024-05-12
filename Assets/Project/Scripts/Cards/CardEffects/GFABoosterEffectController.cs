@@ -21,5 +21,4 @@ public class GFABoosterEffectController : EffectController, IGravitationalImpuls
         IPlayerController playerController = GameManager.Instance.LocalPlayerInstance.PlayerController;
         playerController.SetExtraDamage(0);
     }
-
 }

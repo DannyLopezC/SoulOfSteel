@@ -8,7 +8,8 @@ using UnityEngine.UI;
 using WebSocketSharp;
 
 [Flags]
-public enum AttackType {
+public enum AttackType
+{
     None,
     StraightLine,
     Square,
@@ -16,12 +17,14 @@ public enum AttackType {
 }
 
 [Serializable]
-public class CardInfoSerialized {
+public class CardInfoSerialized
+{
     public List<CardInfoStruct> Sheet1;
     private List<CardInfoStruct> Sheet2;
 
     [Serializable]
-    public class CardInfoStruct {
+    public class CardInfoStruct
+    {
         Dictionary<string, CardType> typeMapping = new() {
             { "Campo", CardType.CampEffect },
             { "hackeo", CardType.Hacking },
@@ -31,6 +34,7 @@ public class CardInfoSerialized {
             { "Brazo", CardType.Arm },
             { "Pecho", CardType.Chest },
             { "Piernas", CardType.Legs },
+            { "Piloto", CardType.Pilot }
         };
 
         Dictionary<string, AttackType> attackTypeMapping = new() {
@@ -69,7 +73,8 @@ public class CardInfoSerialized {
         [OnValueChanged("SetAttackType"), HideInInspector]
         public string AttackType;
 
-        public void SetType() {
+        public void SetType()
+        {
             Type = Type.Replace(" ", "");
             if (Type == "Brazo/Arma") Type = "Arma";
             if (typeMapping.TryGetValue(Type, out CardType enumValue)) {
@@ -80,13 +85,16 @@ public class CardInfoSerialized {
             }
         }
 
-        public void SetMovements() {
+        public void SetMovements()
+        {
             if (Movements.IsNullOrEmpty() || Movements == "0") return;
             SerializedMovements = Movement.FromString(Movements);
         }
 
-        public void SetAttackType() {
+        public void SetAttackType()
+        {
             if (AttackType.IsNullOrEmpty() || AttackType == "0") {
+                Debug.Log($"attack type none card name {CardName} attack type {AttackType}");
                 AttackTypeEnum = global::AttackType.None;
                 return;
             }
@@ -104,11 +112,13 @@ public class CardInfoSerialized {
 }
 
 [Serializable, CreateAssetMenu(fileName = "Card_Data", menuName = "Card_Data")]
-public class CardsDataBase : ScriptableObject {
+public class CardsDataBase : ScriptableObject
+{
     public CardInfoSerialized cardDataBase;
 
     [Button]
-    public void DownloadData() {
+    public void DownloadData()
+    {
         Downloader.Instance.LoadInfo(this);
     }
 }

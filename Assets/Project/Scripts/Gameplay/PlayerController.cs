@@ -493,11 +493,22 @@ public class PlayerController : IPlayerController
             cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
             cardInfoStruct.TypeEnum);
 
+
         if (card.GetCardType() == CardType.Arm) {
+            if (_arm != null) {
+                _arm.RemoveEffect();
+                _view.DestroyGO(_arm.gameObject);
+            }
+
             _arm = card;
             _arm.GetEffect();
         }
         else if (card.GetCardType() == CardType.Weapon) {
+            if (_weapon != null) {
+                _weapon.RemoveEffect();
+                _view.DestroyGO(_weapon.gameObject);
+            }
+
             _weapon = card;
             _weapon.GetEffect();
         }
@@ -510,6 +521,10 @@ public class PlayerController : IPlayerController
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
             cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+        if (_legs != null) {
+            _view.DestroyGO(_legs.gameObject);
+        }
+
         _legs = card;
     }
 
@@ -524,6 +539,7 @@ public class PlayerController : IPlayerController
         //Remove previous effect
         if (_bodyArmor != null) {
             _bodyArmor.RemoveEffect();
+            _view.DestroyGO(_bodyArmor.gameObject);
         }
 
         _bodyArmor = card;

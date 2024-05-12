@@ -21,6 +21,7 @@ public interface IPlayerView
     PlayerCardsInfo GetDeckInfo();
     bool GetAttackDone();
     void SetAttackDone(bool attackDone);
+    void DestroyGO(GameObject go);
 }
 
 [Serializable]
@@ -221,6 +222,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         _attackDone = attackDone;
     }
 
+    public void DestroyGO(GameObject go)
+    {
+        Destroy(go);
+    }
+
     public void SetCardsInfo()
     {
         if (pv.IsMine) {
@@ -230,14 +236,15 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             int startIndex = actorNumber == 1 ? 0 : halfCount;
 
+            Debug.Log($"actor numberr {actorNumber}");
             _deckInfo = Resources.Load<PlayerCardsInfo>($"PlayerCards{actorNumber}");
             _deckInfo.playerCards.Clear();
 
             if (!GameManager.Instance.testing) {
-                _deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 0, 35, 23, 35, 33 });
+                _deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 32, 0, 35, 23, 35, 37 });
             }
             else {
-                _deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 0, 35, 0, 23, 35, 33 });
+                _deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 32, 0, 35, 23, 35, 37 });
             }
         }
     }

@@ -182,7 +182,7 @@ MonoBehaviour:
       AttackDistance: 0
       AttackArea: 0
       Movements: 0
-      AttackType: 
+      AttackType: 0
     - Id: 8
       CardName: Balisa Cuantica
       Type: hackeo
@@ -202,7 +202,7 @@ MonoBehaviour:
       AttackDistance: 0
       AttackArea: 0
       Movements: 0
-      AttackType: 
+      AttackType: 0
     - Id: 9
       CardName: Maniobras Evasivas
       Type: hackeo
@@ -395,11 +395,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
-      AttackDistance: 0
-      AttackArea: 0
+      AttackTypeEnum: 1
+      AttackDistance: 4
+      AttackArea: 5
       Movements: 0
-      AttackType: 
+      AttackType: Linearecta
     - Id: 19
       CardName: Inmobilizador Araknate
       Type: Arma
@@ -415,11 +415,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
-      AttackDistance: 0
-      AttackArea: 0
+      AttackTypeEnum: 2
+      AttackDistance: 5
+      AttackArea: 3
       Movements: 
-      AttackType: 
+      AttackType: Cuadrado
     - Id: 20
       CardName: Espada de Plasma
       Type: Arma
@@ -434,11 +434,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
+      AttackTypeEnum: 3
       AttackDistance: 0
-      AttackArea: 0
+      AttackArea: 2
       Movements: 0
-      AttackType: 
+      AttackType: Cono
     - Id: 21
       CardName: Saboteadora Crick
       Type: Arma
@@ -454,11 +454,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
+      AttackTypeEnum: 1
       AttackDistance: 0
-      AttackArea: 0
+      AttackArea: 5
       Movements: 0
-      AttackType: 
+      AttackType: Linearecta
     - Id: 22
       CardName: Brazo escudo
       Type: Brazo
@@ -473,11 +473,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
-      AttackDistance: 0
-      AttackArea: 0
+      AttackTypeEnum: 1
+      AttackDistance: 1
+      AttackArea: 1
       Movements: 
-      AttackType: 
+      AttackType: Linearecta
     - Id: 23
       CardName: 'Potenciador G.F.A '
       Type: Brazo
@@ -493,11 +493,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
-      AttackDistance: 0
-      AttackArea: 0
+      AttackTypeEnum: 1
+      AttackDistance: 1
+      AttackArea: 1
       Movements: 
-      AttackType: 
+      AttackType: Linearecta
     - Id: 24
       CardName: Brazo fortificado
       Type: Brazo
@@ -512,11 +512,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
-      AttackDistance: 0
-      AttackArea: 0
+      AttackTypeEnum: 1
+      AttackDistance: 1
+      AttackArea: 1
       Movements: 
-      AttackType: 
+      AttackType: Linearecta
     - Id: 25
       CardName: Pinza de Alta Presion
       Type: Arma
@@ -531,11 +531,11 @@ MonoBehaviour:
       ImageSource: {fileID: 0}
       Health: 0
       SerializedMovements: []
-      AttackTypeEnum: 0
+      AttackTypeEnum: 3
       AttackDistance: 0
-      AttackArea: 0
+      AttackArea: 2
       Movements: 0
-      AttackType: 
+      AttackType: Cono
     - Id: 26
       CardName: Impulsor Gravitacional
       Type: Pecho
@@ -742,30 +742,6 @@ MonoBehaviour:
       Movements: "1) 4 \u2191 \n2) 3 \u2191, 2\u2192, 90\xBA\n3) 3 \u2191, 2\u2192,
         90\xBA\n4) 4 \u2191, 180\xBA\u2B82"
       AttackType: 
-    - Id: 33
-      CardName: DefaultPilot
-      Type: 
-      TypeEnum: 0
-      Description: Default pilot
-      Cost: 1
-      Energy: 2
-      Damage: 3
-      Shield: 4
-      Recovery: 5
-      IsCampEffect: 0
-      ImageSource: {fileID: 0}
-      Health: 10
-      SerializedMovements:
-      - steps:
-        - Steps: 2
-          Direction: "\u2191"
-        fullStrings: 
-        degrees: 5a000000
-      AttackTypeEnum: 1
-      AttackDistance: 1
-      AttackArea: 0
-      Movements: 
-      AttackType: 
     - Id: 34
       CardName: Teletransportador de Dimetria
       Type: Campo
@@ -807,11 +783,13 @@ MonoBehaviour:
       AttackType: 
     - Id: 36
       CardName: Bloqueo Tactico Work Port
-      Type: 
+      Type: Campo
       TypeEnum: 3
-      Description: 
-      Cost: 2
-      Energy: 0
+      Description: Posiciona una barrera en una casilla, ningun jugador puede moverse
+        a traves de esa casilla, en caso de que un jugador intente moverse a traves
+        de la casilla, no hara ningun movimiento en absoluto
+      Cost: 3
+      Energy: 1
       Damage: 0
       Shield: 0
       Recovery: 0
@@ -824,3 +802,30 @@ MonoBehaviour:
       AttackArea: 0
       Movements: 
       AttackType: 
+    - Id: 37
+      CardName: Piloto Veterano En Tecnocombates
+      Type: Piloto
+      TypeEnum: 0
+      Description: "El Piloto Veterano en Tecnocombates: experto en batallas, inspira
+        confianza y temor. Su maestr\xEDa en el mecha es incomparable."
+      Cost: 0
+      Energy: 1
+      Damage: 1
+      Shield: 2
+      Recovery: 0
+      IsCampEffect: 0
+      ImageSource: {fileID: 0}
+      Health: 10
+      SerializedMovements:
+      - steps:
+        - Steps: 2
+          Direction: "\u2191"
+        - Steps: 2
+          Direction: "\u2191"
+        fullStrings: "2 \u2191, 270"
+        degrees: ffffffff
+      AttackTypeEnum: 1
+      AttackDistance: 1
+      AttackArea: 1
+      Movements: "1) 2 \u2191, 270"
+      AttackType: Linearecta

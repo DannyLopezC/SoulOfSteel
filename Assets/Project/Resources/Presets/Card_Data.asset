@@ -820,12 +820,10 @@ MonoBehaviour:
       - steps:
         - Steps: 2
           Direction: "\u2191"
-        - Steps: 2
-          Direction: "\u2191"
-        fullStrings: "2 \u2191, 270"
-        degrees: ffffffff
+        fullStrings: "2 \u2191, 270\xBA"
+        degrees: 0e010000
       AttackTypeEnum: 1
       AttackDistance: 1
       AttackArea: 1
-      Movements: "1) 2 \u2191, 270"
+      Movements: "1) 2 \u2191, 270\xBA"
       AttackType: Linearecta

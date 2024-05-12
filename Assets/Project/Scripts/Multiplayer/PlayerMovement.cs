@@ -34,10 +34,11 @@ public class PlayerMovement : MonoBehaviour
 
             List<Movement.MovementInfo> steps = movement.steps;
             int nextDegrees = movement.degrees[0];
+            Vector2 nextCell = currentCell;
 
             foreach (Movement.MovementInfo step in steps) {
                 int currentSteps = step.Steps;
-                Vector2 nextCell = currentCell;
+                nextCell = currentCell;
 
                 while (currentSteps > 0) {
                     Vector2 previousCell = nextCell;
@@ -50,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
                             adjustedDirection = currentDegrees;
                             break;
                         case "→":
-                            adjustedDirection = (currentDegrees - 90) % 360;
+                            adjustedDirection = (currentDegrees - 90 + 360) % 360;
                             break;
                         case "←":
                             adjustedDirection = (currentDegrees + 90) % 360;
@@ -75,12 +76,13 @@ public class PlayerMovement : MonoBehaviour
                             break;
                     }
 
-                    CellView cellView =
-                        GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x];
 
                     nextCell = new Vector2(
                         Mathf.Clamp(nextCell.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
                         Mathf.Clamp(nextCell.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
+
+                    CellView cellView =
+                        GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x];
 
                     if (cellView.CellController.GetCellType() == CellType.Barrier ||
                         cellView.CellController.GetCellType() == CellType.Tower) {
@@ -89,42 +91,41 @@ public class PlayerMovement : MonoBehaviour
 
                     MoveToCell(nextCell);
                     currentSteps--;
+                    currentCell = nextCell;
                     yield return null;
                 }
+            }
 
+            player.PlayerController.SetCurrentCell(nextCell);
 
-                player.PlayerController.SetCurrentCell(nextCell);
+            player.PlayerController.SetCurrentDegrees(nextDegrees);
+            Rotate(player.transform, nextDegrees);
 
+            if (i == movementIterations - 1) {
+                player.PlayerController.SetMoving(false);
+                GameManager.Instance.OnMovementTurnDone();
+            }
 
-                player.PlayerController.SetCurrentDegrees(nextDegrees);
-                Rotate(player.transform, nextDegrees);
-
-                if (i == movementIterations - 1) {
-                    player.PlayerController.SetMoving(false);
-                    GameManager.Instance.OnMovementTurnDone();
-                }
-
-                if (!EffectManager.Instance.gravitationalImpulseEffectActive) {
-                    if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
-                            .GetCellType() == CellType.Blocked) {
-                        if (!EffectManager.Instance.oakShieldEffectActive) {
-                            if (!GameManager.Instance.testing) {
-                                player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
-                                    player.PlayerController.GetPlayerId());
-                            }
-                            else {
-                                EffectManager.Instance.SetOakShieldEffectActive(false);
-                            }
+            if (!EffectManager.Instance.gravitationalImpulseEffectActive) {
+                if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
+                        .GetCellType() == CellType.Blocked) {
+                    if (!EffectManager.Instance.oakShieldEffectActive) {
+                        if (!GameManager.Instance.testing) {
+                            player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
+                                player.PlayerController.GetPlayerId());
                         }
                         else {
-                            //receive damage when hitting walls
-                            player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
+                            EffectManager.Instance.SetOakShieldEffectActive(false);
                         }
-
-                        nextCell = new Vector2(nextCell.x + 1, nextCell.y);
-                        MoveToCell(nextCell);
-                        player.PlayerController.SetCurrentCell(nextCell);
                     }
+                    else {
+                        //receive damage when hitting walls
+                        player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
+                    }
+
+                    nextCell = new Vector2(nextCell.x + 1, nextCell.y);
+                    MoveToCell(nextCell);
+                    player.PlayerController.SetCurrentCell(nextCell);
                 }
             }
         }

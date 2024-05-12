@@ -94,7 +94,6 @@ public class CardInfoSerialized
         public void SetAttackType()
         {
             if (AttackType.IsNullOrEmpty() || AttackType == "0") {
-                Debug.Log($"attack type none card name {CardName} attack type {AttackType}");
                 AttackTypeEnum = global::AttackType.None;
                 return;
             }

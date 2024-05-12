@@ -89,6 +89,32 @@ public class ArmCardController : EquipmentCardController, IArmCardController
 
                 break;
             default:
+                for (int i = 0; i < _attackDistance; i++) {
+                    switch (direction) {
+                        case 180:
+                            cellToSelect.x -= 1;
+                            break;
+                        case 0:
+                            cellToSelect.x += 1;
+                            break;
+                        case 90:
+                            cellToSelect.y -= 1;
+                            break;
+                        case 270:
+                            cellToSelect.y += 1;
+                            break;
+                    }
+
+                    Vector2 index = new(
+                        Mathf.Clamp(cellToSelect.x, 0, currentBoardView.BoardController.GetBoardCount() - 1),
+                        Mathf.Clamp(cellToSelect.y, 0, currentBoardView.BoardController.GetBoardCount() - 1));
+
+                    currentCellsShaded.Add(index);
+                    GameManager.Instance.boardView.SetBoardStatusCellType(index, CellType.Shady);
+                }
+
+                GameManager.Instance.OnCellClickedEvent += currentPlayer.PlayerController.DoAttack;
+
                 Debug.Log($"type not implemented {_attackType} card name: {CardName}");
                 break;
         }

@@ -85,6 +85,32 @@ public class BoardView : MonoBehaviour, IBoardView {
         _boardStatus[(int)index.y][(int)index.x].CellController.SetType(cellType);
     }
 
+    [Button("HideAllCells")]
+    public void HideAllCells() 
+    {
+        int boardSize = BoardController.GetBoardCount();
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
+                _boardStatus[i][j].CellController.HideCell();
+            }
+        }
+    }
+
+    [Button("ShowAllCells")]
+    public void ShowAllCells()
+    {
+        int boardSize = BoardController.GetBoardCount();
+        for (int i = 0; i < boardSize; i++)
+        {
+            for (int j = 0; j < boardSize; j++)
+            {
+                _boardStatus[i][j].CellController.ShowCell();
+            }
+        }
+    }
+
     public void SetBoardStatusInPlaymode() {
         _boardStatus = new List<List<CellView>>();
 

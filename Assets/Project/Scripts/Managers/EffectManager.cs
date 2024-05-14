@@ -69,7 +69,7 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
 
     private void DeactivateGFABoosterEffectController(int originId)
     {
-        _GFABoosterEffectController = new GFABoosterEffectController();
+        _GFABoosterEffectController ??= new GFABoosterEffectController();
         _GFABoosterEffectController.Deactivate();
     }
 
@@ -101,6 +101,24 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     {
         _teleportEffectController = new TeleportEffectController();
         _teleportEffectController.Activate(originId);
+    }
+
+    #endregion
+
+    #region RadarSabotage
+
+    private RadarSabotageEffectController _radarSabotageEffectController;
+
+    private void ActivateRadarSabotageEffectController(int originId)
+    {
+        _radarSabotageEffectController = new RadarSabotageEffectController();
+        _radarSabotageEffectController.Activate(originId);
+    }
+
+    private void DeactivateRadarSabotageEffectController(int originId)
+    {
+        _radarSabotageEffectController ??= new RadarSabotageEffectController();
+        _radarSabotageEffectController.Deactivate(originId);
     }
 
     #endregion
@@ -168,6 +186,10 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
             case 36:
                 PutBarrier(originId, 1);
                 break;
+            case 38:
+                ActivateRadarSabotageEffectController(originId);
+                break;
+
         }
     }
 
@@ -179,6 +201,9 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
                 break;
             case 23:
                 DeactivateGFABoosterEffectController(originId);
+                break;
+            case 38:
+                DeactivateRadarSabotageEffectController(originId);
                 break;
         }
     }

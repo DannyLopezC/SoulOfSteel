@@ -50,6 +50,8 @@ public interface IPlayerController
 
     void AddToScrapValue(int value);
     void SubtractFromScrapValue(int value);
+    void ShowBoardCells();
+    void HideBoardCells();
 }
 
 public class PlayerController : IPlayerController
@@ -586,5 +588,18 @@ public class PlayerController : IPlayerController
     public void SubtractFromScrapValue(int valueToSubtract)
     {
         _scrapPoints -= valueToSubtract;
+    }
+
+    //This should go on another place
+    public void HideBoardCells()
+    {
+        GameManager.Instance.boardView.HideAllCells();
+        Debug.Log("Hide Cells");
+    }
+
+    public void ShowBoardCells()
+    {
+        GameManager.Instance.boardView.ShowAllCells();
+        Debug.Log("Show cells");
     }
 }

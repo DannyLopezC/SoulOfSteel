@@ -19,6 +19,10 @@ public interface ICellController
     bool GetIsMined();
     bool GetIsBarrier();
     bool GetIsTower();
+
+    void HideCell();
+
+    void ShowCell();
 }
 
 public class CellController : ICellController
@@ -58,6 +62,37 @@ public class CellController : ICellController
                 break;
             case CellType.Tower:
                 _isTower = true;
+                _view.SetCellColor(new Color(0.5529411764705883f, 0.6705882352941176f, 0.20784313725490197f));
+                break;
+            default:
+                _view.SetCellColor(_view.GetOriginalColor());
+                Debug.Log($"not valid type, using normal color");
+                break;
+        }
+    }
+
+    public void HideCell()
+    {
+        _view.SetCellColor(new Color(0.1803921568627451f, 0.15294117647058825f, 0.34901960784313724f));
+    }
+
+    public void ShowCell()
+    {
+        switch (CellType)
+        {
+            case CellType.Normal:
+                _view.SetCellColor(_view.GetOriginalColor());
+                break;
+            case CellType.Mined:
+                _view.SetCellColor(Color.red);
+                break;
+            case CellType.Shady:
+                _view.SetCellColor(new Color(0.49019607843137253f, 0.19607843137254902f, 0.6235294117647059f));
+                break;
+            case CellType.Barrier:
+                _view.SetCellColor(new Color(0.6509434f, 0.355801f, 0.1934407f));
+                break;
+            case CellType.Tower:
                 _view.SetCellColor(new Color(0.5529411764705883f, 0.6705882352941176f, 0.20784313725490197f));
                 break;
             default:

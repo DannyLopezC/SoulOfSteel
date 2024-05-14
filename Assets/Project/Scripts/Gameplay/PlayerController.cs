@@ -16,7 +16,6 @@ public interface IPlayerController
     void ShuffleDeck(bool firstTime, bool shuffle);
     void SelectAttack();
     void SelectMovement();
-    void SelectDefense();
     void SelectCards(List<CardType> types, int amount, bool setIsSelecting = true);
     void ReceivedDamage(int damage, int localPlayerId);
     IEnumerator AddCards(int amount);
@@ -35,8 +34,6 @@ public interface IPlayerController
     void SetExtraDamage(int extraDamage);
     void SetCurrentDegrees(int currentDegrees);
     int GetCurrentDegrees();
-    void SetLegsCard(LegsCardView legsCardView);
-    void SetArmCard(ArmCardView armCardView);
     bool GetMovementSelected();
     void SetMovementSelected(bool movementSelected);
     bool GetMovementDone();
@@ -54,13 +51,15 @@ public interface IPlayerController
 
 public class PlayerController : IPlayerController
 {
+    #region Attributes
+
     private readonly IPlayerView _view;
+    private readonly PlayerCardsInfo _shuffledDeck;
+    private readonly List<CardView> _hand;
 
     private int _playerId;
     private int _health;
     private int _scrapPoints;
-    private PlayerCardsInfo _shuffledDeck;
-    private List<CardView> _hand;
     private List<CardView> _scrapPile;
     private List<CardView> _factory;
     private PilotCardView _pilot;
@@ -73,18 +72,19 @@ public class PlayerController : IPlayerController
     private bool _movementDone;
 
     private bool _cardsSelected;
-    private bool _selectingCells;
     private bool _moving;
     private bool _doingEffect;
     private bool _allEffectsDone;
     private int _extraDamage = 0;
     private int _currentMovementId;
 
-    private List<Vector2> cellsSelected;
+    private List<Vector2> _cellsSelected;
 
     private Vector2 _currentCell;
     private int _currentDegrees;
     private int _currentDamage;
+
+    #endregion
 
     public PlayerController(IPlayerView view)
     {
@@ -98,9 +98,12 @@ public class PlayerController : IPlayerController
         _scrapPoints = 15;
     }
 
+    #region Cards Management
+
     public void DrawCards(int amount, bool fullDraw)
     {
-        if (fullDraw) {
+        if (fullDraw)
+        {
             // not destroying the select animatino reference
             GameManager.Instance.handPanel.animationReference.SetParent(
                 GameManager.Instance.handPanel.transform.parent);
@@ -113,7 +116,8 @@ public class PlayerController : IPlayerController
 
     public IEnumerator AddCards(int amount)
     {
-        while (amount > 0) {
+        while (amount > 0)
+        {
             yield return new WaitForSeconds(0.5f);
             UIManager.Instance.SetText($"adding cards {amount}");
             int index = 0;
@@ -121,36 +125,38 @@ public class PlayerController : IPlayerController
 
             CardView card = null;
 
-            if (cardInfoStruct.TypeEnum != CardType.Pilot) {
+            if (cardInfoStruct.TypeEnum != CardType.Pilot)
+            {
                 card = _view.AddCardToPanel(cardInfoStruct.TypeEnum, true);
             }
 
-            switch (cardInfoStruct.TypeEnum) {
+            switch (cardInfoStruct.TypeEnum)
+            {
                 case CardType.Pilot:
                     Debug.Log($"Cannot have pilot card here");
                     continue;
                 case CardType.CampEffect:
                 case CardType.Hacking:
                 case CardType.Generator:
-                    ((EffectCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((EffectCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 case CardType.Legs:
-                    ((LegsCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((LegsCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 case CardType.Weapon:
                 case CardType.Arm:
-                    ((ArmCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((ArmCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage,
                         cardInfoStruct.AttackTypeEnum, cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea,
                         cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 case CardType.Armor:
                 case CardType.Chest:
-                    ((ChestCardView)card).InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((ChestCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
@@ -168,19 +174,19 @@ public class PlayerController : IPlayerController
         GameManager.Instance.OnDrawFinished();
     }
 
-    public int GetPlayerId()
+    public bool TryPayingForCard(int cardCost)
     {
-        return _playerId;
-    }
+        int finalScrapAmount = _scrapPoints - cardCost;
 
-    public bool GetCardsSelected()
-    {
-        return _cardsSelected;
-    }
+        Debug.Log($"current scrap: {_scrapPoints} card cost: {cardCost}");
 
-    public void SetCardsSelected(bool cardsSelected)
-    {
-        _cardsSelected = cardsSelected;
+        if (finalScrapAmount >= 0)
+        {
+            _scrapPoints = finalScrapAmount;
+            return true;
+        }
+
+        return false;
     }
 
     public void EquipCard(int indexHandList)
@@ -188,7 +194,8 @@ public class PlayerController : IPlayerController
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.Id == indexHandList);
 
-        switch (cardInfoStruct.TypeEnum) {
+        switch (cardInfoStruct.TypeEnum)
+        {
             case CardType.Arm:
             case CardType.Weapon:
                 SetArmCard(cardInfoStruct);
@@ -203,15 +210,16 @@ public class PlayerController : IPlayerController
         }
     }
 
-
     public void ShuffleDeck(bool firstTime, bool shuffle)
     {
         Debug.Log($"chufleo");
 
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
-        if (shuffle) {
+        if (shuffle)
+        {
             int n = temporalDeck.Count;
-            while (n > 1) {
+            while (n > 1)
+            {
                 n--;
                 int k = Random.Range(0, n + 1);
                 (temporalDeck[k], temporalDeck[n]) = (temporalDeck[n], temporalDeck[k]);
@@ -220,21 +228,36 @@ public class PlayerController : IPlayerController
 
         _shuffledDeck.playerCards = temporalDeck;
 
-        if (firstTime) {
+        if (firstTime)
+        {
             SetPilotCard();
         }
 
         _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Pilot));
-        // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Legs));
-        // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Arm));
-        // _shuffledDeck.playerCards.Remove(_shuffledDeck.playerCards.Find(p => p.TypeEnum == CardType.Weapon));
     }
 
-    public void SetExtraDamage(int extraDamage)
+    public void SelectCards(List<CardType> type, int amount, bool setSelecting = true)
     {
-        _extraDamage = extraDamage;
-        Debug.Log($"Extra Damage Set To: {_extraDamage}");
+        bool has = false;
+        foreach (CardView card in _hand)
+        {
+            if (type.Contains(card.GetCardType()))
+            {
+                has = true;
+                card.SetIsSelecting(setSelecting);
+                GameManager.Instance.ValidateHealthStatus();
+            }
+        }
+
+        if (!has)
+        {
+            SetCardsSelected(true);
+        }
     }
+
+    #endregion
+
+    #region SelectThings
 
     public void SelectAttack()
     {
@@ -242,53 +265,20 @@ public class PlayerController : IPlayerController
 
         if (!_view.GetPv().IsMine) return;
 
-        if (_weapon == null && _arm != null) {
+        if (_weapon == null && _arm != null)
+        {
             _currentDamage += _arm.ArmCardController.GetDamage();
             _arm.SelectAttack();
         }
-        else if (_weapon == null && _arm == null) {
+        else if (_weapon == null && _arm == null)
+        {
             _currentDamage += _pilot.PilotCardController.GetDefaultDamage();
             _pilot.SelectAttack();
         }
-        else if (_weapon != null) {
+        else if (_weapon != null)
+        {
             _currentDamage += _weapon.ArmCardController.GetDamage();
             _weapon.SelectAttack();
-        }
-    }
-
-    public void DoAttack(Vector2 index)
-    {
-        if (GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
-            CellType.Shady) return;
-
-        PlayerView otherPlayer =
-            GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != _playerId) as PlayerView;
-
-        if (GameManager.Instance.testing)
-            otherPlayer = GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == _playerId) as PlayerView;
-
-        if (otherPlayer.PlayerController.GetCurrentCell() == index) {
-            if (!GameManager.Instance.testing) {
-                otherPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
-                    otherPlayer.PlayerController.GetPlayerId());
-            }
-        }
-
-        GameManager.Instance.OnLocalAttackDone();
-        _view.SetAttackDone(true);
-        GameManager.Instance.OnCellClickedEvent -= DoAttack;
-    }
-
-    public int GetCurrenHealth()
-    {
-        return _health;
-    }
-
-    public void SetHealth(int amount)
-    {
-        _health = amount;
-        if (_playerId != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) {
-            UIManager.Instance.matchView.UpdateEnemyLifeTMP(_health);
         }
     }
 
@@ -297,10 +287,12 @@ public class PlayerController : IPlayerController
         if (!_view.GetPv().IsMine) return;
 
         GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
-        if (_legs == null && _pilot != null) {
+        if (_legs == null && _pilot != null)
+        {
             GameManager.Instance.OnSelectionConfirmed(0);
         }
-        else {
+        else
+        {
             _legs.SelectMovement();
         }
     }
@@ -318,21 +310,182 @@ public class PlayerController : IPlayerController
         GameManager.Instance.OnAllMovementSelectedEvent -= OnAllMovementSelected;
     }
 
+    public IEnumerator SelectCells(int amount)
+    {
+        int currentAmount = amount;
+        _cellsSelected = new List<Vector2>();
+        _cellsSelected.Clear();
+
+        EffectManager.Instance.OnSelectedCellEvent += CellSelected;
+
+        while (currentAmount > 0)
+        {
+            yield return null;
+            currentAmount = amount - _cellsSelected.Count;
+        }
+
+        EffectManager.Instance.OnSelectedCellEvent -= CellSelected;
+
+        EffectManager.Instance.CellsSelected(_cellsSelected);
+    }
+
+    private void CellSelected(Vector2 index, bool select)
+    {
+        if (select) _cellsSelected.Add(index);
+        else _cellsSelected.Remove(index);
+    }
+
+    #endregion
+
+    #region Actions
+
+    public void DoAttack(Vector2 index)
+    {
+        if (GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
+            CellType.Shady) return;
+
+        PlayerView otherPlayer =
+            GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != _playerId) as PlayerView;
+
+        if (GameManager.Instance.testing)
+            otherPlayer =
+                GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == _playerId) as PlayerView;
+
+        if (otherPlayer?.PlayerController.GetCurrentCell() == index)
+        {
+            if (!GameManager.Instance.testing)
+            {
+                otherPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
+                    otherPlayer.PlayerController.GetPlayerId());
+            }
+        }
+
+        GameManager.Instance.OnLocalAttackDone();
+        _view.SetAttackDone(true);
+        GameManager.Instance.OnCellClickedEvent -= DoAttack;
+    }
+
+    public void ReceivedDamage(int damage, int localPlayerId)
+    {
+        if (localPlayerId == _playerId)
+        {
+            _health -= damage;
+            _pilot.SetHealthTMP(_health);
+        }
+    }
+
     public void DoMovement()
     {
-        if (_legs == null && _pilot != null) {
+        if (_legs == null && _pilot != null)
+        {
             GameManager.Instance.OnMovementSelected(_pilot.PilotCardController.GetDefaultMovement(),
                 (PlayerView)_view, GetMovementIterations());
         }
-        else {
+        else
+        {
             GameManager.Instance.OnMovementSelected(_legs.LegsCardController.GetMovements()[_currentMovementId],
                 (PlayerView)_view, GetMovementIterations());
         }
     }
 
+    #endregion
+
+    #region Setting Cards
+
+    private void SetArmCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    {
+        ArmCardView card = (ArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
+            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage, cardInfoStruct.AttackTypeEnum,
+            cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
+            cardInfoStruct.TypeEnum);
+
+
+        if (card.GetCardType() == CardType.Arm)
+        {
+            if (_arm != null)
+            {
+                _arm.RemoveEffect();
+                _view.DestroyGO(_arm.gameObject);
+            }
+
+            _arm = card;
+            _arm.GetEffect();
+        }
+        else if (card.GetCardType() == CardType.Weapon)
+        {
+            if (_weapon != null)
+            {
+                _weapon.RemoveEffect();
+                _view.DestroyGO(_weapon.gameObject);
+            }
+
+            _weapon = card;
+            _weapon.GetEffect();
+        }
+    }
+
+    private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    {
+        LegsCardView card = (LegsCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+            cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+        if (_legs != null)
+        {
+            _view.DestroyGO(_legs.gameObject);
+        }
+
+        _legs = card;
+    }
+
+    private void SetArmorCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    {
+        ChestCardView card = (ChestCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+
+        //Remove previous effect
+        if (_bodyArmor != null)
+        {
+            _bodyArmor.RemoveEffect();
+            _view.DestroyGO(_bodyArmor.gameObject);
+        }
+
+        _bodyArmor = card;
+
+        _bodyArmor.GetEffect();
+    }
+
+    private void SetPilotCard()
+    {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct =
+            _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
+
+        PilotCardView card = (PilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+
+        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
+            cardInfoStruct.ImageSource, cardInfoStruct.Health, cardInfoStruct.TypeEnum,
+            cardInfoStruct.SerializedMovements[0], cardInfoStruct.Damage);
+        _pilot = card;
+        _health = _pilot.PilotCardController.GetHealth();
+        if (_view.GetPv().IsMine) _pilot.SetHealthTMP(_health);
+        else UIManager.Instance.matchView.UpdateEnemyLifeTMP(_health);
+    }
+
+    #endregion
+
+    #region Setters And Getters
+
     private int GetMovementIterations()
     {
-        if (EffectManager.Instance.doubleMovementEffectActive) {
+        if (EffectManager.Instance.doubleMovementEffectActive)
+        {
             EffectManager.Instance.SetDoubleMovementEffectActive(false);
             return 2;
         }
@@ -340,62 +493,14 @@ public class PlayerController : IPlayerController
         return 1;
     }
 
-    public PilotCardView GetPilotCard()
+    public void AddToScrapValue(int valueToAdd)
     {
-        return _pilot;
+        _scrapPoints += valueToAdd;
     }
 
-    public void SelectDefense()
+    public void SubtractFromScrapValue(int valueToSubtract)
     {
-    }
-
-    public void ReceivedDamage(int damage, int localPlayerId)
-    {
-        if (localPlayerId == _playerId) {
-            _health -= damage;
-            _pilot.SetHealthTMP(_health);
-        }
-    }
-
-    public void SetPlayerId(int id)
-    {
-        _playerId = id;
-    }
-
-    public void SelectCards(List<CardType> type, int amount, bool setSelecting = true)
-    {
-        bool has = false;
-        foreach (CardView card in _hand) {
-            if (type.Contains(card.GetCardType())) {
-                has = true;
-                card.SetIsSelecting(setSelecting);
-                GameManager.Instance.ValidateHealthStatus();
-            }
-        }
-
-        if (!has) {
-            SetCardsSelected(true);
-        }
-    }
-
-    public IEnumerator SelectCells(int amount)
-    {
-        int currentAmount = amount;
-        cellsSelected = new List<Vector2>();
-        cellsSelected.Clear();
-
-        _selectingCells = true;
-        EffectManager.Instance.OnSelectedCellEvent += CellSelected;
-
-        while (currentAmount > 0) {
-            yield return null;
-            currentAmount = amount - cellsSelected.Count;
-        }
-
-        _selectingCells = false;
-        EffectManager.Instance.OnSelectedCellEvent -= CellSelected;
-
-        EffectManager.Instance.CellsSelected(cellsSelected);
+        _scrapPoints -= valueToSubtract;
     }
 
     public bool GetMoving()
@@ -448,16 +553,6 @@ public class PlayerController : IPlayerController
         return _currentDegrees;
     }
 
-    public void SetLegsCard(LegsCardView legsCardView)
-    {
-        _legs = legsCardView;
-    }
-
-    public void SetArmCard(ArmCardView armCardView)
-    {
-        _arm = armCardView;
-    }
-
     public bool GetMovementSelected()
     {
         return _movementSelected;
@@ -478,113 +573,49 @@ public class PlayerController : IPlayerController
         _movementDone = movementDone;
     }
 
-    private void CellSelected(Vector2 index, bool select)
+    public void SetPlayerId(int id)
     {
-        if (select) cellsSelected.Add(index);
-        else cellsSelected.Remove(index);
+        _playerId = id;
     }
 
-    private void SetArmCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    public int GetPlayerId()
     {
-        ArmCardView card = (ArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+        return _playerId;
+    }
 
-        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
-            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage, cardInfoStruct.AttackTypeEnum,
-            cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
-            cardInfoStruct.TypeEnum);
+    public bool GetCardsSelected()
+    {
+        return _cardsSelected;
+    }
 
+    public void SetCardsSelected(bool cardsSelected)
+    {
+        _cardsSelected = cardsSelected;
+    }
 
-        if (card.GetCardType() == CardType.Arm) {
-            if (_arm != null) {
-                _arm.RemoveEffect();
-                _view.DestroyGO(_arm.gameObject);
-            }
+    public void SetExtraDamage(int extraDamage)
+    {
+        _extraDamage = extraDamage;
+    }
 
-            _arm = card;
-            _arm.GetEffect();
+    public int GetCurrenHealth()
+    {
+        return _health;
+    }
+
+    public void SetHealth(int amount)
+    {
+        _health = amount;
+        if (_playerId != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId())
+        {
+            UIManager.Instance.matchView.UpdateEnemyLifeTMP(_health);
         }
-        else if (card.GetCardType() == CardType.Weapon) {
-            if (_weapon != null) {
-                _weapon.RemoveEffect();
-                _view.DestroyGO(_weapon.gameObject);
-            }
-
-            _weapon = card;
-            _weapon.GetEffect();
-        }
     }
 
-    private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    public PilotCardView GetPilotCard()
     {
-        LegsCardView card = (LegsCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
-
-        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
-            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-            cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
-        if (_legs != null) {
-            _view.DestroyGO(_legs.gameObject);
-        }
-
-        _legs = card;
+        return _pilot;
     }
 
-    private void SetArmorCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
-    {
-        ChestCardView card = (ChestCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
-
-        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
-            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
-
-        //Remove previous effect
-        if (_bodyArmor != null) {
-            _bodyArmor.RemoveEffect();
-            _view.DestroyGO(_bodyArmor.gameObject);
-        }
-
-        _bodyArmor = card;
-
-        _bodyArmor.GetEffect();
-    }
-
-    private void SetPilotCard()
-    {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
-
-        PilotCardView card = (PilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
-
-        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
-            cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-            cardInfoStruct.ImageSource, cardInfoStruct.Health, cardInfoStruct.TypeEnum,
-            cardInfoStruct.SerializedMovements[0], cardInfoStruct.Damage);
-        _pilot = card;
-        _health = _pilot.PilotCardController.GetHealth();
-        if (_view.GetPv().IsMine) _pilot.SetHealthTMP(_health);
-        else UIManager.Instance.matchView.UpdateEnemyLifeTMP(_health);
-    }
-
-    public bool TryPayingForCard(int cardCost)
-    {
-        int finalScrapAmount = _scrapPoints - cardCost;
-
-        Debug.Log($"current scrap: {_scrapPoints} card cost: {cardCost}");
-
-        if (finalScrapAmount >= 0) {
-            _scrapPoints = finalScrapAmount;
-            return true;
-        }
-
-        return false;
-    }
-
-    public void AddToScrapValue(int valueToAdd)
-    {
-        _scrapPoints += valueToAdd;
-    }
-
-    public void SubtractFromScrapValue(int valueToSubtract)
-    {
-        _scrapPoints -= valueToSubtract;
-    }
+    #endregion
 }

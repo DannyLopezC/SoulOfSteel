@@ -15,7 +15,7 @@ public class TeleportEffectController : EffectController, ITeleportEffectControl
     {
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(true);
 
-        _player = GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() == originId);
+        _player = GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == originId) as PlayerView;
         EffectManager.Instance.OnCellsSelectedEvent += StopEffect;
         EffectManager.Instance.OnSelectedCellEvent += SetTeleport;
         _player.SelectCells(1);
@@ -23,7 +23,7 @@ public class TeleportEffectController : EffectController, ITeleportEffectControl
 
     private void SetTeleport(Vector2 index, bool select)
     {
-        if (CellType.Normal != GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x]
+        if (CellType.Normal != GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x]
                 .CellController.GetCellType()) return;
 
         //Here i need to move the player to the desired position

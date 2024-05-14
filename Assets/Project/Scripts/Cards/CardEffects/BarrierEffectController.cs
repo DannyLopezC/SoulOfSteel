@@ -24,15 +24,15 @@ public class BarrierEffectController : EffectController, IBarrierEffectControlle
         EffectManager.Instance.OnCellsSelectedEvent += StopSettingBarrier;
         EffectManager.Instance.OnSelectedCellEvent += SetBarrier;
 
-        GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() == originId)
+        (GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == originId) as PlayerView)
             .SelectCells(_barrierAmount);
     }
 
     private void SetBarrier(Vector2 index, bool select)
     {
-        if (CellType.Normal != GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x]
+        if (CellType.Normal != GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x]
                 .CellController.GetCellType()) return;
-        GameManager.Instance.boardView.SetBoardStatusCellType(index, select ? CellType.Barrier : CellType.Normal);
+        GameManager.Instance.BoardView.SetBoardStatusCellType(index, select ? CellType.Barrier : CellType.Normal);
 
         if (!GameManager.Instance.testing) {
             GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutBarrier",

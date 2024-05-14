@@ -258,14 +258,14 @@ public class PlayerController : IPlayerController
 
     public void DoAttack(Vector2 index)
     {
-        if (GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
+        if (GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
             CellType.Shady) return;
 
         PlayerView otherPlayer =
-            GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() != _playerId);
+            GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != _playerId) as PlayerView;
 
         if (GameManager.Instance.testing)
-            otherPlayer = GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() == _playerId);
+            otherPlayer = GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == _playerId) as PlayerView;
 
         if (otherPlayer.PlayerController.GetCurrentCell() == index) {
             if (!GameManager.Instance.testing) {

@@ -5,8 +5,14 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+public interface IGameManager {
+    int CurrentPriority { get; }
+    void SetCurrentPriority(int currentPriority);
+    List<IPlayerView> PlayerList { get; }
+    IBoardView BoardView { get; set; }
+}
 
-public class GameManager : MonoBehaviourSingleton<GameManager>
+public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
 {
     public CardsDataBase cardDataBase;
 
@@ -30,9 +36,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     public PilotCardView LocalPilotCardView;
     public string LocalPlayerName;
 
-    public int currentPriority; // player Id
-    public BoardView boardView;
-    public List<PlayerView> playerList;
+    public int CurrentPriority { get; set; }
+    public IBoardView BoardView { get; set; }
+    public List<IPlayerView> PlayerList { get; set; } 
 
     public Phase CurrenPhase;
     public bool gameOver;
@@ -97,7 +103,14 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         OnMovementSelectedEvent?.Invoke(movement, player, iterations);
     }
+    
+    public void SetCurrentPriority(int currentPriority)
+    {
+        CurrentPriority = currentPriority;
+        OnPrioritySetEvent?.Invoke(currentPriority);
+    }
 
+    // BORRAR.
     public void OnPrioritySet(int priority)
     {
         OnPrioritySetEvent?.Invoke(priority);
@@ -126,7 +139,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     public IEnumerator OnGameStartedCoroutine()
     {
-        while (playerList.Count < 2 && !testing) {
+        while (PlayerList.Count < 2 && !testing) {
             yield return null;
         }
 
@@ -154,7 +167,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     public bool ValidateHealthStatus()
     {
-        foreach (PlayerView playerView in playerList) {
+        foreach (PlayerView playerView in PlayerList) {
             if (playerView.PlayerController.GetCurrenHealth() <= 0) {
                 Debug.Log($"current phase {CurrenPhase}");
                 Debug.Log($"player view id {playerView.PlayerController.GetPlayerId()}");
@@ -180,7 +193,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     public void PrepareForMatch(IMatchView matchView)
     {
-        playerList.ForEach(player => player.PlayerController.ShuffleDeck(true, false));
+        PlayerList.ForEach(player => player.PlayerController.ShuffleDeck(true, false));
         ChangePhase(new DrawPhase(matchView));
     }
 

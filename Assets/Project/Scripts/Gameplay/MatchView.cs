@@ -20,7 +20,7 @@ public class MatchView : MonoBehaviour, IMatchView
     private IMatchController _matchController;
 
     public IMatchController MatchController {
-        get { return _matchController ??= new MatchController(this); }
+        get { return _matchController ??= new MatchController(this, GameManager.Instance); }
     }
 
     private void Awake()

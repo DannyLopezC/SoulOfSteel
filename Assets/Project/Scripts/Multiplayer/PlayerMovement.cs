@@ -78,11 +78,11 @@ public class PlayerMovement : MonoBehaviour
 
 
                     nextCell = new Vector2(
-                        Mathf.Clamp(nextCell.x, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1),
-                        Mathf.Clamp(nextCell.y, 0, GameManager.Instance.boardView.BoardController.GetBoardCount() - 1));
+                        Mathf.Clamp(nextCell.x, 0, GameManager.Instance.BoardView.BoardController.GetBoardCount() - 1),
+                        Mathf.Clamp(nextCell.y, 0, GameManager.Instance.BoardView.BoardController.GetBoardCount() - 1));
 
                     CellView cellView =
-                        GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x];
+                        GameManager.Instance.BoardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x];
 
                     if (cellView.CellController.GetCellType() == CellType.Barrier ||
                         cellView.CellController.GetCellType() == CellType.Tower) {
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             if (!EffectManager.Instance.gravitationalImpulseEffectActive) {
-                if (GameManager.Instance.boardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
+                if (GameManager.Instance.BoardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
                         .GetCellType() == CellType.Blocked) {
                     if (!EffectManager.Instance.oakShieldEffectActive) {
                         if (!GameManager.Instance.testing) {
@@ -134,15 +134,15 @@ public class PlayerMovement : MonoBehaviour
     public void MoveToCell(Vector2 index)
     {
         if (pv.IsMine) {
-            CellView nextCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
+            CellView nextCell = GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x];
             if (nextCell.CellController.GetCellType() == CellType.Barrier ||
                 nextCell.CellController.GetCellType() == CellType.Tower) {
                 return;
             }
 
 
-            transform.position = GameManager.Instance.boardView.GetCellPos(index);
-            CellView currentCell = GameManager.Instance.boardView.GetBoardStatus()[(int)index.y][(int)index.x];
+            transform.position = GameManager.Instance.BoardView.GetCellPos(index);
+            CellView currentCell = GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
             if (currentCell.CellController.GetCellType() == CellType.Mined &&
                 !EffectManager.Instance.gravitationalImpulseEffectActive) {

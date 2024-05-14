@@ -14,6 +14,9 @@ public interface IBoardView {
     GameObject InstantiateCellView();
     List<List<CellView>> GetBoardStatus();
     void SetBoardStatus(List<List<CellView>> board);
+    IBoardController BoardController { get; }
+    void SetBoardStatusCellType(Vector2 index, CellType cellType);
+    Vector3 GetCellPos(Vector2 index);
 }
 
 public class BoardView : MonoBehaviour, IBoardView {
@@ -35,7 +38,7 @@ public class BoardView : MonoBehaviour, IBoardView {
     }
 
     private void Start() {
-        GameManager.Instance.boardView = this;
+        GameManager.Instance.BoardView = this;
     }
 
     public Transform GetTransform() {

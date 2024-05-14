@@ -17,37 +17,42 @@ public class MatchController : IMatchController
     private List<string> _matchLog;
 
     private readonly IMatchView _view;
+    private readonly IGameManager _gameManager;
 
-    public MatchController(IMatchView view)
+    public MatchController(
+        IMatchView view,
+        IGameManager gameManager)
     {
         _view = view;
+        _gameManager = gameManager;
     }
 
-    private void SetPriority()
-    {
-        GameManager.Instance.currentPriority = 1;
-
-        GameManager.Instance.OnPrioritySet(GameManager.Instance.currentPriority);
-
-        _view.SetCurrentPhaseText($"priority = {GameManager.Instance.currentPriority}");
+    private void SetPriority() {
+        const int currentPriority = 1;
+        _gameManager.SetCurrentPriority(currentPriority);
+        _view.SetCurrentPhaseText($"priority = {currentPriority}");
     }
 
-    private void SelectQuadrant()
-    {
+    private void SelectQuadrant() {
+        if(_gameManager?.PlayerList == null) return;
+        
         _view.SetCurrentPhaseText("Selecting quadrant");
 
-        foreach (PlayerView p in GameManager.Instance.playerList) {
-            Vector2 nextCell = p.PlayerController.GetPlayerId() == 1
+        if(_gameManager.PlayerList.Count == 0) return;
+        
+        const int upDegrees = 90;
+        const int downDegrees = 270;
+        foreach (IPlayerView player in _gameManager.PlayerList) {
+            Vector2 nextCell = player.PlayerController.GetPlayerId() == 1
                 ? Vector2.zero
-                : new Vector2(GameManager.Instance.boardView.BoardController.GetBoardCount() - 1,
-                    GameManager.Instance.boardView.BoardController.GetBoardCount() - 1);
+                : (_gameManager.BoardView.BoardController.GetBoardCount() - 1) * Vector2.one;
 
-            int currentDegrees = p.PlayerController.GetPlayerId() == 1 ? 270 : 90;
+            int currentDegrees = player.PlayerController.GetPlayerId() == 1 ? downDegrees : upDegrees;
 
-            p.PlayerController.SetCurrentCell(nextCell);
-            p.PlayerController.SetCurrentDegrees(currentDegrees);
-            p.GetComponent<PlayerMovement>().MoveToCell(nextCell);
-            p.GetComponent<PlayerMovement>().Rotate(p.transform, currentDegrees);
+            player.PlayerController.SetCurrentCell(nextCell);
+            player.PlayerController.SetCurrentDegrees(currentDegrees);
+            player.MoveToCell(nextCell);
+            player.Rotate(currentDegrees);
         }
     }
 
@@ -60,4 +65,18 @@ public class MatchController : IMatchController
         yield return new WaitForSeconds(2);
         GameManager.Instance.PrepareForMatch(_view);
     }
+
+    #region Debug
+    #if UNITY_EDITOR
+    public void Debug_SetPriority()
+    {
+        SetPriority();
+    }
+    
+    public void Debug_SelectQuadrant()
+    {
+        SelectQuadrant();
+    }
+    #endif
+    #endregion
 }

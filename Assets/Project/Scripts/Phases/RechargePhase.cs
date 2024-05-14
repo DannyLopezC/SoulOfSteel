@@ -29,11 +29,11 @@ public class RechargePhase : Phase
         };
 
         // selecting cards
-        GameManager.Instance.playerList.ForEach(player => player.SelectCards(cardTypes, 1));
+        GameManager.Instance.PlayerList.ForEach(player => player.SelectCards(cardTypes, 1));
 
         while (!_allCardSelected) {
             bool localAllSelected = true;
-            foreach (PlayerView player in GameManager.Instance.playerList) {
+            foreach (PlayerView player in GameManager.Instance.PlayerList) {
                 if (!player.PlayerController.GetCardsSelected()) {
                     localAllSelected = false;
                     break;
@@ -45,12 +45,12 @@ public class RechargePhase : Phase
             yield return null;
         }
 
-        GameManager.Instance.playerList.ForEach(player => player.SelectCards(cardTypes, 1, false));
+        GameManager.Instance.PlayerList.ForEach(player => player.SelectCards(cardTypes, 1, false));
 
         // doing cards effects        
-        EffectManager.Instance.effectTurn = GameManager.Instance.currentPriority;
+        EffectManager.Instance.effectTurn = GameManager.Instance.CurrentPriority;
 
-        foreach (PlayerView p in GameManager.Instance.playerList) {
+        foreach (PlayerView p in GameManager.Instance.PlayerList) {
             p.PlayerController.SetAllEffectsDone(false);
             p.SetEffectTurnDone(false);
         }
@@ -60,7 +60,7 @@ public class RechargePhase : Phase
                 GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId() !=
                 EffectManager.Instance.effectTurn) {
                 bool localAllEffectsDone = true;
-                foreach (PlayerView p in GameManager.Instance.playerList) {
+                foreach (PlayerView p in GameManager.Instance.PlayerList) {
                     if (!p.PlayerController.GetAllEffectsDone()) {
                         localAllEffectsDone = false;
                     }
@@ -72,8 +72,8 @@ public class RechargePhase : Phase
                 yield return null;
             }
             else {
-                PlayerView player = GameManager.Instance.playerList.Find(p =>
-                    p.PlayerController.GetPlayerId() == EffectManager.Instance.effectTurn);
+                PlayerView player = GameManager.Instance.PlayerList.Find(p =>
+                    p.PlayerController.GetPlayerId() == EffectManager.Instance.effectTurn) as PlayerView;
 
                 player.SetMyEffectTurn(true);
 
@@ -127,6 +127,6 @@ public class RechargePhase : Phase
     private void SetEffectTurn()
     {
         EffectManager.Instance.effectTurn =
-            (EffectManager.Instance.effectTurn % GameManager.Instance.playerList.Count) + 1;
+            (EffectManager.Instance.effectTurn % GameManager.Instance.PlayerList.Count) + 1;
     }
 }

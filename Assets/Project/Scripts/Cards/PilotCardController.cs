@@ -72,7 +72,7 @@ public class PilotCardController : CardController, IPilotCardController
         currentCellsShaded = new List<Vector2>();
         currentCellsShaded.Clear();
         PlayerView currentPlayer = GameManager.Instance.LocalPlayerInstance;
-        BoardView currentBoardView = GameManager.Instance.boardView;
+        IBoardView currentBoardView = GameManager.Instance.BoardView;
 
         int direction = currentPlayer.PlayerController.GetCurrentDegrees();
         Vector2 cellToSelect = currentPlayer.PlayerController.GetCurrentCell();
@@ -98,7 +98,7 @@ public class PilotCardController : CardController, IPilotCardController
                 Mathf.Clamp(cellToSelect.y, 0, currentBoardView.BoardController.GetBoardCount() - 1));
 
             currentCellsShaded.Add(index);
-            GameManager.Instance.boardView.SetBoardStatusCellType(index, CellType.Shady);
+            GameManager.Instance.BoardView.SetBoardStatusCellType(index, CellType.Shady);
         }
 
         GameManager.Instance.OnCellClickedEvent += currentPlayer.PlayerController.DoAttack;
@@ -109,20 +109,20 @@ public class PilotCardController : CardController, IPilotCardController
     public void UnShadeCells()
     {
         foreach (Vector2 cellIndex in currentCellsShaded) {
-            if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+            if (GameManager.Instance.BoardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
                 .GetIsMined()) {
-                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Mined);
+                GameManager.Instance.BoardView.SetBoardStatusCellType(cellIndex, CellType.Mined);
             }
-            else if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+            else if (GameManager.Instance.BoardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
                      .GetIsBarrier()) {
-                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Barrier);
+                GameManager.Instance.BoardView.SetBoardStatusCellType(cellIndex, CellType.Barrier);
             }
-            else if (GameManager.Instance.boardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
+            else if (GameManager.Instance.BoardView.GetBoardStatus()[(int)cellIndex.y][(int)cellIndex.x].CellController
                      .GetIsTower()) {
-                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Tower);
+                GameManager.Instance.BoardView.SetBoardStatusCellType(cellIndex, CellType.Tower);
             }
             else {
-                GameManager.Instance.boardView.SetBoardStatusCellType(cellIndex, CellType.Normal);
+                GameManager.Instance.BoardView.SetBoardStatusCellType(cellIndex, CellType.Normal);
             }
         }
 

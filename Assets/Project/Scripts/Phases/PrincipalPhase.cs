@@ -29,11 +29,11 @@ public class PrincipalPhase : Phase
         };
 
         // selecting cards
-        GameManager.Instance.playerList.ForEach(player => player.SelectCards(cardTypes, 1));
+        GameManager.Instance.PlayerList.ForEach(player => player.SelectCards(cardTypes, 1));
 
         while (!_allCardSelected) {
             bool localAllSelected = true;
-            foreach (PlayerView player in GameManager.Instance.playerList) {
+            foreach (PlayerView player in GameManager.Instance.PlayerList) {
                 if (!player.PlayerController.GetCardsSelected()) {
                     localAllSelected = false;
                     break;
@@ -45,7 +45,7 @@ public class PrincipalPhase : Phase
             yield return null;
         }
 
-        GameManager.Instance.playerList.ForEach(player => player.SelectCards(cardTypes, 1, false));
+        GameManager.Instance.PlayerList.ForEach(player => player.SelectCards(cardTypes, 1, false));
 
         // equipping cards         
 
@@ -57,7 +57,7 @@ public class PrincipalPhase : Phase
         yield return new WaitForSeconds(0.5f);
 
 
-        foreach (PlayerView playerView in GameManager.Instance.playerList) {
+        foreach (PlayerView playerView in GameManager.Instance.PlayerList) {
             if (playerView.PlayerController.GetPlayerId() ==
                 GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) {
                 playerView.PlayerController.EquipCard(_localId);

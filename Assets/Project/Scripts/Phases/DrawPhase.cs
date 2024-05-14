@@ -10,7 +10,7 @@ public class DrawPhase : Phase
 
     public override IEnumerator Start()
     {
-        GameManager.Instance.playerList.ForEach(player => player.DrawCards(5, true));
+        GameManager.Instance.PlayerList.ForEach(player => player.DrawCards(5, true));
 
         matchView.SetCurrentPhaseText("drawing cards");
         yield break;

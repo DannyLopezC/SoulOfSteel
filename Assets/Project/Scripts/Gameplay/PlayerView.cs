@@ -22,6 +22,11 @@ public interface IPlayerView
     bool GetAttackDone();
     void SetAttackDone(bool attackDone);
     void DestroyGO(GameObject go);
+    IPlayerController PlayerController { get; }
+    void MoveToCell(Vector2 nextCell);
+    void Rotate(int currentDegrees);
+    void DrawCards(int amount, bool fullDraw);
+    void SelectMovement();
 }
 
 [Serializable]
@@ -56,9 +61,17 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     private IPlayerController _playerController;
     private IPlayerView _playerViewImplementation;
-
+    
     public IPlayerController PlayerController {
         get { return _playerController ??= new PlayerController(this); }
+    }
+
+    public void MoveToCell(Vector2 nextCell) {
+        _playerMovement.MoveToCell(nextCell);
+    }
+
+    public void Rotate(int currentDegrees) {
+        _playerMovement.Rotate(transform, currentDegrees);
     }
 
     private void Awake()
@@ -66,7 +79,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         GameManager.Instance.OnGameStartedEvent += TurnOnSprite;
         pv = GetComponent<PhotonView>();
         _playerMovement = GetComponent<PlayerMovement>();
-        GameManager.Instance.playerList.Add(this);
+        GameManager.Instance.PlayerList.Add(this);
         if (pv.IsMine) {
             GameManager.Instance.LocalPlayerInstance = this;
         }
@@ -291,7 +304,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             stream.SendNext(PlayerController.GetPlayerId());
 
             //priority
-            stream.SendNext(GameManager.Instance.currentPriority);
+            stream.SendNext(GameManager.Instance.CurrentPriority);
 
             //effects
             stream.SendNext(EffectManager.Instance.effectTurn);
@@ -320,7 +333,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             bool receivedAttackDone = (bool)stream.ReceiveNext();
             int receivedHealth = (int)stream.ReceiveNext();
 
-            foreach (PlayerView player in GameManager.Instance.playerList) {
+            foreach (PlayerView player in GameManager.Instance.PlayerList) {
                 if (receivedPlayerId == player.pv.Owner.ActorNumber) {
                     player.PlayerController.SetCardsSelected(receivedSelection);
                     player.PlayerController.SetAllEffectsDone(receivedAllEffectsDone);
@@ -334,7 +347,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             if (!_myEffectTurn) EffectManager.Instance.effectTurn = receivedEffectTurn;
 
             if (!PhotonNetwork.IsMasterClient && _receivePriority) {
-                GameManager.Instance.currentPriority = receivedPriority;
+                GameManager.Instance.CurrentPriority = receivedPriority;
                 _receivePriority = false;
             }
         }
@@ -384,14 +397,14 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     public void RpcSetTurn()
     {
         GameManager.Instance.movementTurn =
-            (GameManager.Instance.movementTurn % GameManager.Instance.playerList.Count) + 1;
+            (GameManager.Instance.movementTurn % GameManager.Instance.PlayerList.Count) + 1;
     }
 
     [PunRPC]
     public void RpcSetAttackTurn()
     {
         GameManager.Instance.attackTurn =
-            (GameManager.Instance.attackTurn % GameManager.Instance.playerList.Count) + 1;
+            (GameManager.Instance.attackTurn % GameManager.Instance.PlayerList.Count) + 1;
     }
 
     [PunRPC]
@@ -403,14 +416,14 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [PunRPC]
     public void RpcPutMines(int x, int y, bool mined)
     {
-        GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController
+        GameManager.Instance.BoardView.GetBoardStatus()[x][y].CellController
             .SetType(mined ? CellType.Mined : CellType.Normal);
     }
 
     [PunRPC]
     public void RpcPutBarrier(int x, int y, bool barrier)
     {
-        GameManager.Instance.boardView.GetBoardStatus()[x][y].CellController
+        GameManager.Instance.BoardView.GetBoardStatus()[x][y].CellController
             .SetType(barrier ? CellType.Barrier : CellType.Normal);
     }
 }

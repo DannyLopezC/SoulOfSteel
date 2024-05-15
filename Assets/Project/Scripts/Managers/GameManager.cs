@@ -5,11 +5,17 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
-public interface IGameManager {
+
+public interface IGameManager
+{
     int CurrentPriority { get; }
     void SetCurrentPriority(int currentPriority);
     List<IPlayerView> PlayerList { get; }
     IBoardView BoardView { get; set; }
+    IHandPanel HandPanel { get; set; }
+    IHandPanel MiddlePanel { get; set; }
+    CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByIndex(int index);
+    CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByType(CardType type);
 }
 
 public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
@@ -22,8 +28,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
     public int movementTurn;
     public int attackTurn;
 
-    public HandPanel handPanel;
-    public HandPanel middlePanel;
+    public IHandPanel HandPanel { get; set; }
+    public IHandPanel MiddlePanel { get; set; }
     public ScrapPanel scrapPanel;
 
     public EquipmentPanel myEquipmentPanel;
@@ -38,7 +44,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
 
     public int CurrentPriority { get; set; }
     public IBoardView BoardView { get; set; }
-    public List<IPlayerView> PlayerList { get; set; } 
+    public List<IPlayerView> PlayerList { get; set; }
 
     public Phase CurrenPhase;
     public bool gameOver;
@@ -103,7 +109,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
     {
         OnMovementSelectedEvent?.Invoke(movement, player, iterations);
     }
-    
+
     public void SetCurrentPriority(int currentPriority)
     {
         CurrentPriority = currentPriority;
@@ -139,7 +145,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
 
     public IEnumerator OnGameStartedCoroutine()
     {
-        while (PlayerList.Count < 2 && !testing) {
+        while (PlayerList.Count < 2 && !testing)
+        {
             yield return null;
         }
 
@@ -167,8 +174,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
 
     public bool ValidateHealthStatus()
     {
-        foreach (PlayerView playerView in PlayerList) {
-            if (playerView.PlayerController.GetCurrenHealth() <= 0) {
+        foreach (PlayerView playerView in PlayerList)
+        {
+            if (playerView.PlayerController.GetCurrenHealth() <= 0)
+            {
                 Debug.Log($"current phase {CurrenPhase}");
                 Debug.Log($"player view id {playerView.PlayerController.GetPlayerId()}");
                 Debug.Log($"player health {playerView.PlayerController.GetCurrenHealth()}");
@@ -195,6 +204,21 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
     {
         PlayerList.ForEach(player => player.PlayerController.ShuffleDeck(true, false));
         ChangePhase(new DrawPhase(matchView));
+    }
+
+    public CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByIndex(int index)
+    {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct = cardDataBase.cardDataBase.Sheet1
+            .Find(c => c.Id == index);
+        return cardInfoStruct;
+    }
+
+    public CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByType(CardType type)
+    {
+        CardInfoSerialized.CardInfoStruct cardInfoStruct = cardDataBase.cardDataBase.Sheet1
+            .Find(c => c.TypeEnum == CardType.Pilot);
+
+        return cardInfoStruct;
     }
 
     protected override void OnDestroy()

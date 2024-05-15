@@ -12,7 +12,7 @@ public interface IPlayerController
 {
     void SetPlayerId(int id);
     void DrawCards(int amount, bool fullDraw);
-    void EquipCard(int indexHandList);
+    void EquipCard(int index);
     void ShuffleDeck(bool firstTime, bool shuffle);
     void SelectAttack();
     void SelectMovement();
@@ -54,19 +54,21 @@ public class PlayerController : IPlayerController
     #region Attributes
 
     private readonly IPlayerView _view;
+    private readonly IGameManager _gameManager;
+
     private readonly PlayerCardsInfo _shuffledDeck;
-    private readonly List<CardView> _hand;
+    private readonly List<ICardView> _hand;
 
     private int _playerId;
     private int _health;
     private int _scrapPoints;
     private List<CardView> _scrapPile;
     private List<CardView> _factory;
-    private PilotCardView _pilot;
-    private LegsCardView _legs;
-    private ArmCardView _arm;
-    private ArmCardView _weapon;
-    private ChestCardView _bodyArmor;
+    private IPilotCardView _pilot;
+    private ILegsCardView _legs;
+    private IArmCardView _arm;
+    private IArmCardView _weapon;
+    private IChestCardView _bodyArmor;
 
     private bool _movementSelected;
     private bool _movementDone;
@@ -86,11 +88,12 @@ public class PlayerController : IPlayerController
 
     #endregion
 
-    public PlayerController(IPlayerView view)
+    public PlayerController(IPlayerView view, IGameManager gameManager)
     {
         _view = view;
+        _gameManager = gameManager;
 
-        _hand = new List<CardView>();
+        _hand = new List<ICardView>();
         _shuffledDeck = ScriptableObject.CreateInstance<PlayerCardsInfo>();
         _moving = false;
         _currentDegrees = 270;
@@ -104,9 +107,8 @@ public class PlayerController : IPlayerController
     {
         if (fullDraw)
         {
-            // not destroying the select animatino reference
-            GameManager.Instance.handPanel.animationReference.SetParent(
-                GameManager.Instance.handPanel.transform.parent);
+            // not destroying the select animation reference
+            _gameManager.HandPanel.ResetAnimationReferenceParent();
             _view.CleanHandsPanel();
             _hand.Clear();
         }
@@ -123,7 +125,7 @@ public class PlayerController : IPlayerController
             int index = 0;
             CardInfoSerialized.CardInfoStruct cardInfoStruct = _shuffledDeck.playerCards[index];
 
-            CardView card = null;
+            ICardView card = null;
 
             if (cardInfoStruct.TypeEnum != CardType.Pilot)
             {
@@ -138,25 +140,25 @@ public class PlayerController : IPlayerController
                 case CardType.CampEffect:
                 case CardType.Hacking:
                 case CardType.Generator:
-                    ((EffectCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((IEffectCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.IsCampEffect, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 case CardType.Legs:
-                    ((LegsCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((ILegsCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 case CardType.Weapon:
                 case CardType.Arm:
-                    ((ArmCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((IArmCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage,
                         cardInfoStruct.AttackTypeEnum, cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea,
                         cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 case CardType.Armor:
                 case CardType.Chest:
-                    ((ChestCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
+                    ((IChestCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
                         cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
@@ -178,8 +180,6 @@ public class PlayerController : IPlayerController
     {
         int finalScrapAmount = _scrapPoints - cardCost;
 
-        Debug.Log($"current scrap: {_scrapPoints} card cost: {cardCost}");
-
         if (finalScrapAmount >= 0)
         {
             _scrapPoints = finalScrapAmount;
@@ -189,10 +189,15 @@ public class PlayerController : IPlayerController
         return false;
     }
 
-    public void EquipCard(int indexHandList)
+    public void EquipCard(int index)
     {
-        CardInfoSerialized.CardInfoStruct cardInfoStruct =
-            GameManager.Instance.cardDataBase.cardDataBase.Sheet1.Find(c => c.Id == indexHandList);
+        CardInfoSerialized.CardInfoStruct cardInfoStruct = _gameManager.GetCardFromDataBaseByIndex(index);
+
+        if (cardInfoStruct == null)
+        {
+            Debug.LogError($"CARD NOT FOUND");
+            return;
+        }
 
         switch (cardInfoStruct.TypeEnum)
         {
@@ -212,8 +217,6 @@ public class PlayerController : IPlayerController
 
     public void ShuffleDeck(bool firstTime, bool shuffle)
     {
-        Debug.Log($"chufleo");
-
         List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
         if (shuffle)
         {
@@ -394,8 +397,8 @@ public class PlayerController : IPlayerController
 
     private void SetArmCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
-        ArmCardView card = (ArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
-
+        IArmCardView card = (IArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+        
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
             cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage, cardInfoStruct.AttackTypeEnum,
             cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
@@ -407,7 +410,7 @@ public class PlayerController : IPlayerController
             if (_arm != null)
             {
                 _arm.RemoveEffect();
-                _view.DestroyGO(_arm.gameObject);
+                _arm.DestroyGo();
             }
 
             _arm = card;
@@ -418,7 +421,7 @@ public class PlayerController : IPlayerController
             if (_weapon != null)
             {
                 _weapon.RemoveEffect();
-                _view.DestroyGO(_weapon.gameObject);
+                _weapon.DestroyGo();
             }
 
             _weapon = card;
@@ -428,14 +431,15 @@ public class PlayerController : IPlayerController
 
     private void SetLegsCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
-        LegsCardView card = (LegsCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+        ILegsCardView card = (ILegsCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
             cardInfoStruct.SerializedMovements, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+
         if (_legs != null)
         {
-            _view.DestroyGO(_legs.gameObject);
+            _legs.DestroyGo();
         }
 
         _legs = card;
@@ -443,7 +447,7 @@ public class PlayerController : IPlayerController
 
     private void SetArmorCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
-        ChestCardView card = (ChestCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+        IChestCardView card = (IChestCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
@@ -453,7 +457,7 @@ public class PlayerController : IPlayerController
         if (_bodyArmor != null)
         {
             _bodyArmor.RemoveEffect();
-            _view.DestroyGO(_bodyArmor.gameObject);
+            _bodyArmor.DestroyGo();
         }
 
         _bodyArmor = card;
@@ -466,7 +470,7 @@ public class PlayerController : IPlayerController
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
 
-        PilotCardView card = (PilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+        IPilotCardView card = (IPilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
@@ -614,8 +618,24 @@ public class PlayerController : IPlayerController
 
     public PilotCardView GetPilotCard()
     {
-        return _pilot;
+        return (PilotCardView)_pilot;
     }
+
+    #endregion
+
+    #region Debug
+
+#if UNITY_EDITOR
+    public int Debug_GetScrapPoints()
+    {
+        return _scrapPoints;
+    }
+
+    public void Debug_SetArmCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
+    {
+        SetArmCard(cardInfoStruct);
+    }
+#endif
 
     #endregion
 }

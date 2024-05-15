@@ -4,14 +4,20 @@ using UnityEngine;
 
 public interface IChestCardView : IEquipmentCardView
 {
+    public void InitCard(int id, string cardName, string cardDescription,
+        int scrapCost, int scrapRecovery, Sprite imageSource, CardType type);
+
+    CardType GetCardType();
+    void GetEffect();
+    void RemoveEffect();
+    void DestroyGo();
 }
 
 public class ChestCardView : EquipmentCardView, IChestCardView
 {
     private IChestCardController _chestCardController;
 
-    public IChestCardController ChestCardController
-    {
+    public IChestCardController ChestCardController {
         get { return _chestCardController ??= new ChestCardController(this); }
     }
 
@@ -25,7 +31,7 @@ public class ChestCardView : EquipmentCardView, IChestCardView
     }
 
     public void InitCard(int id, string cardName, string cardDescription,
-    int scrapCost, int scrapRecovery, Sprite imageSource, CardType type)
+        int scrapCost, int scrapRecovery, Sprite imageSource, CardType type)
     {
         ChestCardController.InitCard(id, cardName, cardDescription, scrapCost, scrapRecovery, imageSource, type);
     }
@@ -75,10 +81,16 @@ public class ChestCardView : EquipmentCardView, IChestCardView
         ChestCardController.RemoveEffect();
     }
 
+    public void DestroyGo()
+    {
+        Destroy(gameObject);
+    }
+
     public override void Dismiss()
     {
         ChestCardController.DismissCard();
     }
+
     public override int GetScrapCost()
     {
         return ChestCardController.GetScrapCost();
@@ -88,5 +100,4 @@ public class ChestCardView : EquipmentCardView, IChestCardView
     {
         return ChestCardController.GetId();
     }
-
 }

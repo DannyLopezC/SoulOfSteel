@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,7 @@ public interface ICardView
 
     // void SelectAnimation();
     void SetDismissTextSizes();
+    void SelectAnimation(bool select);
 }
 
 [Serializable]
@@ -48,11 +50,13 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right) {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
             ManageRightClick();
         }
 
-        if (eventData.button == PointerEventData.InputButton.Left) {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
             ManageLeftClick();
         }
     }
@@ -71,6 +75,36 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler
         nameTMP.fontSize = 10;
         descriptionTMP.fontSize = 5;
         scrapCostTMP.fontSize = 12;
+    }
+
+    public void SelectAnimation(bool select)
+    {
+        Transform animationReference = GameManager.Instance.HandPanel.AnimationReference;
+        Transform parent = GameManager.Instance.HandPanel.GetGo().transform.parent;
+
+        animationReference.SetParent(parent);
+
+        transform.SetParent(parent);
+
+        Vector3 endPos = select
+            ? GameManager.Instance.MiddlePanel.GetGo().transform.position
+            : animationReference.position;
+
+        if (select) animationReference.SetParent(GameManager.Instance.HandPanel.GetGo().transform);
+
+        GameManager.Instance.LocalPlayerInstance._inAnimation = true;
+        transform.DOMove(endPos, 0.5f).OnComplete(() => {
+            transform.SetParent(select
+                ? GameManager.Instance.MiddlePanel.GetGo().transform
+                : GameManager.Instance.HandPanel.GetGo().transform);
+
+            if (!select)
+            {
+                animationReference.SetParent(GameManager.Instance.HandPanel.GetGo().transform);
+            }
+
+            GameManager.Instance.LocalPlayerInstance._inAnimation = false;
+        });
     }
 
     public abstract void DoEffect(int originId);

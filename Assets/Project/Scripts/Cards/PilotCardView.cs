@@ -9,6 +9,12 @@ public interface IPilotCardView : ICardView
 {
     void SetCardUI(string cardName, string cardDescription, int scrapCost, Sprite imageSource, int health);
     void SelectAttack();
+
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        Sprite imageSource, int health, CardType type, Movement defaultMovement, int defaultDamage);
+
+    IPilotCardController PilotCardController { get; }
+    void SetHealthTMP(int value);
 }
 
 [Serializable]

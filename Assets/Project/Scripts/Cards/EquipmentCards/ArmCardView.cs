@@ -3,6 +3,16 @@ using UnityEngine;
 
 public interface IArmCardView : IEquipmentCardView
 {
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        int damage, AttackType attackType, int attackDistance, int attackArea, Sprite imageSource, CardType type);
+
+    CardType GetCardType();
+    void GetEffect();
+    void RemoveEffect();
+    void DestroyGo();
+    void SelectAttack();
+
+    IArmCardController ArmCardController { get; }
 }
 
 public class ArmCardView : EquipmentCardView, IArmCardView
@@ -70,6 +80,11 @@ public class ArmCardView : EquipmentCardView, IArmCardView
         _armCardController.RemoveEffect();
     }
 
+    public void DestroyGo()
+    {
+        Destroy(gameObject);
+    }
+
     public override void Select(bool deselect = false)
     {
         ArmCardController.Select(deselect);
@@ -89,6 +104,7 @@ public class ArmCardView : EquipmentCardView, IArmCardView
     {
         ArmCardController.SelectAttack();
     }
+
     public override int GetScrapCost()
     {
         return ArmCardController.GetScrapCost();
@@ -98,5 +114,4 @@ public class ArmCardView : EquipmentCardView, IArmCardView
     {
         return ArmCardController.GetId();
     }
-
 }

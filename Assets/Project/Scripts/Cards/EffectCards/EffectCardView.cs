@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IEffectCardView : ICardView
 {
+    public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        bool isCampEffect, Sprite imageSource, CardType type);
 }
 
 public class EffectCardView : CardView, IEffectCardView

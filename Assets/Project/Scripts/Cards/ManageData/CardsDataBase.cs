@@ -16,6 +16,7 @@ public enum AttackType
     Cone
 }
 
+
 [Serializable]
 public class CardInfoSerialized
 {
@@ -77,10 +78,12 @@ public class CardInfoSerialized
         {
             Type = Type.Replace(" ", "");
             if (Type == "Brazo/Arma") Type = "Arma";
-            if (typeMapping.TryGetValue(Type, out CardType enumValue)) {
+            if (typeMapping.TryGetValue(Type, out CardType enumValue))
+            {
                 TypeEnum = enumValue;
             }
-            else {
+            else
+            {
                 throw new ArgumentException($"Invalid CardType Type: {Type}");
             }
         }
@@ -93,17 +96,20 @@ public class CardInfoSerialized
 
         public void SetAttackType()
         {
-            if (AttackType.IsNullOrEmpty() || AttackType == "0") {
+            if (AttackType.IsNullOrEmpty() || AttackType == "0")
+            {
                 AttackTypeEnum = global::AttackType.None;
                 return;
             }
 
             AttackType = AttackType.Replace(" ", "");
 
-            if (attackTypeMapping.TryGetValue(AttackType, out AttackType enumValue)) {
+            if (attackTypeMapping.TryGetValue(AttackType, out AttackType enumValue))
+            {
                 AttackTypeEnum = enumValue;
             }
-            else {
+            else
+            {
                 throw new ArgumentException($"Invalid Attack Type: {AttackType}");
             }
         }

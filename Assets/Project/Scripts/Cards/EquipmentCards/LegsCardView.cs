@@ -4,6 +4,12 @@ using UnityEngine;
 
 public interface ILegsCardView : IEquipmentCardView
 {
+    void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
+        List<Movement> movements, Sprite imageSource, CardType type);
+
+    void SelectMovement();
+    ILegsCardController LegsCardController { get; }
+    void DestroyGo();
 }
 
 public class LegsCardView : EquipmentCardView, ILegsCardView
@@ -12,6 +18,11 @@ public class LegsCardView : EquipmentCardView, ILegsCardView
 
     public ILegsCardController LegsCardController {
         get { return _legsCardController ??= new LegsCardController(this); }
+    }
+
+    public void DestroyGo()
+    {
+        Destroy(gameObject);
     }
 
     protected override void Start()
@@ -78,12 +89,11 @@ public class LegsCardView : EquipmentCardView, ILegsCardView
 
     public override int GetScrapCost()
     {
-       return LegsCardController.GetScrapCost();
+        return LegsCardController.GetScrapCost();
     }
 
     public override int GetId()
     {
         return LegsCardController.GetId();
     }
-
 }

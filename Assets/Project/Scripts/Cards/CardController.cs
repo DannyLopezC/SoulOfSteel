@@ -99,12 +99,14 @@ public abstract class CardController : ICardController
         if (GameManager.Instance.LocalPlayerInstance._inAnimation) return;
         if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetCardsSelected() && !_selected) return;
 
-        if (_isSelecting) {
+        if (_isSelecting)
+        {
             if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(GetScrapCost())) return;
             _selected = !deselect && !_selected;
-            SelectAnimation(_selected);
+            _view.SelectAnimation(_selected);
 
-            switch (Type) {
+            switch (Type)
+            {
                 case CardType.Weapon:
                 case CardType.Arm:
                     GameManager.Instance.OnCardSelected(GameManager.Instance.LocalPlayerInstance,
@@ -131,40 +133,12 @@ public abstract class CardController : ICardController
                     break;
             }
         }
-        else if (!_isSelecting && _selected) {
+        else if (!_isSelecting && _selected)
+        {
             _selected = !deselect;
         }
     }
 
-    private void SelectAnimation(bool select)
-    {
-        Transform animationReference = GameManager.Instance.handPanel.animationReference;
-        Transform parent = GameManager.Instance.handPanel.transform.parent;
-
-        animationReference.SetParent(parent);
-
-        Transform t = _view.GetGameObject().transform;
-        t.SetParent(parent);
-
-        Vector3 endPos = select
-            ? GameManager.Instance.middlePanel.transform.position
-            : animationReference.position;
-
-        if (select) animationReference.SetParent(GameManager.Instance.handPanel.transform);
-
-        GameManager.Instance.LocalPlayerInstance._inAnimation = true;
-        t.DOMove(endPos, 0.5f).OnComplete(() => {
-            t.SetParent(select
-                ? GameManager.Instance.middlePanel.transform
-                : GameManager.Instance.handPanel.transform);
-
-            if (!select) {
-                animationReference.SetParent(GameManager.Instance.handPanel.transform);
-            }
-
-            GameManager.Instance.LocalPlayerInstance._inAnimation = false;
-        });
-    }
 
     public void DismissCard()
     {

@@ -82,7 +82,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         GameManager.Instance.OnGameStartedEvent += TurnOnSprite;
         pv = GetComponent<PhotonView>();
         _playerMovement = GetComponent<PlayerMovement>();
-        GameManager.Instance.PlayerList.Add(this);
+        GameManager.Instance.AddPlayerToThePlayerList(this);
         if (pv.IsMine)
         {
             GameManager.Instance.LocalPlayerInstance = this;
@@ -456,7 +456,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     [PunRPC]
     public void RpcShowBoard(int playerID)
     {
-        if (playerID != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) 
+        if (playerID != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId())
         {
             GameManager.Instance.BoardView.ShowAllCells();
         }

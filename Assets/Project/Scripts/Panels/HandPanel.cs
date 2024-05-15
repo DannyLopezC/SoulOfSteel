@@ -6,13 +6,13 @@ public interface IHandPanel
 {
     void ResetAnimationReferenceParent();
     GameObject GetGo();
-    public Transform AnimationReference { get; set; }
+    Transform GetAnimationReference();
 }
 
 public class HandPanel : MonoBehaviour, IHandPanel
 {
     [SerializeField] private bool isMiddle;
-    public Transform AnimationReference { get; set; }
+    public Transform animationReference;
 
     void Start()
     {
@@ -22,11 +22,16 @@ public class HandPanel : MonoBehaviour, IHandPanel
 
     public void ResetAnimationReferenceParent()
     {
-        AnimationReference.SetParent(transform.parent);
+        animationReference.SetParent(transform.parent);
     }
 
     public GameObject GetGo()
     {
         return gameObject;
+    }
+
+    public Transform GetAnimationReference()
+    {
+        return animationReference;
     }
 }

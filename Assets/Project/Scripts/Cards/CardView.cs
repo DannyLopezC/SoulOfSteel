@@ -79,7 +79,7 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler
 
     public void SelectAnimation(bool select)
     {
-        Transform animationReference = GameManager.Instance.HandPanel.AnimationReference;
+        Transform animationReference = GameManager.Instance.HandPanel.GetAnimationReference();
         Transform parent = GameManager.Instance.HandPanel.GetGo().transform.parent;
 
         animationReference.SetParent(parent);

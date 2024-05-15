@@ -16,6 +16,7 @@ public interface IGameManager
     IHandPanel MiddlePanel { get; set; }
     CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByIndex(int index);
     CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByType(CardType type);
+    void AddPlayerToThePlayerList(IPlayerView playerView);
 }
 
 public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
@@ -219,6 +220,13 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
             .Find(c => c.TypeEnum == CardType.Pilot);
 
         return cardInfoStruct;
+    }
+
+    public void AddPlayerToThePlayerList(IPlayerView playerView)
+    {
+        PlayerList ??= new List<IPlayerView>();
+
+        PlayerList.Add(playerView);
     }
 
     protected override void OnDestroy()

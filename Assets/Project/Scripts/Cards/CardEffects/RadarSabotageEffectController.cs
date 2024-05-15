@@ -16,15 +16,15 @@ public class RadarSabotageEffectController : EffectController, IRadarSabotageEff
     {
         GameManager.Instance.LocalPlayerInstance.PlayerController.SetDoingEffect(true);
 
-        PlayerView enemyPlayer = GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() != originId);
-        enemyPlayer.photonView.RPC("RpcHideBoard", RpcTarget.AllBuffered, originId); 
+        IPlayerView enemyPlayer = GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != originId);
+        enemyPlayer.GetPv().RPC("RpcHideBoard", RpcTarget.AllBuffered, originId); 
 
         EffectManager.Instance.WaitForEffectCardAnimation();
     }
 
     public void Deactivate(int originId)
     {
-        PlayerView enemyPlayer = GameManager.Instance.playerList.Find(p => p.PlayerController.GetPlayerId() != originId);
-        enemyPlayer.photonView.RPC("RpcShowBoard", RpcTarget.AllBuffered, originId);
+        IPlayerView enemyPlayer = GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != originId);
+        enemyPlayer.GetPv().RPC("RpcShowBoard", RpcTarget.AllBuffered, originId);
     }
 }

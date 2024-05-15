@@ -17,6 +17,9 @@ public interface IBoardView {
     IBoardController BoardController { get; }
     void SetBoardStatusCellType(Vector2 index, CellType cellType);
     Vector3 GetCellPos(Vector2 index);
+
+    void ShowAllCells();
+    void HideAllCells();
 }
 
 public class BoardView : MonoBehaviour, IBoardView {

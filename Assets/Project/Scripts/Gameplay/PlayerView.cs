@@ -458,7 +458,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     {
         if (playerID != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) 
         {
-            GameManager.Instance.boardView.ShowAllCells();
+            GameManager.Instance.BoardView.ShowAllCells();
         }
     }
 
@@ -467,7 +467,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     {
         if (playerID != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId())
         {
-            GameManager.Instance.boardView.HideAllCells();
+            GameManager.Instance.BoardView.HideAllCells();
         }
     }
 }

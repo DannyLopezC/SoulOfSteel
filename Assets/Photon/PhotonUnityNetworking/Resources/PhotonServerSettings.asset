@@ -48,6 +48,8 @@ MonoBehaviour:
   - RpcUpdateBoard
   - RpcPutMines
   - RpcPutBarrier
+  - RpcHideBoard
+  - RpcShowBoard
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

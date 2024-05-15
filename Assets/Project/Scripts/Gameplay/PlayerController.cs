@@ -47,6 +47,8 @@ public interface IPlayerController
 
     void AddToScrapValue(int value);
     void SubtractFromScrapValue(int value);
+    void ShowBoardCells();
+    void HideBoardCells();
 }
 
 public class PlayerController : IPlayerController

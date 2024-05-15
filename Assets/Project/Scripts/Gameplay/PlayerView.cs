@@ -452,4 +452,22 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         GameManager.Instance.BoardView.GetBoardStatus()[x][y].CellController
             .SetType(barrier ? CellType.Barrier : CellType.Normal);
     }
+
+    [PunRPC]
+    public void RpcShowBoard(int playerID)
+    {
+        if (playerID != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId()) 
+        {
+            GameManager.Instance.boardView.ShowAllCells();
+        }
+    }
+
+    [PunRPC]
+    public void RpcHideBoard(int playerID)
+    {
+        if (playerID != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId())
+        {
+            GameManager.Instance.boardView.HideAllCells();
+        }
+    }
 }

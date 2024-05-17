@@ -108,17 +108,38 @@ public class EffectManager : MonoBehaviourSingleton<EffectManager>
     #region RadarSabotage
 
     private RadarSabotageEffectController _radarSabotageEffectController;
+    public bool isRadarSabotageActive { get; set; } = false;
+    public int radarSabotageRoundsCount = 0;
 
     private void ActivateRadarSabotageEffectController(int originId)
     {
+        Debug.Log("Activating radar sabotage");
         _radarSabotageEffectController = new RadarSabotageEffectController();
-        _radarSabotageEffectController.Activate(originId);
+        _radarSabotageEffectController.Activate(originId);  
     }
 
     private void DeactivateRadarSabotageEffectController(int originId)
     {
+        Debug.Log("Deactivating radar sabotage");
         _radarSabotageEffectController ??= new RadarSabotageEffectController();
         _radarSabotageEffectController.Deactivate(originId);
+    }
+
+    public void IncrementRadarSabotageRoundsCount()
+    {
+        if (isRadarSabotageActive)
+        {
+            Debug.Log("radarSabotageRoundsCount " + radarSabotageRoundsCount);
+            if (radarSabotageRoundsCount <= 1)
+            {
+                ActivateRadarSabotageEffectController(GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
+                radarSabotageRoundsCount++;
+            }
+            else
+            {
+                DeactivateRadarSabotageEffectController(GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
+            }
+        }
     }
 
     #endregion

@@ -10,8 +10,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public interface IPlayerView
-{
+public interface IPlayerView {
     GameObject GetHandCardsPanel();
     void CleanHandsPanel();
     CardView AddCardToPanel(CardType cardType, bool inHand = false);
@@ -31,8 +30,7 @@ public interface IPlayerView
 }
 
 [Serializable]
-public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
-{
+public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable {
     [SerializeField] private PhotonView pv;
     [ShowInInspector] public PlayerCardsInfo _deckInfo;
     private PlayerMovement _playerMovement;
@@ -211,7 +209,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         rt.sizeDelta = new Vector2(250, 350);
         if (inHand)
         {
-            rt.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            rt.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         }
 
         GO.TryGetComponent(out CardView card);
@@ -274,12 +272,19 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             if (!GameManager.Instance.testing)
             {
                 //_deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38 });
-                _deckInfo.SetPlayerCards(new List<int> { 38, 36, 34, 35, 0, 0, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38 });
+                _deckInfo.SetPlayerCards(new List<int> {
+                    38, 36, 34, 35, 0, 0, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29,
+                    30, 31, 32, 34, 35, 36, 37, 38
+                });
             }
             else
             {
-                _deckInfo.SetPlayerCards(new List<int> { 38, 36, 34, 35, 0, 0, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38 });
-                //_deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38 });
+                // _deckInfo.SetPlayerCards(new List<int> {
+                //     38, 36, 34, 35, 0, 0, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29,
+                //     30, 31, 32, 34, 35, 36, 37, 38
+                // });
+                _deckInfo.SetPlayerCards(new List<int>
+                    { 28, 0, 27, 32, 18, 23, 34, 37, 29, 35, 31, 26, 36, 30, 6, 24, 20, 22, 38 });
             }
         }
     }

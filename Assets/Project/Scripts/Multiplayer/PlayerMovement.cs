@@ -5,8 +5,7 @@ using Photon.Pun;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
-{
+public class PlayerMovement : MonoBehaviour {
     public PhotonView pv;
     public Movement currentMovement;
     public Nickname nickname;
@@ -28,25 +27,29 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator StartMoving(Movement movement, PlayerView player, int movementIterations)
     {
-        for (int i = 0; i < movementIterations; i++) {
+        for (int i = 0; i < movementIterations; i++)
+        {
             int currentDegrees = player.PlayerController.GetCurrentDegrees();
             Vector2 currentCell = player.PlayerController.GetCurrentCell();
 
             List<Movement.MovementInfo> steps = movement.steps;
-            int nextDegrees = movement.degrees[0];
+            int nextDegrees = movement.degrees[0] == -1 ? currentDegrees : movement.degrees[0];
             Vector2 nextCell = currentCell;
 
-            foreach (Movement.MovementInfo step in steps) {
+            foreach (Movement.MovementInfo step in steps)
+            {
                 int currentSteps = step.Steps;
                 nextCell = currentCell;
 
-                while (currentSteps > 0) {
+                while (currentSteps > 0)
+                {
                     Vector2 previousCell = nextCell;
                     yield return new WaitForSeconds(0.5f);
 
                     int adjustedDirection;
 
-                    switch (step.Direction) {
+                    switch (step.Direction)
+                    {
                         case "↑":
                             adjustedDirection = currentDegrees;
                             break;
@@ -61,7 +64,8 @@ public class PlayerMovement : MonoBehaviour
                             yield break;
                     }
 
-                    switch (adjustedDirection) {
+                    switch (adjustedDirection)
+                    {
                         case 180:
                             nextCell.x -= 1;
                             break;
@@ -85,7 +89,8 @@ public class PlayerMovement : MonoBehaviour
                         GameManager.Instance.BoardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x];
 
                     if (cellView.CellController.GetCellType() == CellType.Barrier ||
-                        cellView.CellController.GetCellType() == CellType.Tower) {
+                        cellView.CellController.GetCellType() == CellType.Tower)
+                    {
                         nextCell = previousCell;
                     }
 
@@ -101,24 +106,31 @@ public class PlayerMovement : MonoBehaviour
             player.PlayerController.SetCurrentDegrees(nextDegrees);
             Rotate(player.transform, nextDegrees);
 
-            if (i == movementIterations - 1) {
+            if (i == movementIterations - 1)
+            {
                 player.PlayerController.SetMoving(false);
                 GameManager.Instance.OnMovementTurnDone();
             }
 
-            if (!EffectManager.Instance.gravitationalImpulseEffectActive) {
+            if (!EffectManager.Instance.gravitationalImpulseEffectActive)
+            {
                 if (GameManager.Instance.BoardView.GetBoardStatus()[(int)nextCell.y][(int)nextCell.x].CellController
-                        .GetCellType() == CellType.Blocked) {
-                    if (!EffectManager.Instance.oakShieldEffectActive) {
-                        if (!GameManager.Instance.testing) {
+                        .GetCellType() == CellType.Blocked)
+                {
+                    if (!EffectManager.Instance.oakShieldEffectActive)
+                    {
+                        if (!GameManager.Instance.testing)
+                        {
                             player.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
                                 player.PlayerController.GetPlayerId());
                         }
-                        else {
+                        else
+                        {
                             EffectManager.Instance.SetOakShieldEffectActive(false);
                         }
                     }
-                    else {
+                    else
+                    {
                         //receive damage when hitting walls
                         player.PlayerController.ReceivedDamage(3, player.PlayerController.GetPlayerId());
                     }
@@ -133,10 +145,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void MoveToCell(Vector2 index)
     {
-        if (pv.IsMine) {
+        if (pv.IsMine)
+        {
             CellView nextCell = GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x];
             if (nextCell.CellController.GetCellType() == CellType.Barrier ||
-                nextCell.CellController.GetCellType() == CellType.Tower) {
+                nextCell.CellController.GetCellType() == CellType.Tower)
+            {
                 return;
             }
 
@@ -145,16 +159,20 @@ public class PlayerMovement : MonoBehaviour
             CellView currentCell = GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x];
 
             if (currentCell.CellController.GetCellType() == CellType.Mined &&
-                !EffectManager.Instance.gravitationalImpulseEffectActive) {
+                !EffectManager.Instance.gravitationalImpulseEffectActive)
+            {
                 PlayerView currentPlayer = GetComponent<PlayerView>();
-                if (!GameManager.Instance.testing) {
-                    if (!EffectManager.Instance.oakShieldEffectActive) {
+                if (!GameManager.Instance.testing)
+                {
+                    if (!EffectManager.Instance.oakShieldEffectActive)
+                    {
                         currentPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 3,
                             currentPlayer.PlayerController.GetPlayerId());
                         GameManager.Instance.LocalPlayerInstance.photonView.RPC("RpcPutMines",
                             RpcTarget.AllBuffered, (int)index.y, (int)index.x, false);
                     }
-                    else {
+                    else
+                    {
                         EffectManager.Instance.SetOakShieldEffectActive(false);
                     }
                 }

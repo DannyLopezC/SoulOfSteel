@@ -8,8 +8,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public interface IPlayerController
-{
+public interface IPlayerController {
     void SetPlayerId(int id);
     void DrawCards(int amount, bool fullDraw);
     void EquipCard(int index);
@@ -49,8 +48,7 @@ public interface IPlayerController
     void SubtractFromScrapValue(int value);
 }
 
-public class PlayerController : IPlayerController
-{
+public class PlayerController : IPlayerController {
     #region Attributes
 
     private readonly IPlayerView _view;
@@ -160,7 +158,7 @@ public class PlayerController : IPlayerController
                 case CardType.Chest:
                     ((IChestCardView)card)?.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
                         cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-                        cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+                        cardInfoStruct.Shield, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -398,7 +396,7 @@ public class PlayerController : IPlayerController
     private void SetArmCard(CardInfoSerialized.CardInfoStruct cardInfoStruct)
     {
         IArmCardView card = (IArmCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
-        
+
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
             cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage, cardInfoStruct.AttackTypeEnum,
             cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
@@ -451,7 +449,7 @@ public class PlayerController : IPlayerController
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
-            cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
+            cardInfoStruct.Shield, cardInfoStruct.ImageSource, cardInfoStruct.TypeEnum);
 
         //Remove previous effect
         if (_bodyArmor != null)

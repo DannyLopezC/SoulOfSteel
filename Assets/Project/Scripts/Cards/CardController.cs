@@ -4,8 +4,7 @@ using Photon.Pun;
 using UnityEngine;
 
 [Flags]
-public enum CardType
-{
+public enum CardType {
     Pilot,
     Weapon,
     Armor,
@@ -17,8 +16,7 @@ public enum CardType
     Chest
 }
 
-public interface ICardController
-{
+public interface ICardController {
     CardType GetCardType();
     public void ManageRightClick();
     void PrintInfo();
@@ -32,8 +30,7 @@ public interface ICardController
     int GetScrapCost();
 }
 
-public abstract class CardController : ICardController
-{
+public abstract class CardController : ICardController {
     private readonly ICardView _view;
 
     private Vector3 startingPos;
@@ -62,7 +59,7 @@ public abstract class CardController : ICardController
         CardDescription = cardDescription;
         ScrapCost = scrapCost;
         _scrapRecovery = scrapRecovery;
-        ImageSource = imageSource;
+        if (imageSource != null) ImageSource = imageSource;
         Type = type;
 
         SetCardUI();

@@ -17,11 +17,11 @@ public class CollectionPanelController : MonoBehaviour
     [SerializeField] private Transform _spellsCardsPanelContent;
     [SerializeField] private Transform _fieldCardsPanelContent;
 
+    private List<int> playerCards = new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38 };
+//[Header("Buttons")]
+//[SerializeField] private Button Show
 
-    //[Header("Buttons")]
-    //[SerializeField] private Button Show
-
-    private void Start()
+private void Start()
     {
         InstantiateCards();
     }
@@ -34,6 +34,10 @@ public class CollectionPanelController : MonoBehaviour
 
         foreach (var card in cards)
         {
+            if (!playerCards.Contains(card.Id))
+            {
+                continue;
+            }
             InstantiateCard(_allCardsPanelContent, card);
 
             switch (card.TypeEnum)

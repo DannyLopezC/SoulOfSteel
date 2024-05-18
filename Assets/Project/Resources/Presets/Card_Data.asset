@@ -431,7 +431,7 @@ MonoBehaviour:
       Shield: 0
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 28850a1717052c148b75110002fb610a, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 3
@@ -470,7 +470,7 @@ MonoBehaviour:
       Shield: 5
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 3f9727ce397137749b67915cd2a0dabc, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 1
@@ -509,7 +509,7 @@ MonoBehaviour:
       Shield: 2
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 5929c4490565dab48b4cad87a6fa3f0b, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 1
@@ -567,7 +567,7 @@ MonoBehaviour:
       Shield: 4
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 83a2fd6fcc6c2114bbf4211ef4701a76, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 0
@@ -586,7 +586,7 @@ MonoBehaviour:
       Shield: 2
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 7254f2613cc63c547a47d674bc2235e9, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 0
@@ -605,7 +605,7 @@ MonoBehaviour:
       Shield: 2
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 58c68918e0b993741a1610661554d839, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 0
@@ -665,7 +665,7 @@ MonoBehaviour:
       Shield: 3
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 102b773c4fc2b3f4e84486e0356d9b64, type: 3}
       Health: 0
       SerializedMovements:
       - steps:
@@ -709,7 +709,7 @@ MonoBehaviour:
       Shield: 1
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 0cd0f5a23455e2e4aac43a4a44da6490, type: 3}
       Health: 0
       SerializedMovements:
       - steps:
@@ -773,7 +773,7 @@ MonoBehaviour:
       Shield: 0
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: 02e618095db8991448114e0ac2a01df4, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 0
@@ -794,7 +794,7 @@ MonoBehaviour:
       Shield: 0
       Recovery: 0
       IsCampEffect: 0
-      ImageSource: {fileID: 0}
+      ImageSource: {fileID: 21300000, guid: c5e0420b3b4239e43b1f58053d9cec08, type: 3}
       Health: 0
       SerializedMovements: []
       AttackTypeEnum: 0

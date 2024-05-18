@@ -46,6 +46,8 @@ public interface IPlayerController {
 
     void AddToScrapValue(int value);
     void SubtractFromScrapValue(int value);
+
+    int GetCurrentDamage();
 }
 
 public class PlayerController : IPlayerController {
@@ -96,7 +98,7 @@ public class PlayerController : IPlayerController {
         _moving = false;
         _currentDegrees = 270;
         _currentCell = new Vector2(5, 5);
-        _scrapPoints = 15;
+        _scrapPoints = 1000;
     }
 
     #region Cards Management
@@ -164,7 +166,7 @@ public class PlayerController : IPlayerController {
                     throw new ArgumentOutOfRangeException();
             }
 
-
+            card.SetIsSelecting(false);
             _hand.Add(card);
             _shuffledDeck.playerCards.RemoveAt(index);
             if (_shuffledDeck.playerCards.Count == 0) ShuffleDeck(false, false);
@@ -240,10 +242,11 @@ public class PlayerController : IPlayerController {
     public void SelectCards(List<CardType> type, int amount, bool setSelecting = true)
     {
         bool has = false;
-        foreach (CardView card in _hand)
+        foreach (ICardView card in _hand)
         {
             if (type.Contains(card.GetCardType()))
             {
+                Debug.Log($"name {card.GetCardName()} type {card.GetCardType()}");
                 has = true;
                 card.SetIsSelecting(setSelecting);
                 GameManager.Instance.ValidateHealthStatus();
@@ -281,6 +284,8 @@ public class PlayerController : IPlayerController {
             _currentDamage += _weapon.ArmCardController.GetDamage();
             _weapon.SelectAttack();
         }
+
+        Debug.Log($"current damage {_currentDamage}");
     }
 
     public void SelectMovement()
@@ -345,19 +350,23 @@ public class PlayerController : IPlayerController {
         if (GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x].CellController.GetCellType() !=
             CellType.Shady) return;
 
-        PlayerView otherPlayer =
-            GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != _playerId) as PlayerView;
+        IPlayerView otherPlayer =
+            GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != _playerId);
 
         if (GameManager.Instance.testing)
             otherPlayer =
-                GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == _playerId) as PlayerView;
+                GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() == _playerId);
 
-        if (otherPlayer?.PlayerController.GetCurrentCell() == index)
+        Debug.Log($"attacked cell {index}\n");
+        if (otherPlayer.PlayerController.GetCurrentCell() == index)
         {
             if (!GameManager.Instance.testing)
             {
-                otherPlayer.photonView.RPC("RpcReceivedDamage", RpcTarget.AllBuffered, 2,
-                    otherPlayer.PlayerController.GetPlayerId());
+                _view.GetPv().RPC("RpcDoDamage", RpcTarget.AllBuffered, _playerId, (int)index.x, (int)index.y);
+            }
+            else
+            {
+                otherPlayer.PlayerController.ReceivedDamage(_currentDamage, otherPlayer.PlayerController.GetPlayerId());
             }
         }
 
@@ -503,6 +512,11 @@ public class PlayerController : IPlayerController {
     public void SubtractFromScrapValue(int valueToSubtract)
     {
         _scrapPoints -= valueToSubtract;
+    }
+
+    public int GetCurrentDamage()
+    {
+        return _currentDamage;
     }
 
     public bool GetMoving()

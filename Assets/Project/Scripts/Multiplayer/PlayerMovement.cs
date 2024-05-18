@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour {
             player.PlayerController.SetCurrentCell(nextCell);
 
             player.PlayerController.SetCurrentDegrees(nextDegrees);
-            Rotate(player.transform, nextDegrees);
+            StartCoroutine(Rotate(player.transform, nextDegrees));
 
             if (i == movementIterations - 1)
             {
@@ -184,10 +184,11 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    public void Rotate(Transform t, int direction)
+    public IEnumerator Rotate(Transform t, int direction)
     {
         nickname.transform.SetParent(transform.parent);
         t.rotation = Quaternion.Euler(0, 0, direction);
+        yield return null;
         nickname.transform.SetParent(transform);
     }
 

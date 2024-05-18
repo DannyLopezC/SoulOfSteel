@@ -99,4 +99,9 @@ public class ChestCardView : EquipmentCardView, IChestCardView {
     {
         return ChestCardController.GetId();
     }
+
+    public override string GetCardName()
+    {
+        return ChestCardController.GetCardName();
+    }
 }

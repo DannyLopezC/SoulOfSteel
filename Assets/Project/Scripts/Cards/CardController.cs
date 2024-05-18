@@ -28,6 +28,7 @@ public interface ICardController {
     int GetId();
 
     int GetScrapCost();
+    string GetCardName();
 }
 
 public abstract class CardController : ICardController {
@@ -164,6 +165,7 @@ public abstract class CardController : ICardController {
     public void IsSelecting(bool isSelecting)
     {
         _isSelecting = isSelecting;
+        if (!isSelecting) _selected = false;
     }
 
     public bool GetSelected()
@@ -179,5 +181,10 @@ public abstract class CardController : ICardController {
     public int GetScrapCost()
     {
         return ScrapCost;
+    }
+
+    public string GetCardName()
+    {
+        return CardName;
     }
 }

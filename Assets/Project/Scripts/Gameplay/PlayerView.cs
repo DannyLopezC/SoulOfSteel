@@ -72,7 +72,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
     public void Rotate(int currentDegrees)
     {
-        _playerMovement.Rotate(transform, currentDegrees);
+        StartCoroutine(_playerMovement.Rotate(transform, currentDegrees));
     }
 
     private void Awake()
@@ -272,10 +272,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             if (!GameManager.Instance.testing)
             {
                 //_deckInfo.SetPlayerCards(new List<int> { 30, 36, 34, 35, 23, 6, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38 });
-                _deckInfo.SetPlayerCards(new List<int> {
-                    38, 36, 34, 35, 0, 0, 0, 35, 32, 20, 0, 35, 23, 35, 37, 0, 6, 18, 20, 22, 23, 24, 26, 27, 28, 29,
-                    30, 31, 32, 34, 35, 36, 37, 38
-                });
+                _deckInfo.SetPlayerCards(new List<int>
+                    { 28, 0, 27, 32, 18, 23, 34, 37, 29, 35, 31, 26, 36, 30, 6, 24, 20, 22, 38 });
             }
             else
             {
@@ -342,6 +340,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             //movement
             stream.SendNext(PlayerController.GetMovementSelected());
             stream.SendNext(PlayerController.GetMovementDone());
+            stream.SendNext((int)PlayerController.GetCurrentCell().x);
+            stream.SendNext((int)PlayerController.GetCurrentCell().y);
 
             //attack
             stream.SendNext(_attackDone);
@@ -359,6 +359,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
 
             bool receivedMovementSelected = (bool)stream.ReceiveNext();
             bool receivedMovementDone = (bool)stream.ReceiveNext();
+            int xReceivedPos = (int)stream.ReceiveNext();
+            int yReceivedPos = (int)stream.ReceiveNext();
 
             bool receivedAttackDone = (bool)stream.ReceiveNext();
             int receivedHealth = (int)stream.ReceiveNext();
@@ -373,6 +375,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
                     player.PlayerController.SetMovementDone(receivedMovementDone);
                     player.SetAttackDone(receivedAttackDone);
                     player.PlayerController.SetHealth(receivedHealth);
+                    player.PlayerController.SetCurrentCell(new Vector2(xReceivedPos, yReceivedPos));
                 }
             }
 
@@ -444,6 +447,23 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     public void RpcReceivedDamage(int damage, int localPlayerId)
     {
         PlayerController.ReceivedDamage(damage, localPlayerId);
+    }
+
+    [PunRPC]
+    public void RpcDoDamage(int playerId, int x, int y)
+    {
+        if (playerId != GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId())
+        {
+            IPlayerView player =
+                GameManager.Instance.PlayerList.Find(p => p.PlayerController.GetPlayerId() != playerId);
+
+            if (player.PlayerController.GetCurrentCell() == new Vector2(x, y))
+            {
+                Debug.Log($"daño");
+                player.PlayerController.ReceivedDamage(player.PlayerController.GetCurrentDamage(),
+                    player.PlayerController.GetPlayerId());
+            }
+        }
     }
 
     [PunRPC]

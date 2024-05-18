@@ -6,8 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public interface IGameManager
-{
+public interface IGameManager {
     int CurrentPriority { get; }
     void SetCurrentPriority(int currentPriority);
     List<IPlayerView> PlayerList { get; }
@@ -19,8 +18,7 @@ public interface IGameManager
     void AddPlayerToThePlayerList(IPlayerView playerView);
 }
 
-public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
-{
+public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
     public CardsDataBase cardDataBase;
 
     public bool testing;
@@ -175,7 +173,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager
 
     public bool ValidateHealthStatus()
     {
-        foreach (PlayerView playerView in PlayerList)
+        foreach (IPlayerView playerView in PlayerList)
         {
             if (playerView.PlayerController.GetCurrenHealth() <= 0)
             {

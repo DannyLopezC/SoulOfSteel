@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public interface IArmCardView : IEquipmentCardView
-{
+public interface IArmCardView : IEquipmentCardView {
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
         int damage, AttackType attackType, int attackDistance, int attackArea, Sprite imageSource, CardType type);
 
@@ -15,8 +14,7 @@ public interface IArmCardView : IEquipmentCardView
     IArmCardController ArmCardController { get; }
 }
 
-public class ArmCardView : EquipmentCardView, IArmCardView
-{
+public class ArmCardView : EquipmentCardView, IArmCardView {
     private IArmCardController _armCardController;
 
     public IArmCardController ArmCardController {
@@ -113,5 +111,10 @@ public class ArmCardView : EquipmentCardView, IArmCardView
     public override int GetId()
     {
         return ArmCardController.GetId();
+    }
+
+    public override string GetCardName()
+    {
+        return ArmCardController.GetCardName();
     }
 }

@@ -87,6 +87,11 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
         EquipmentCardController.IsSelecting(isSelecting);
     }
 
+    public override string GetCardName()
+    {
+        return EquipmentCardController.GetCardName();
+    }
+
     public override CardType GetCardType()
     {
         return EquipmentCardController.GetCardType();

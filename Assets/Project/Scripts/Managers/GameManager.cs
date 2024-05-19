@@ -212,6 +212,18 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
         PhotonGame.DisconnectPlayer();
     }
 
+    public void ResetValues()
+    {
+        testing = false;
+        isFirstRound = false;
+        movementTurn = 0;
+        attackTurn = 0;
+        CurrentPhase = default(Phase);
+        CurrentPriority = 0;
+        CurrenPhase = default(Phase);
+        gameOver = false;
+    }
+
     public void PrepareForMatch(IMatchView matchView)
     {
         PlayerList.ForEach(player => player.PlayerController.ShuffleDeck(true, false));

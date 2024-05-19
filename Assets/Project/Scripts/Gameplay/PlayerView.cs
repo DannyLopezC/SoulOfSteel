@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public interface IPlayerView {
     GameObject GetHandCardsPanel();
     void CleanHandsPanel();
-    CardView AddCardToPanel(CardType cardType, bool inHand = false);
+    ICardView AddCardToPanel(CardType cardType, bool inHand = false);
     void InitAddCards(int amount);
     PhotonView GetPv();
     void SelectCards(List<CardType> type, int amount, bool setSelecting = true);
@@ -27,6 +27,7 @@ public interface IPlayerView {
     void Rotate(int currentDegrees);
     void DrawCards(int amount, bool fullDraw);
     void SelectMovement();
+    string GetPlayerName();
 }
 
 [Serializable]
@@ -62,7 +63,10 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     private IPlayerView _playerViewImplementation;
 
     public IPlayerController PlayerController {
-        get { return _playerController ??= new PlayerController(this, GameManager.Instance); }
+        get {
+            return _playerController ??=
+                new PlayerController(this, GameManager.Instance, EffectManager.Instance, UIManager.Instance);
+        }
     }
 
     public void MoveToCell(Vector2 nextCell)
@@ -119,7 +123,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
-    public CardView AddCardToPanel(CardType cardType, bool inHand = false)
+    public ICardView AddCardToPanel(CardType cardType, bool inHand = false)
     {
         GameObject prefab = null;
         Transform parent = null;
@@ -212,7 +216,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
             rt.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         }
 
-        GO.TryGetComponent(out CardView card);
+        GO.TryGetComponent(out ICardView card);
         GO.SetActive(pv.IsMine);
         return card;
     }
@@ -309,6 +313,11 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     public void SelectMovement()
     {
         PlayerController.SelectMovement();
+    }
+
+    public string GetPlayerName()
+    {
+        return playerName.text;
     }
 
     public void SelectAttack()

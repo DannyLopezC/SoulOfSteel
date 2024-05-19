@@ -16,6 +16,12 @@ public interface IGameManager {
     CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByIndex(int index);
     CardInfoSerialized.CardInfoStruct GetCardFromDataBaseByType(CardType type);
     void AddPlayerToThePlayerList(IPlayerView playerView);
+    bool ValidateHealthStatus();
+    void OnSelectionConfirmed(int id);
+    bool GetTesting();
+    void OnLocalAttackDone();
+    void OnMovementSelected(Movement getDefaultMovement, PlayerView view, int getMovementIterations);
+    PlayerView LocalPlayerInstance { get; set; }
 }
 
 public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
@@ -97,6 +103,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
     public void OnSelectionConfirmed(int id)
     {
         OnSelectionConfirmedEvent?.Invoke(id);
+    }
+
+    public bool GetTesting()
+    {
+        return testing;
     }
 
     public void OnMovementFinished()
@@ -182,7 +193,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
                 Debug.Log($"player health {playerView.PlayerController.GetCurrenHealth()}");
                 gameOver = true;
                 UIManager.Instance.SetText(
-                    $"JUEGO TERMINADO, jugador {playerView.PlayerController.GetPlayerId()} perdio");
+                    $"JUEGO TERMINADO, {playerView.GetPlayerName()} perdio");
                 CurrenPhase.End();
                 StartCoroutine(BackToMenuFinishingGame());
                 return false;

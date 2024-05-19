@@ -8,7 +8,11 @@ using Unity.VisualScripting;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviourSingleton<UIManager> {
+public interface IUIManager {
+    void UpdateEnemyLifeTMP(int health);
+}
+
+public class UIManager : MonoBehaviourSingleton<UIManager>, IUIManager {
     public TMP_InputField nickname;
 
     [SerializeField] private GameObject gamePanel;
@@ -102,5 +106,10 @@ public class UIManager : MonoBehaviourSingleton<UIManager> {
                 nickname.onValueChanged.RemoveAllListeners();
             }
         }
+    }
+
+    public void UpdateEnemyLifeTMP(int health)
+    {
+        matchView.UpdateEnemyLifeTMP(health);
     }
 }

@@ -103,8 +103,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     {
         TryGetComponent(out Image image);
         image.enabled = true;
+        image.sprite = Resources.Load<Sprite>($"PlayerImage{(PlayerController.GetPlayerId() == 1 ? 1 : 2)}");
         playerName.gameObject.SetActive(true);
-        playerDirection.gameObject.SetActive(true);
+        // playerDirection.gameObject.SetActive(true);
         if (!GameManager.Instance.testing) playerName.text = pv.Owner.NickName;
 
         SetCardsInfo();

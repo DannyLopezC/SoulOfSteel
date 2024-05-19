@@ -15,9 +15,10 @@ public class LegsCardController : EquipmentCardController, ILegsCardController {
 
     private List<Movement> _movements;
 
-    public LegsCardController(ILegsCardView view) : base(view)
+    public LegsCardController(ILegsCardView view, IGameManager gameManager, IUIManager uiManager) : base(view,
+        gameManager,
+        uiManager)
     {
-        _view = view;
     }
 
     public void InitCard(int id, string cardName, string cardDescription,

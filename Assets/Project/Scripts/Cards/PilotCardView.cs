@@ -26,7 +26,7 @@ public class PilotCardView : CardView, IPilotCardView {
     private IPilotCardController _pilotCardController;
 
     public IPilotCardController PilotCardController {
-        get { return _pilotCardController ??= new PilotCardController(this); }
+        get { return _pilotCardController ??= new PilotCardController(this, GameManager.Instance, UIManager.Instance); }
     }
 
     private void Start()

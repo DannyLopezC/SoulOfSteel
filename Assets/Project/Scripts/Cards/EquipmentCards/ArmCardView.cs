@@ -18,7 +18,7 @@ public class ArmCardView : EquipmentCardView, IArmCardView {
     private IArmCardController _armCardController;
 
     public IArmCardController ArmCardController {
-        get { return _armCardController ??= new ArmCardController(this); }
+        get { return _armCardController ??= new ArmCardController(this, GameManager.Instance, UIManager.Instance); }
     }
 
     protected override void Start()

@@ -15,6 +15,7 @@ namespace SoulOfSteelTests {
         private IGameManager _mockGameManager;
         private IEffectManager _mockEffectManager;
         private IUIManager _mockUIManager;
+        private IArmCardView _mockCardView;
 
         [SetUp]
         public void BeforeTest()
@@ -23,6 +24,7 @@ namespace SoulOfSteelTests {
             _mockGameManager = Substitute.For<IGameManager>();
             _mockEffectManager = Substitute.For<IEffectManager>();
             _mockUIManager = Substitute.For<IUIManager>();
+            _mockCardView = Substitute.For<IArmCardView>();
         }
 
         private PlayerController CreateSystem()
@@ -106,59 +108,126 @@ namespace SoulOfSteelTests {
         #region EquipCard
 
         [Test]
-        public void EquipCard_WhenCardInfoStructIsNull_DoesNothing()
+        public void EquipCard_WhenCardInfoStructIsNull_LogsCardNotFoundError()
         {
             // Arrange.
-            _mockGameManager.GetCardFromDataBaseByIndex(0).ReturnsNull();
+            const int index = 1;
+            _mockGameManager.GetCardFromDataBaseByIndex(index).Returns((CardInfoSerialized.CardInfoStruct)null);
+            PlayerController systemUnderTest = CreateSystem();
 
             // Act.
-            PlayerController systemUnderTest = CreateSystem();
-            systemUnderTest.EquipCard(0);
+            systemUnderTest.EquipCard(index);
 
             // Assert.
-            _mockView.DidNotReceive().AddCardToPanel(Arg.Any<CardType>());
             LogAssert.Expect(LogType.Error, "CARD NOT FOUND");
         }
 
         [Test]
-        public void EquipCard_WhenCardInfoStructIsNotNull_SetTheCorrespondingCard(
-            [NUnit.Framework.Range(0, 38)] int index)
+        public void EquipCard_WhenCardTypeIsArm_SetsArmCard()
         {
             // Arrange.
-            var cardData = Resources.Load<CardsDataBase>("Presets/Card_Data");
-            var cardInfoStruct = cardData.cardDataBase.Sheet1.Find(c => c.Id == index);
-
-            if (cardInfoStruct == null)
-            {
-                Assert.Ignore("CardInfoStruct is null for this index.");
-                return;
-            }
+            const int index = 1;
+            var cardInfoStruct = new CardInfoSerialized.CardInfoStruct {
+                Id = 1,
+                CardName = "Test Arm Card",
+                Description = "Test Description",
+                Cost = 10,
+                Recovery = 2,
+                Damage = 5,
+                AttackTypeEnum = AttackType.StraightLine,
+                AttackDistance = 2,
+                AttackArea = 1,
+                ImageSource = null,
+                TypeEnum = CardType.Arm
+            };
 
             _mockGameManager.GetCardFromDataBaseByIndex(index).Returns(cardInfoStruct);
-
-            var mockCardView = Substitute.For<IArmCardView>();
-            _mockView.AddCardToPanel(cardInfoStruct.TypeEnum).Returns(mockCardView);
+            _mockView.AddCardToPanel(CardType.Arm, false).Returns(_mockCardView);
 
             // Act.
             PlayerController systemUnderTest = CreateSystem();
-
             systemUnderTest.EquipCard(index);
 
             // Assert.
-            bool shouldAddCardToPanel = cardInfoStruct != null && (cardInfoStruct.TypeEnum == CardType.Arm
-                                                                   || cardInfoStruct.TypeEnum == CardType.Weapon
-                                                                   || cardInfoStruct.TypeEnum == CardType.Legs
-                                                                   || cardInfoStruct.TypeEnum == CardType.Armor
-                                                                   || cardInfoStruct.TypeEnum == CardType.Chest);
+            _mockCardView.Received(1).InitCard(
+                cardInfoStruct.Id,
+                cardInfoStruct.CardName,
+                cardInfoStruct.Description,
+                cardInfoStruct.Cost,
+                cardInfoStruct.Recovery,
+                cardInfoStruct.Damage,
+                cardInfoStruct.AttackTypeEnum,
+                cardInfoStruct.AttackDistance,
+                cardInfoStruct.AttackArea,
+                cardInfoStruct.ImageSource,
+                cardInfoStruct.TypeEnum
+            );
 
-            if (shouldAddCardToPanel)
-            {
-                _mockView.Received(1).AddCardToPanel(cardInfoStruct.TypeEnum);
-            }
-            else
-            {
-                _mockView.DidNotReceive().AddCardToPanel(Arg.Any<CardType>());
-            }
+            Assert.AreSame(_mockCardView, systemUnderTest.GetArmCard()); // Check if _arm is set correctly.
+        }
+
+        [Test]
+        public void EquipCard_WhenCardTypeIsWeapon_SetsArmCard()
+        {
+            // Arrange.
+            const int index = 1;
+            var cardInfoStruct = new CardInfoSerialized.CardInfoStruct { TypeEnum = CardType.Weapon };
+            _mockGameManager.GetCardFromDataBaseByIndex(index).Returns(cardInfoStruct);
+            PlayerController systemUnderTest = CreateSystem();
+
+            // Act.
+            systemUnderTest.EquipCard(index);
+
+            // Assert.
+            // Add your assertions to verify that SetArmCard was called with correct parameters.
+        }
+
+        [Test]
+        public void EquipCard_WhenCardTypeIsLegs_SetsLegsCard()
+        {
+            // Arrange.
+            const int index = 1;
+            var cardInfoStruct = new CardInfoSerialized.CardInfoStruct { TypeEnum = CardType.Legs };
+            _mockGameManager.GetCardFromDataBaseByIndex(index).Returns(cardInfoStruct);
+            PlayerController systemUnderTest = CreateSystem();
+
+            // Act.
+            systemUnderTest.EquipCard(index);
+
+            // Assert.
+            // Add your assertions to verify that SetLegsCard was called with correct parameters.
+        }
+
+        [Test]
+        public void EquipCard_WhenCardTypeIsArmor_SetsArmorCard()
+        {
+            // Arrange.
+            const int index = 1;
+            var cardInfoStruct = new CardInfoSerialized.CardInfoStruct { TypeEnum = CardType.Armor };
+            _mockGameManager.GetCardFromDataBaseByIndex(index).Returns(cardInfoStruct);
+            PlayerController systemUnderTest = CreateSystem();
+
+            // Act.
+            systemUnderTest.EquipCard(index);
+
+            // Assert.
+            // Add your assertions to verify that SetArmorCard was called with correct parameters.
+        }
+
+        [Test]
+        public void EquipCard_WhenCardTypeIsChest_SetsArmorCard()
+        {
+            // Arrange.
+            const int index = 1;
+            var cardInfoStruct = new CardInfoSerialized.CardInfoStruct { TypeEnum = CardType.Chest };
+            _mockGameManager.GetCardFromDataBaseByIndex(index).Returns(cardInfoStruct);
+            PlayerController systemUnderTest = CreateSystem();
+
+            // Act.
+            systemUnderTest.EquipCard(index);
+
+            // Assert.
+            // Add your assertions to verify that SetArmorCard was called with correct parameters.
         }
 
         #endregion

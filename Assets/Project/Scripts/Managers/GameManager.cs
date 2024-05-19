@@ -22,6 +22,8 @@ public interface IGameManager {
     void OnLocalAttackDone();
     void OnMovementSelected(Movement getDefaultMovement, PlayerView view, int getMovementIterations);
     PlayerView LocalPlayerInstance { get; set; }
+    void OnCardSelected(PlayerView playerView, CardView card, bool selected);
+    ScrapPanel ScrapPanel { get; set; }
 }
 
 public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>, IGameManager {
 
     public IHandPanel HandPanel { get; set; }
     public IHandPanel MiddlePanel { get; set; }
-    public ScrapPanel scrapPanel;
+    public ScrapPanel ScrapPanel { get; set; }
 
     public EquipmentPanel myEquipmentPanel;
     public EquipmentPanel enemyEquipmentPanel;

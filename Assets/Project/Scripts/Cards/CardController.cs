@@ -33,8 +33,9 @@ public interface ICardController {
 
 public abstract class CardController : ICardController {
     private readonly ICardView _view;
+    private readonly IGameManager _gameManager;
+    private readonly IUIManager _uiManager;
 
-    private Vector3 startingPos;
     private bool _isSelecting;
     private bool _selected;
     private int _scrapRecovery;
@@ -46,9 +47,11 @@ public abstract class CardController : ICardController {
     protected Sprite ImageSource { get; private set; }
     protected int Id;
 
-    protected CardController(ICardView view)
+    protected CardController(ICardView view, IGameManager gameManager, IUIManager uiManager)
     {
         _view = view;
+        _gameManager = gameManager;
+        _uiManager = uiManager;
     }
 
     public virtual void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,
@@ -64,7 +67,6 @@ public abstract class CardController : ICardController {
         Type = type;
 
         SetCardUI();
-        startingPos = _view.GetGameObject().transform.position;
     }
 
     protected virtual void SetCardUI()
@@ -74,7 +76,7 @@ public abstract class CardController : ICardController {
 
     protected virtual void ShowCard()
     {
-        UIManager.Instance.ShowCardPanel(CardName, CardDescription, ScrapCost, ImageSource);
+        _uiManager.ShowCardPanel(CardName, CardDescription, ScrapCost, ImageSource);
     }
 
     public virtual void ManageRightClick()
@@ -94,12 +96,12 @@ public abstract class CardController : ICardController {
 
     public void Select(bool deselect = false)
     {
-        if (GameManager.Instance.LocalPlayerInstance._inAnimation) return;
-        if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetCardsSelected() && !_selected) return;
+        if (_gameManager.LocalPlayerInstance._inAnimation) return;
+        if (_gameManager.LocalPlayerInstance.PlayerController.GetCardsSelected() && !_selected) return;
 
         if (_isSelecting)
         {
-            if (!GameManager.Instance.LocalPlayerInstance.PlayerController.TryPayingForCard(GetScrapCost())) return;
+            if (!_gameManager.LocalPlayerInstance.PlayerController.TryPayingForCard(GetScrapCost())) return;
             _selected = !deselect && !_selected;
             _view.SelectAnimation(_selected);
 
@@ -107,23 +109,23 @@ public abstract class CardController : ICardController {
             {
                 case CardType.Weapon:
                 case CardType.Arm:
-                    GameManager.Instance.OnCardSelected(GameManager.Instance.LocalPlayerInstance,
+                    _gameManager.OnCardSelected(_gameManager.LocalPlayerInstance,
                         _view.GetGameObject().GetComponent<ArmCardView>(), _selected);
                     break;
                 case CardType.CampEffect:
                 case CardType.Hacking:
-                    GameManager.Instance.OnCardSelected(GameManager.Instance.LocalPlayerInstance,
+                    _gameManager.OnCardSelected(_gameManager.LocalPlayerInstance,
                         _view.GetGameObject().GetComponent<EffectCardView>(), _selected);
                     break;
                 case CardType.Generator:
                     break;
                 case CardType.Legs:
-                    GameManager.Instance.OnCardSelected(GameManager.Instance.LocalPlayerInstance,
+                    _gameManager.OnCardSelected(_gameManager.LocalPlayerInstance,
                         _view.GetGameObject().GetComponent<LegsCardView>(), _selected);
                     break;
                 case CardType.Armor:
                 case CardType.Chest:
-                    GameManager.Instance.OnCardSelected(GameManager.Instance.LocalPlayerInstance,
+                    _gameManager.OnCardSelected(_gameManager.LocalPlayerInstance,
                         _view.GetGameObject().GetComponent<EquipmentCardView>(), _selected);
                     break;
                 default:
@@ -138,22 +140,22 @@ public abstract class CardController : ICardController {
     }
 
 
-    public void DismissCard()
+    public virtual void DismissCard()
     {
         Transform t = _view.GetGameObject().transform;
-        ScrapPanel scrapPanel = GameManager.Instance.scrapPanel;
+        IScrapPanel scrapPanel = _gameManager.ScrapPanel;
 
-        Vector3 endPos = scrapPanel.transform.TransformPoint(scrapPanel.transform.position);
+        Vector3 endPos = scrapPanel.GetTransform().TransformPoint(scrapPanel.GetTransform().position);
 
-        GameManager.Instance.LocalPlayerInstance._inAnimation = true;
+        _gameManager.LocalPlayerInstance._inAnimation = true;
         t.DOMove(endPos, 0.5f).OnComplete(() => {
             scrapPanel.SendToBackup();
-            t.localScale = scrapPanel.transform.GetChild(0).localScale;
-            t.SetParent(scrapPanel.transform);
+            t.localScale = scrapPanel.GetTransform().GetChild(0).localScale;
+            t.SetParent(scrapPanel.GetTransform());
             t.SetSiblingIndex(2);
             _view.SetDismissTextSizes();
 
-            GameManager.Instance.LocalPlayerInstance._inAnimation = false;
+            _gameManager.LocalPlayerInstance._inAnimation = false;
         });
     }
 

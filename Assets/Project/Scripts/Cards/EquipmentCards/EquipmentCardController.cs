@@ -15,9 +15,10 @@ public class EquipmentCardController : CardController, IEquipmentCardController 
     private readonly IEquipmentCardView _view;
     private int _shieldValue;
 
-    public EquipmentCardController(IEquipmentCardView view) : base(view)
+    public EquipmentCardController(IEquipmentCardView view, IGameManager gameManager, IUIManager uiManager) : base(view,
+        gameManager,
+        uiManager)
     {
-        _view = view;
     }
 
     public override CardType GetCardType()

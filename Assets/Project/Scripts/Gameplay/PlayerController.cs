@@ -48,6 +48,7 @@ public interface IPlayerController {
     void SubtractFromScrapValue(int value);
 
     int GetCurrentDamage();
+    IArmCardView GetArmCard();
 }
 
 public class PlayerController : IPlayerController {
@@ -419,10 +420,19 @@ public class PlayerController : IPlayerController {
             return;
         }
 
-        card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName, cardInfoStruct.Description,
-            cardInfoStruct.Cost, cardInfoStruct.Recovery, cardInfoStruct.Damage, cardInfoStruct.AttackTypeEnum,
-            cardInfoStruct.AttackDistance, cardInfoStruct.AttackArea, cardInfoStruct.ImageSource,
-            cardInfoStruct.TypeEnum);
+        card.InitCard(
+            cardInfoStruct.Id,
+            cardInfoStruct.CardName,
+            cardInfoStruct.Description,
+            cardInfoStruct.Cost,
+            cardInfoStruct.Recovery,
+            cardInfoStruct.Damage,
+            cardInfoStruct.AttackTypeEnum,
+            cardInfoStruct.AttackDistance,
+            cardInfoStruct.AttackArea,
+            cardInfoStruct.ImageSource,
+            cardInfoStruct.TypeEnum
+        );
 
         if (card.GetCardType() == CardType.Arm)
         {
@@ -533,6 +543,11 @@ public class PlayerController : IPlayerController {
     public int GetCurrentDamage()
     {
         return _currentDamage;
+    }
+
+    public IArmCardView GetArmCard()
+    {
+        return _arm;
     }
 
     public bool GetMoving()

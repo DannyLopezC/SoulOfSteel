@@ -15,7 +15,7 @@ public class LegsCardView : EquipmentCardView, ILegsCardView {
     private ILegsCardController _legsCardController;
 
     public ILegsCardController LegsCardController {
-        get { return _legsCardController ??= new LegsCardController(this); }
+        get { return _legsCardController ??= new LegsCardController(this, GameManager.Instance, UIManager.Instance); }
     }
 
     public void DestroyGo()

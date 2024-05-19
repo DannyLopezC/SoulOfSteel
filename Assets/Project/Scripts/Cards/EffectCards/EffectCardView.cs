@@ -11,7 +11,9 @@ public class EffectCardView : CardView, IEffectCardView {
     private IEffectCardController _effectCardController;
 
     public IEffectCardController EffectCardController {
-        get { return _effectCardController ??= new EffectCardController(this); }
+        get {
+            return _effectCardController ??= new EffectCardController(this, GameManager.Instance, UIManager.Instance);
+        }
     }
 
     public override void ManageLeftClick()

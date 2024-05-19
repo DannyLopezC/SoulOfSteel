@@ -69,7 +69,10 @@ public class EquipmentCardView : CardView, IEquipmentCardView {
     }
 
     public IEquipmentCardController EquipmentCardController {
-        get { return _equipmentCardController ??= new EquipmentCardController(this); }
+        get {
+            return _equipmentCardController ??=
+                new EquipmentCardController(this, GameManager.Instance, UIManager.Instance);
+        }
     }
 
     public override void ManageLeftClick()

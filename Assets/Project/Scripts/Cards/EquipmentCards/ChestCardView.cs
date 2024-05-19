@@ -16,7 +16,7 @@ public class ChestCardView : EquipmentCardView, IChestCardView {
     private IChestCardController _chestCardController;
 
     public IChestCardController ChestCardController {
-        get { return _chestCardController ??= new ChestCardController(this); }
+        get { return _chestCardController ??= new ChestCardController(this, GameManager.Instance, UIManager.Instance); }
     }
 
     protected override void Start()

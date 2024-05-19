@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 public interface IUIManager {
     void UpdateEnemyLifeTMP(int health);
+
+    void ShowCardPanel(string cardName, string cardDescription,
+        int scrapCost, Sprite imageSource, bool activate = true);
 }
 
 public class UIManager : MonoBehaviourSingleton<UIManager>, IUIManager {

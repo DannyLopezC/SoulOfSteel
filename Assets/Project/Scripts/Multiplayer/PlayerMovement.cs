@@ -143,7 +143,7 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    public void MoveToCell(Vector2 index)
+    public bool MoveToCell(Vector2 index)
     {
         if (pv.IsMine)
         {
@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour {
                                                                             nextCell.index == enemyP.PlayerController
                                                                                 .GetCurrentCell()))
             {
-                return;
+                return false;
             }
 
 
@@ -187,6 +187,8 @@ public class PlayerMovement : MonoBehaviour {
 
             currentCell.CellController.SetType(CellType.Normal);
         }
+
+        return true;
     }
 
     public IEnumerator Rotate(Transform t, int direction)

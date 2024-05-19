@@ -25,10 +25,10 @@ public class TeleportEffectController : EffectController, ITeleportEffectControl
                 .CellController.GetCellType()) return;
 
         //Here i need to move the player to the desired position
-        Debug.Log($"before tp {_player.PlayerController.GetCurrentCell()}\n");
-        _player.PlayerController.SetCurrentCell(index);
-        Debug.Log($"after tp {_player.PlayerController.GetCurrentCell()}\n");
-        _player.MoveToCell(index);
+        if (_player.MoveToCell(index))
+        {
+            _player.PlayerController.SetCurrentCell(index);
+        }
     }
 
     private void StopEffect(List<Vector2> cellsSelected)

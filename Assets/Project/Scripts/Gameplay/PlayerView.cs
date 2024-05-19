@@ -23,7 +23,7 @@ public interface IPlayerView {
     void SetAttackDone(bool attackDone);
     void DestroyGO(GameObject go);
     IPlayerController PlayerController { get; }
-    void MoveToCell(Vector2 nextCell);
+    bool MoveToCell(Vector2 nextCell);
     void Rotate(int currentDegrees);
     void DrawCards(int amount, bool fullDraw);
     void SelectMovement();
@@ -69,9 +69,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
-    public void MoveToCell(Vector2 nextCell)
+    public bool MoveToCell(Vector2 nextCell)
     {
-        _playerMovement.MoveToCell(nextCell);
+        return _playerMovement.MoveToCell(nextCell);
     }
 
     public void Rotate(int currentDegrees)
@@ -103,8 +103,9 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     {
         TryGetComponent(out Image image);
         image.enabled = true;
+        image.sprite = Resources.Load<Sprite>($"PlayerImage{(PlayerController.GetPlayerId() == 1 ? 1 : 2)}");
         playerName.gameObject.SetActive(true);
-        playerDirection.gameObject.SetActive(true);
+        // playerDirection.gameObject.SetActive(true);
         if (!GameManager.Instance.testing) playerName.text = pv.Owner.NickName;
 
         SetCardsInfo();

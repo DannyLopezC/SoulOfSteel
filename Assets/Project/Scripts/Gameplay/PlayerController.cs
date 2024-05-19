@@ -254,7 +254,6 @@ public class PlayerController : IPlayerController {
             {
                 has = true;
                 card.SetIsSelecting(setSelecting);
-                _gameManager.ValidateHealthStatus();
             }
         }
 
@@ -383,6 +382,7 @@ public class PlayerController : IPlayerController {
         {
             _health -= damage;
             _pilot.SetHealthTMP(_health);
+            _gameManager.ValidateHealthStatus();
         }
     }
 

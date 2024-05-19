@@ -19,6 +19,7 @@ public class EquipmentCardController : CardController, IEquipmentCardController 
         gameManager,
         uiManager)
     {
+        _view = view;
     }
 
     public override CardType GetCardType()

@@ -24,6 +24,7 @@ public class ArmCardController : EquipmentCardController, IArmCardController {
         gameManager,
         uiManager)
     {
+        _view = view;
     }
 
     public void InitCard(int id, string cardName, string cardDescription, int scrapCost, int scrapRecovery,

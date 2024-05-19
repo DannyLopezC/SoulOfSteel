@@ -19,6 +19,7 @@ public class LegsCardController : EquipmentCardController, ILegsCardController {
         gameManager,
         uiManager)
     {
+        _view = view;
     }
 
     public void InitCard(int id, string cardName, string cardDescription,

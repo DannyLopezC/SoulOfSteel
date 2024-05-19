@@ -13,5 +13,6 @@ public class ChestCardController : EquipmentCardController, IChestCardController
         gameManager,
         uiManager)
     {
+        _view = view;
     }
 }

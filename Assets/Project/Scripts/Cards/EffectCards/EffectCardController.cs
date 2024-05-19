@@ -14,6 +14,7 @@ public class EffectCardController : CardController, IEffectCardController {
         gameManager,
         uiManager)
     {
+        _view = view;
     }
 
     public override CardType GetCardType()

@@ -147,9 +147,14 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (pv.IsMine)
         {
+            IPlayerView enemyP = GameManager.Instance.PlayerList.Find(p =>
+                p.PlayerController.GetPlayerId() !=
+                GameManager.Instance.LocalPlayerInstance.PlayerController.GetPlayerId());
             CellView nextCell = GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x];
             if (nextCell.CellController.GetCellType() == CellType.Barrier ||
-                nextCell.CellController.GetCellType() == CellType.Tower)
+                nextCell.CellController.GetCellType() == CellType.Tower || (!GameManager.Instance.GetTesting() &&
+                                                                            nextCell.index == enemyP.PlayerController
+                                                                                .GetCurrentCell()))
             {
                 return;
             }

@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour {
         GameManager.Instance.OnMovementSelectedEvent += DoMove;
     }
 
+    private void StopAllCoroutinesTest()
+    {
+        StopAllCoroutines();
+    }
+
     private void DoMove(Movement movement, PlayerView player, int movementIterations)
     {
         if (GameManager.Instance.LocalPlayerInstance.PlayerController.GetMoving()) return;
@@ -199,6 +204,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void OnDestroy()
     {
+        StopAllCoroutinesTest();
         if (GameManager.HasInstance()) GameManager.Instance.OnMovementSelectedEvent -= DoMove;
     }
 }

@@ -51,7 +51,6 @@ public abstract class CardView : MonoBehaviour, ICardView, IPointerClickHandler 
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"pointer click");
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             ManageRightClick();

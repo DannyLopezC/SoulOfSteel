@@ -16,9 +16,10 @@ public interface IPlayerView {
     ICardView AddCardToPanel(CardType cardType, bool inHand = false);
     void InitAddCards(int amount);
     PhotonView GetPv();
+    bool PhotonViewIsMine { get; }
     void SelectCards(List<CardType> type, int amount, bool setSelecting = true);
     void ClearPanel(Transform panel);
-    PlayerCardsInfo GetDeckInfo();
+    IPlayerCardsInfo GetDeckInfo();
     bool GetAttackDone();
     void SetAttackDone(bool attackDone);
     void DestroyGO(GameObject go);
@@ -33,7 +34,7 @@ public interface IPlayerView {
 [Serializable]
 public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable {
     [SerializeField] private PhotonView pv;
-    [ShowInInspector] public PlayerCardsInfo _deckInfo;
+    [ShowInInspector] private PlayerCardsInfo _deckInfo;
     private PlayerMovement _playerMovement;
 
     public bool _inAnimation;
@@ -44,6 +45,8 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
     private bool _effectTurnDone;
     private bool _movementTurnDone;
     private bool _attackDone;
+
+    public bool PhotonViewIsMine => pv.IsMine;
 
     public GameObject HandCardsPanel {
         get { return _handCardsPanel ??= GameManager.Instance.HandPanel.GetGo(); }
@@ -240,7 +243,7 @@ public class PlayerView : MonoBehaviourPunCallbacks, IPlayerView, IPunObservable
         }
     }
 
-    public PlayerCardsInfo GetDeckInfo()
+    public IPlayerCardsInfo GetDeckInfo()
     {
         return _deckInfo;
     }

@@ -223,7 +223,7 @@ public class PlayerController : IPlayerController {
 
     public void ShuffleDeck(bool firstTime, bool shuffle)
     {
-        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
+        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().PlayerCards.ToList();
         if (shuffle)
         {
             int n = temporalDeck.Count;
@@ -271,7 +271,7 @@ public class PlayerController : IPlayerController {
     {
         _currentDamage = _extraDamage;
 
-        if (!_view.GetPv().IsMine) return;
+        if (!_view.PhotonViewIsMine) return;
 
         if (_weapon == null && _arm != null)
         {
@@ -292,7 +292,7 @@ public class PlayerController : IPlayerController {
 
     public void SelectMovement()
     {
-        if (!_view.GetPv().IsMine) return;
+        if (!_view.PhotonViewIsMine) return;
 
         GameManager.Instance.OnSelectionConfirmedEvent += OnMovementSelected;
         if (_legs == null && _pilot != null)
@@ -503,15 +503,15 @@ public class PlayerController : IPlayerController {
         CardInfoSerialized.CardInfoStruct cardInfoStruct =
             _shuffledDeck.playerCards.Find(c => c.TypeEnum == CardType.Pilot);
 
-        IPilotCardView card = (IPilotCardView)_view.AddCardToPanel(cardInfoStruct.TypeEnum);
+        IPilotCardView card = (IPilotCardView)_view.AddCardToPanel(CardType.Pilot);
 
         card.InitCard(cardInfoStruct.Id, cardInfoStruct.CardName,
             cardInfoStruct.Description, cardInfoStruct.Cost, cardInfoStruct.Recovery,
             cardInfoStruct.ImageSource, cardInfoStruct.Health, cardInfoStruct.TypeEnum,
-            cardInfoStruct.SerializedMovements[0], cardInfoStruct.Damage);
+            cardInfoStruct.SerializedMovements?[0], cardInfoStruct.Damage);
         _pilot = card;
         _health = _pilot.PilotCardController.GetHealth();
-        if (_view.GetPv().IsMine) _pilot.SetHealthTMP(_health);
+        if (_view.PhotonViewIsMine) _pilot.SetHealthTMP(_health);
         else _uiManager.UpdateEnemyLifeTMP(_health);
     }
 
@@ -687,6 +687,27 @@ public class PlayerController : IPlayerController {
     public void Debug_SetPilotCard()
     {
         SetPilotCard();
+    }
+
+    public void Debug_AddCardToHand(ICardView card)
+    {
+        _hand.Add(card);
+    }
+
+    public IArmCardView Debug_GetWeapon()
+    {
+        return _weapon;
+    }
+
+    public void Debug_SetArm(IArmCardView card, bool isWeapon)
+    {
+        if (isWeapon) _weapon = card;
+        else _arm = card;
+    }
+
+    public void Debug_SetPilot(IPilotCardView pilot)
+    {
+        _pilot = pilot;
     }
 
 #endif

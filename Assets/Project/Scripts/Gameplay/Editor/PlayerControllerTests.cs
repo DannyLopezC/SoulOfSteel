@@ -298,7 +298,7 @@ namespace SoulOfSteelTests {
                 cardInfo2,
                 cardInfo3
             });
-            _mockView.GetDeckInfo().Returns(mockPlayerCardsInfo);
+            // _mockView.GetDeckInfo().Returns(mockPlayerCardsInfo);
 
             // Act
             PlayerController systemUnderTest = CreateSystem();
@@ -326,7 +326,7 @@ namespace SoulOfSteelTests {
                 cardInfo2,
                 cardInfo3
             });
-            _mockView.GetDeckInfo().Returns(mockPlayerCardsInfo);
+            // _mockView.GetDeckInfo().Returns(mockPlayerCardsInfo);
 
             // Act
             PlayerController systemUnderTest = CreateSystem();
@@ -354,7 +354,7 @@ namespace SoulOfSteelTests {
                 cardInfo2,
                 cardInfo3
             });
-            _mockView.GetDeckInfo().Returns(mockPlayerCardsInfo);
+            // _mockView.GetDeckInfo().Returns(mockPlayerCardsInfo);
             _mockView.AddCardToPanel(CardType.Pilot).Returns(Substitute.For<IPilotCardView>());
 
             // Act

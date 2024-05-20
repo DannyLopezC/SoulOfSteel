@@ -223,7 +223,7 @@ public class PlayerController : IPlayerController {
 
     public void ShuffleDeck(bool firstTime, bool shuffle)
     {
-        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().PlayerCards.ToList();
+        List<CardInfoSerialized.CardInfoStruct> temporalDeck = _view.GetDeckInfo().playerCards.ToList();
         if (shuffle)
         {
             int n = temporalDeck.Count;

@@ -340,7 +340,6 @@ public class PlayerController : IPlayerController {
     private void CellSelected(Vector2 index, bool select)
     {
         if (select) _cellsSelected.Add(index);
-        else _cellsSelected.Remove(index);
     }
 
     #endregion

@@ -29,7 +29,7 @@ public class MineEffectController : EffectController, IMineEffectController {
     {
         if (CellType.Normal != GameManager.Instance.BoardView.GetBoardStatus()[(int)index.y][(int)index.x]
                 .CellController.GetCellType()) return;
-        GameManager.Instance.BoardView.SetBoardStatusCellType(index, select ? CellType.Mined : CellType.Normal);
+        GameManager.Instance.BoardView.SetBoardStatusCellType(index, CellType.Mined);
 
         if (!GameManager.Instance.testing)
         {

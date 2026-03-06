@@ -34,7 +34,7 @@ The project emphasizes modular design, allowing gameplay systems, networking, an
 
 ## 🖼️ Preview
 
-![Gameplay preview](https://github.com/DannyLopezC/SpaceInvaders/blob/main/demo_video.gif)
+![Gameplay preview](https://github.com/DannyLopezC/SoulOfSteel/blob/main/preview.png)
 
 ---
 

@@ -111,6 +111,88 @@ _(Controls may vary depending on the current game state.)_
 
 ---
 
+## 🏗 Architecture
+
+The project follows a modular architecture designed to keep gameplay logic, networking, and presentation clearly separated. The goal is to make the system **scalable, testable, and easy to maintain**.
+
+### View–Controller Separation
+
+The project uses a **View–Controller architecture** to separate presentation from game logic.
+
+**View**
+
+- Responsible for rendering cards, UI elements, and visual feedback.
+- Contains no gameplay rules.
+- Communicates user actions to controllers.
+
+**Controller**
+
+- Handles player input and interaction with the game.
+- Coordinates gameplay systems.
+- Acts as a bridge between the View layer and the core gameplay logic.
+
+This separation allows gameplay systems to remain **independent from the Unity UI layer**, making them easier to test and modify.
+
+---
+
+### Gameplay Systems
+
+Core gameplay mechanics are implemented as **independent systems**, each responsible for a specific aspect of the game logic.
+
+Examples include:
+
+- Card behavior and card effects
+- Turn management
+- Game state validation
+- Player interaction logic
+
+These systems follow **SOLID principles**, ensuring that responsibilities remain clearly defined and components remain loosely coupled.
+
+---
+
+### Networking Layer
+
+Multiplayer functionality is implemented using **Photon PUN**, which manages:
+
+- Player connections
+- Room creation and matchmaking
+- Network synchronization between clients
+
+The networking layer is designed so that **gameplay systems remain independent from Photon**, allowing the game logic to be tested locally without requiring an active multiplayer session.
+
+Controllers handle communication between gameplay systems and Photon events.
+
+---
+
+### Testable Gameplay Logic
+
+A key design goal of the project is **testability**.
+
+Core gameplay systems are written so they can be executed **outside the Unity scene environment**, allowing them to be validated using **unit tests**.
+
+This approach allows:
+
+- Validation of card mechanics
+- Verification of turn system behavior
+- Testing of gameplay rules
+
+Using the **Unity Test Framework**, gameplay logic can be tested independently from rendering or networking.
+
+---
+
+### Design Principles
+
+The architecture of the project emphasizes:
+
+- **Single Responsibility Principle** – Each system handles a single concern.
+- **Dependency Inversion** – High-level gameplay systems do not depend on specific implementations.
+- **Loose Coupling** – Systems communicate through controlled interfaces.
+- **Testability** – Gameplay logic can be validated without running the full game.
+
+This architecture makes the project easier to extend with additional gameplay mechanics, networking features, or UI improvements.
+
+---
+
 ## 📚 Credits
 
 Project developed as a programming exercise focused on **software architecture, multiplayer networking, and testable gameplay systems**.

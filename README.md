@@ -1,100 +1,111 @@
-🃏 Soul of Steel – Multiplayer Card Game (Unity + Photon)
+# 🃏 Soul of Steel -- Multiplayer Card Game (Unity + Photon)
 
-This project is a multiplayer card game developed in Unity with C#, using Photon Networking for online multiplayer functionality.
+This project is a multiplayer card game developed in **Unity using C#**,
+implementing **Photon Networking (PUN)** for online multiplayer
+functionality.
 
-The main goal of the project is to demonstrate clean architecture and SOLID principles applied to game development while implementing a networked multiplayer system.
+The main goal of the project is to demonstrate **clean architecture and
+SOLID principles** applied to game development while building a
+functional multiplayer card game.
 
-🎯 Project Objective
+---
+
+## 🎯 Project Objective
 
 Develop a multiplayer card game while focusing on:
 
-Clean and maintainable code architecture.
+- Clean and maintainable code architecture.
+- Implementation of **SOLID design principles**.
+- Separation of responsibilities using **View--Controller
+  architecture**.
+- Multiplayer synchronization using **Photon Networking**.
 
-Implementation of SOLID design principles.
+The project emphasizes modular design, allowing gameplay systems,
+networking, and presentation layers to remain **decoupled and
+scalable**.
 
-Separation of responsibilities using View–Controller architecture.
+---
 
-Multiplayer synchronization using Photon Networking.
+## 📌 Features
 
-The project aims to show how gameplay logic, networking, and presentation can remain decoupled and scalable.
+- Online multiplayer matches using **Photon PUN**.
+- Turn-based card gameplay system.
+- Modular architecture following **SOLID principles**.
+- **View--Controller pattern** separating logic from presentation.
+- Player matchmaking and room system.
+- Network synchronization between players.
 
-📌 Features
+---
 
-Online multiplayer matches using Photon Networking.
+## 🖼️ Preview
 
-Turn-based card gameplay.
-
-Modular architecture following SOLID principles.
-
-View–Controller separation for UI and game logic.
-
-Room creation and matchmaking system.
-
-Network synchronization between players.
-
-Photon provides a client–server networking model that simplifies player connection, matchmaking, and state synchronization in Unity multiplayer games.
-
-🖼️ Preview
-
-(You can add gameplay screenshots or a demo GIF here)
+_(You can add gameplay screenshots or a demo GIF here)_
 
 Example:
 
 assets/demo.gif
-🔧 Requirements
+
+---
+
+## 🔧 Requirements
 
 This project requires:
 
-Unity 2021 or newer
+- **Unity 2021 or newer**
+- **Photon PUN (Photon Unity Networking)**
+- **C#**
 
-Photon PUN (Photon Unity Networking)
+Photon PUN is used to handle:
 
-.NET / C#
+- Player connections
+- Multiplayer rooms
+- Game object synchronization
+- Networking events
 
-Photon PUN is a networking framework for Unity that enables multiplayer games by handling player connections, rooms, and synchronized game objects.
+---
 
-▶️ How to run the project
+## ▶️ How to run the project
 
-Clone this repository:
+1.  Clone this repository:
 
-git clone https://github.com/DannyLopezC/SoulOfSteel.git
-cd SoulOfSteel
+git clone https://github.com/DannyLopezC/SoulOfSteel.git cd SoulOfSteel
 
-Open the project in Unity.
+2.  Open the project in **Unity**.
 
-Configure your Photon App ID in the Photon settings.
+3.  Configure your **Photon App ID** in the Photon settings.
 
-Open the main scene.
+4.  Open the main scene.
 
-Press Play in the Unity Editor.
+5.  Press **Play** in the Unity Editor.
 
-🎮 Controls
+---
 
-Interact with cards → Mouse click
-Play card → Click on a card in your hand
-Game UI navigation → Mouse
+## 🎮 Controls
 
-(Exact controls may depend on the current game state.)
+Interact with cards → **Mouse click**\
+Play card → **Click on a card in your hand**\
+Navigate UI → **Mouse**
 
-🧠 Concepts Used
+_(Controls may vary depending on the current game state.)_
 
-Object-Oriented Programming
+---
 
-SOLID Design Principles
+## 🧠 Concepts Used
 
-View–Controller architecture
+- Object-Oriented Programming
+- SOLID Design Principles
+- View--Controller architecture
+- Multiplayer networking
+- Photon matchmaking and room system
+- Client-server synchronization
+- Turn-based gameplay systems
 
-Multiplayer networking
+---
 
-Photon room and matchmaking systems
+## 📚 Credits
 
-Client–server game synchronization
+Project developed as a programming exercise focused on **software
+architecture and multiplayer game development**.
 
-Turn-based gameplay systems
-
-📚 Credits
-
-Project developed as a programming exercise focused on software architecture and multiplayer game development.
-
-Author: DannyLopezC
+Author: **DannyLopezC**\
 GitHub: https://github.com/DannyLopezC
